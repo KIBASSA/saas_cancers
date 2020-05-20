@@ -1,0 +1,15 @@
+fxcm.cfg
+fxcm.log
+.DS_Store
+__pycache__
+
+# Pycharm
+.idea
+
+# VS Code
+.vscode/
+
+#exclude data folders
+data
+pre_processed_data*
+reaorganized_data
