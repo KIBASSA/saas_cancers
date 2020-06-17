@@ -13,3 +13,11 @@ __pycache__
 data
 pre_processed_data*
 reaorganized_data
+sub_train_data
+test_data
+train_data
+unlabeled_data
+
+
+#Jupyter NB Checkpoints
+.ipynb_checkpoints/
