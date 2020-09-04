@@ -1,0 +1,15 @@
+agm-map {
+  height: 400px;
+}
+
+.map-container{
+  iframe {
+    &.grayscale {
+      -webkit-filter: grayscale(100%);
+       -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+         -o-filter: grayscale(100%);
+            filter: grayscale(100%);
+    }
+  }
+}

@@ -1,0 +1,815 @@
+<div class="page-header flex-wrap">
+    <h3 class="mb-0" translate>Hi, welcome back!<span class="pr-0 h6 pr-sm-2 text-muted d-inline-block" translate>Your web analytics dashboard template.</span>
+    </h3>
+  </div>
+  <div class="row">
+    <div class="col-xl-3 col-lg-12 stretch-card grid-margin">
+      <div class="row">
+        <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+          <div class="card bg-warning">
+            <div class="card-body px-3 py-4 text-white">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="color-card">
+                  <p class="mb-0 color-card-head" translate>Sales</p>
+                  <h2>$8,753.<span class="h5">00</span></h2>
+                </div>
+                <i class="card-icon-indicator mdi mdi-basket bg-inverse-icon-warning"></i>
+              </div>
+              <h6 translate>18.33% Since last month</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+          <div class="card bg-danger">
+            <div class="card-body px-3 py-4 text-white">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="color-card">
+                  <p class="mb-0 color-card-head" translate>Margin</p>
+                  <h2>$5,300.<span class="h5">00</span></h2>
+                </div>
+                <i class="card-icon-indicator mdi mdi-cube-outline bg-inverse-icon-danger"></i>
+              </div>
+              <h6 translate>13.21% Since last month</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3 pb-lg-0 pb-xl-3">
+          <div class="card bg-primary">
+            <div class="card-body px-3 py-4 text-white">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="color-card">
+                  <p class="mb-0 color-card-head" translate>Orders</p>
+                  <h2>$1,753.<span class="h5">00</span></h2>
+                </div>
+                <i class="card-icon-indicator mdi mdi-briefcase-outline bg-inverse-icon-primary"></i>
+              </div>
+              <h6 translate>67.98% Since last month</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-12 col-md-6 stretch-card pb-sm-3 pb-lg-0">
+          <div class="card bg-success">
+            <div class="card-body px-3 py-4 text-white">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="color-card">
+                  <p class="mb-0 color-card-head" translate>Affiliate</p>
+                  <h2>2368</h2>
+                </div>
+                <i class="card-icon-indicator mdi mdi-account-circle bg-inverse-icon-success"></i>
+              </div>
+              <h6 translate>20.32% Since last month</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-9 stretch-card grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-7">
+              <h5 translate>Business Survey</h5>
+              <p class="text-muted" translate>Show overview jan 2018 - Dec 2019<a class="text-muted font-weight-medium pl-2"
+                  href="#"><u translate>See Details</u></a></p>
+            </div>
+            <div class="col-sm-5 text-md-left">
+              <button type="button" class="btn btn-icon-text mb-3 mb-sm-0 btn-inverse-primary font-weight-normal" translate>
+                <i class="mdi mdi-email btn-icon-prepend"></i>Download Report</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="card mb-3 mb-sm-0">
+                <div class="card-body py-3 px-4">
+                  <p class="mb-1 survey-head" translate>Today Earnings</p>
+                  <div class="row align-items-end">
+                    <div class="col-7 pl-0">
+                      <h3 class="m-0 survey-value">$5,300</h3>
+                      <p class="text-success m-0" translate>-310 avg. sales</p>
+                    </div>
+                    <div class="col-5 pl-0">
+                        <canvas baseChart [chartType]="'bar'" [datasets]="barChartData" [labels]="barChartLabels"
+                          [options]="barChartOptions" [colors]="barChartColors"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="card mb-3 mb-sm-0">
+                <div class="card-body py-3 px-4">
+                  <p class="mb-1 survey-head" translate>Product Sold</p>
+                  <div class="row align-items-end">
+                    <div class="col-7 pl-0">
+                      <h3 class="m-0 survey-value">$9,100</h3>
+                      <p class="text-danger m-0" translate>-310 avg. sales</p>
+                    </div>
+                    <div class="col-5 pl-0">
+                        <canvas baseChart [chartType]="'bar'" [datasets]="barChartData" [labels]="barChartLabels"
+                          [options]="barChartOptions" [colors]="barChartColors"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="card">
+                <div class="card-body py-3 px-4">
+                  <p class="mb-1 survey-head" translate>Today Orders</p>
+                  <div class="row align-items-end">
+                    <div class="col-7 pl-0">
+                      <h3 class="m-0 survey-value">$4,354</h3>
+                      <p class="text-success m-0" translate>-310 avg. sales</p>
+                    </div>
+                    <div class="col-5 pl-0">
+                        <canvas baseChart [chartType]="'bar'" [datasets]="barChartData" [labels]="barChartLabels"
+                          [options]="barChartOptions" [colors]="barChartColors"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <canvas height="130" baseChart [chartType]="'line'" [datasets]="areaChartData" [labels]="areaChartLabels"
+                [options]="areaChartOptions" [colors]="areaChartColors"></canvas>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-8">
+              <p class="text-muted mb-0" translate>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temporincididunt ut labore et dolore.<b translate>Learn More</b></p>
+            </div>
+            <div class="col-sm-4">
+              <p class="mb-0 text-muted" translate>Sales Revenue</p>
+              <h5 class="d-inline-block survey-value mb-0">$2,45,500</h5>
+              <p class="d-inline-block text-danger pr-1 mb-0" translate>last 8 months</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-8 col-sm-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body px-0 overflow-auto">
+          <h4 class="card-title pr-3" translate>Purchase History</h4>
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="bg-light">
+                <tr class="pr-2">
+                  <th translate>Customer</th>
+                  <th translate>Project</th>
+                  <th translate>Invoice</th>
+                  <th translate>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="assets/images/faces/face1.jpg" alt="image" />
+                      <div class="table-user-name mr-3">
+                        <p class="mb-0 font-weight-medium" translate>Cecelia Cooper</p>
+                        <span class="availability-status bg-danger"></span><small translate>Payment on hold</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td translate>Angular Admin</td>
+                  <td>
+                    <div class="badge badge-inverse-success" translate>Completed</div>
+                  </td>
+                  <td> $ 77.99 </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="assets/images/faces/face10.jpg" alt="image" />
+                      <div class="table-user-name mr-3">
+                        <p class="mb-0 font-weight-medium" translate>Victor Watkins</p>
+                        <span class="availability-status bg-success"></span><small translate>Email verified</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td translate>Angular Admin</td>
+                  <td>
+                    <div class="badge badge-inverse-success" translate>Completed</div>
+                  </td>
+                  <td> $245.30 </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="assets/images/faces/face11.jpg" alt="image" />
+                      <div class="table-user-name mr-3">
+                        <p class="mb-0 font-weight-medium" translate>Ada Burgess</p>
+                        <span class="availability-status bg-info"></span><small translate>Email verified</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td translate>One page html</td>
+                  <td>
+                    <div class="badge badge-inverse-danger" translate>Completed</div>
+                  </td>
+                  <td> $ 160.25 </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="assets/images/faces/face13.jpg" alt="image" />
+                      <div class="table-user-name mr-3">
+                        <p class="mb-0 font-weight-medium" translate>Dollie Lynch</p>
+                        <span class="availability-status bg-success"></span><small translate>Email verified</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td translate>Wordpress</td>
+                  <td>
+                    <div class="badge badge-inverse-success " translate>Declined</div>
+                  </td>
+                  <td> $ 123.21 </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="assets/images/faces/face16.jpg" alt="image" />
+                      <div class="table-user-name mr-3">
+                        <p class="mb-0 font-weight-medium" translate>Harry Holloway</p>
+                        <span class="availability-status bg-warning"></span><small translate>Payment on process</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td translate>VueJs Application</td>
+                  <td>
+                    <div class="badge badge-inverse-danger" translate>Declined</div>
+                  </td>
+                  <td> $ 150.00 </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <a class="text-black mt-3 d-block pr-3" href="#"> <span class="font-weight-medium h6" translate>View all order history</span> <i class="mdi mdi-chevron-left"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title font-weight-medium" translate>Business Survey</div>
+          <p class="text-muted" translate>Lorem ipsum dolor sitadipiscing elit, sed amet do eiusmod tempor we find a new solution</p>
+          <div class="d-flex flex-wrap border-bottom py-2 border-top justify-content-between">
+            <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_3.jpg" alt="">
+            <div class="pt-2">
+              <h5 class="mb-0" translate>Villa called Archagel</h5>
+              <p class="mb-0 text-muted" translate>St, San Diego, CA</p>
+              <h5 class="mb-0">$600/mo</h5>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap border-bottom py-2 justify-content-between">
+            <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_1.jpg" alt="">
+            <div class="pt-2">
+              <h5 class="mb-0" translate>Luxury villa in Hermo</h5>
+              <p class="mb-0 text-muted" translate>Glendale, CA</p>
+              <h5 class="mb-0">$900/mo</h5>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap border-bottom py-2 justify-content-between">
+            <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_2.jpg" alt="">
+            <div class="pt-2">
+              <h5 class="mb-0" translate>House on the Clarita</h5>
+              <p class="mb-0 text-muted" translate>Business Survey</p>
+              <h5 class="mb-0">$459/mo</h5>
+            </div>
+          </div>
+          <a class="text-black mt-3 d-block font-weight-medium h6" href="#" translate>View all<i
+              class="mdi mdi-chevron-left"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-black" translate>To do Task List</h4>
+          <p class="text-muted" translate>Created by anonymous</p>
+          <div class="list-wrapper">
+            <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+              <li>
+                <div class="form-check form-check-flat">
+                  <label class="form-check-label" translate>
+                    <input type="checkbox" class="form-check-input">
+                    Meeting with Alisa
+                    <i class="input-helper"></i>
+                  </label>
+                    <span class="list-time" translate>4 Hours Ago</span>
+                </div>
+              </li>
+              <li>
+                <div class="form-check form-check-flat">
+                  <label class="form-check-label" translate>
+                    <input type="checkbox" class="form-check-input">
+                    Create invoice
+                    <i class="input-helper"></i>
+                  </label>
+                    <span class="list-time" translate>6 Hours Ago</span>
+                </div>
+              </li>
+              <li class="completed">
+                <div class="form-check form-check-flat">
+                  <label class="form-check-label" translate>
+                    <input type="checkbox" class="form-check-input" checked>
+                    Prepare for presentation
+                    <i class="input-helper"></i>
+                  </label>
+                    <span class="list-time" translate>2 Hours Ago</span>
+                </div>
+              </li>
+              <li>
+                <div class="form-check form-check-flat">
+                  <label class="form-check-label" translate>
+                    <input type="checkbox" class="form-check-input">
+                    Pick up kids from school
+                    <i class="input-helper"></i>
+                  </label>
+                    <span class="list-time" translate>8 Hours Ago</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-items d-flex flex-wrap flex-sm-nowrap">
+            <input type="text" class="form-control todo-list-input flex-grow" placeholder="Add task name">
+            <button class="add btn btn-primary font-weight-regular mt-2 mt-sm-0  text-nowrap" id="add-task" translate>Add Task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-md-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-black" translate>Recent Customers</h4>
+          <p class="text-muted" translate>All contacts</p>
+          <div class="row pt-2 pb-1">
+            <div class="col-12 col-sm-7">
+              <div class="row">
+                <div class="col-4 col-md-4">
+                  <img class="customer-img" src="assets/images/faces/face22.jpg" alt="">
+                </div>
+                <div class="col-8 col-md-8 p-sm-0">
+                  <h6 class="mb-0" translate>Cecelia Cooper</h6>
+                  <p class="text-muted font-12">05:58AM</p>
+                </div>
+              </div>
+            </div>
+            <div class=" col-sm-5 pl-0">
+              <canvas baseChart [chartType]="'line'" [datasets]="areaChartData1" [labels]="areaChartLabels1"
+                [options]="areaChartOptions1" [colors]="areaChartColors1"></canvas>
+            </div>
+          </div>
+          <div class="row py-1">
+            <div class="col-sm-7">
+              <div class="row">
+                <div class="col-4 col-sm-4">
+                  <img class="customer-img" src="assets/images/faces/face25.jpg" alt="">
+                </div>
+                <div class="col-8 col-sm-8 p-sm-0">
+                  <h6 class="mb-0" translate>Victor Watkins</h6>
+                  <p class="text-muted font-12" translate>05:28AM</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-5 pl-0">
+              <canvas baseChart [chartType]="'line'" [datasets]="areaChartData2" [labels]="areaChartLabels2"
+                [options]="areaChartOptions2" [colors]="areaChartColors2"></canvas>
+            </div>
+          </div>
+          <div class="row py-1">
+            <div class="col-sm-7">
+              <div class="row">
+                <div class="col-4 col-sm-4">
+                  <img class="customer-img" src="assets/images/faces/face15.jpg" alt="">
+                </div>
+                <div class="col-8 col-sm-8 p-sm-0">
+                  <h6 class="mb-0" translate>Ada Burgess</h6>
+                  <p class="text-muted font-12">05:57AM</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-5 pl-0">
+              <canvas baseChart [chartType]="'line'" [datasets]="areaChartData3" [labels]="areaChartLabels3"
+                [options]="areaChartOptions3" [colors]="areaChartColors1"></canvas>
+            </div>
+          </div>
+          <div class="row py-1">
+            <div class="col-sm-7">
+              <div class="row">
+                <div class="col-4 col-sm-4">
+                  <img class="customer-img" src="assets/images/faces/face5.jpg" alt="">
+                </div>
+                <div class="col-8 col-sm-8 p-sm-0">
+                  <h6 class="mb-0" translate>Dollie Lynch</h6>
+                  <p class="text-muted font-12">05:59AM</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-5 pl-0">
+              <canvas baseChart [chartType]="'line'" [datasets]="areaChartData4" [labels]="areaChartLabels4"
+                [options]="areaChartOptions4" [colors]="areaChartColors4"></canvas>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-7">
+              <div class="row">
+                <div class="col-4 col-sm-4">
+                  <img class="customer-img" src="assets/images/faces/face2.jpg" alt="">
+                </div>
+                <div class="col-8 col-sm-8 p-sm-0">
+                  <h6 class="mb-0" translate>Harry Holloway</h6>
+                  <p class="text-muted font-12 mb-0">05:13AM</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-5 pl-0">
+              <canvas height="100" baseChart [chartType]="'line'" [datasets]="areaChartData5" [labels]="areaChartLabels5"
+                [options]="areaChartOptions5" [colors]="areaChartColors5"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-md-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-black" translate>Business Survey</h4>
+          <p class="text-muted pb-2" translate>Jan 01 2019 - Dec 31 2019</p>
+          <canvas baseChart [chartType]="'bar'" [datasets]="barStackData" [labels]="barStackLabels"
+            [options]="barStackOptions" [colors]="barStackColors"></canvas>
+          <div class="row border-bottom pb-3 pt-4 align-items-center mx-0">
+            <div class="col-sm-9 pl-0">
+              <div class="d-flex">
+                <img class="img-decoration" src="assets/images/dashboard/img_4.jpg" alt="">
+                <div class="pr-2">
+                  <h6 class="m-0" translate>Red Chair</h6>
+                  <p class="m-0" translate>Home Decoration</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 pl-0 pl-sm-3">
+              <div class="badge badge-inverse-success mt-3 mt-sm-0"> +7.7%</div>
+            </div>
+          </div>
+          <div class="row py-3 align-items-center mx-0">
+            <div class="col-sm-9 pl-0">
+              <div class="d-flex">
+                <img class="img-decoration" src="assets/images/dashboard/img_5.jpg" alt="">
+                <div class="pr-2">
+                  <h6 class="m-0" translate>Gray Sofa</h6>
+                  <p class="m-0" translate>Home Decoration</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 pl-0 pl-sm-3">
+              <div class="badge badge-inverse-success mt-3 mt-sm-0"> +7.7%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-8 grid-margin stretch-card">
+      <div class="card card-calender">
+        <div class="card-body">
+          <div class="row pt-4">
+            <div class="col-sm-6">
+              <h1 class="text-white">10:16PM</h1>
+              <h5 class="text-white" translate>Monday 25 October, 2016</h5>
+              <h5 class="text-white pt-2 m-0" translate>Precipitation:50%</h5>
+              <h5 class="text-white m-0" translate>Humidity:23%</h5>
+              <h5 class="text-white m-0" translate>Wind:13 km/h</h5>
+            </div>
+            <div class="col-sm-6 text-sm-right pt-3 pt-sm-0">
+              <h3 class="text-white" translate>Clear Sky</h3>
+              <p class="text-white m-0" translate>London, UK</p>
+              <h3 class="text-white m-0">21°C</h3>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-sm-12">
+              <ul class="d-flex pl-0 overflow-auto">
+                <li class="weakly-weather-item text-white font-weight-medium text-center active">
+                  <p class="mb-0" translate>TODAY</p>
+                  <i class="mdi mdi-weather-cloudy"></i>
+                  <p class="mb-0"> 21<span class="symbol">°c</span>
+                  </p>
+                </li>
+                <li class="weakly-weather-item text-white font-weight-medium text-center">
+                  <p class="mb-0" translate>MON</p>
+                  <i class="mdi mdi-weather-hail"></i>
+                  <p class="mb-0"> 21<span class="symbol">°c</span>
+                  </p>
+                </li>
+                <li class="weakly-weather-item text-white font-weight-medium text-center">
+                  <p class="mb-0" translate>TUE</p>
+                  <i class="mdi mdi-weather-cloudy"></i>
+                  <p class="mb-0"> 21<span class="symbol">°c</span>
+                  </p>
+                </li>
+                <li class="weakly-weather-item text-white font-weight-medium text-center">
+                  <p class="mb-0" translate>WED</p>
+                  <i class="mdi mdi-weather-fog"></i>
+                  <p class="mb-0"> 21<span class="symbol">°c</span>
+                  </p>
+                </li>
+                <li class="weakly-weather-item text-white font-weight-medium text-center">
+                  <p class="mb-0" translate>THU</p>
+                  <i class="mdi mdi-weather-hail"></i>
+                  <p class="mb-0"> 21<span class="symbol">°c</span>
+                  </p>
+                </li>
+                <li class="weakly-weather-item text-white font-weight-medium text-center">
+                  <p class="mb-0" translate>FRI</p>
+                  <i class="mdi mdi-weather-cloudy"></i>
+                  <p class="mb-0"> 21<span class="symbol">°c</span>
+                  </p>
+                </li>
+                <li class="weakly-weather-item text-white font-weight-medium text-center">
+                  <p class="mb-0" translate>SAT</p>
+                  <i class="mdi mdi-weather-hail"></i>
+                  <p class="mb-0"> 21<span class="symbol">°c</span>
+                  </p>
+                </li>
+                <li class="weakly-weather-item text-white font-weight-medium text-center">
+                  <p class="mb-0" translate>SUN</p>
+                  <i class="mdi mdi-weather-cloudy"></i>
+                  <p class="mb-0"> 21<span class="symbol">°c</span>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 grid-margin stretch-card">
+      <!--activity-->
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">
+            <span class="d-flex justify-content-between">
+              <span translate>Activity</span>
+              <span class="dropdown d-block" ngbDropdown>
+                <span id="dropdownMenuButton1" ngbDropdownToggle>
+                  <span><i class="mdi mdi-dots-horizontal"></i></span>
+                </span>
+                <span class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ngbDropdownMenu>
+                  <a class="dropdown-item" href="#" translate>Contact</a>
+                  <a class="dropdown-item" href="#" translate>Helpdesk</a>
+                  <a class="dropdown-item" href="#" translate>Chat with us</a>
+                </span>
+              </span>
+            </span>
+          </h4>
+          <ul class="gradient-bullet-list border-bottom">
+            <li>
+              <h6 class="mb-0" translate>It's awesome when we find a new solution</h6>
+              <p class="text-muted" translate>2h ago</p>
+            </li>
+            <li>
+              <h6 class="mb-0" translate>Report has been updated</h6>
+              <p class="text-muted">
+                <span translate>2h ago</span>
+                <span class=" d-inline-block">
+                  <span class="d-flex d-inline-block">
+                    <img class="ml-1 activity-img" src="assets/images/faces/face1.jpg" alt="">
+                    <img class="ml-1 activity-img" src="assets/images/faces/face10.jpg" alt="">
+                    <img class="ml-1 activity-img" src="assets/images/faces/face14.jpg" alt="">
+                  </span>
+                </span>
+              </p>
+            </li>
+            <li>
+              <h6 class="mb-0" translate>Analytics dashboard has been created#Slack</h6>
+              <p class="text-muted" translate>2h ago</p>
+            </li>
+            <li>
+              <h6 class="mb-0" translate>It's awesome when we find a new solution</h6>
+              <p class="text-muted" translate>2h ago</p>
+            </li>
+          </ul>
+          <a class="text-black mt-3 mb-0 d-block h6" href="#" translate>View all<i class="mdi mdi-chevron-left"></i></a>
+        </div>
+      </div>
+      <!--activity ends-->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4 col-md-6 grid-margin stretch-card">
+      <div class="card card-invoice">
+        <div class="card-body">
+          <h4 class="card-title pb-3" translate>Pending invoices</h4>
+          <div class="list-card">
+            <div class="row align-items-center">
+              <div class="col-7 col-sm-8">
+                <div class="row align-items-center">
+                  <div class="col-sm-4">
+                    <img class="mr-2" src="assets/images/faces/face2.jpg" alt="">
+                  </div>
+                  <div class="col-sm-8 pr-0 pl-sm-0">
+                    <span translate>06 Jan 2019</span>
+                    <h6 class="mb-1 mb-sm-0" translate>Isabel Cross</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5 col-sm-4">
+                <div class="d-flex pt-1 align-items-center">
+                  <div class="reload-outer bg-info">
+                    <i class="mdi mdi-reload"></i>
+                  </div>
+                  <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
+                    <div id="dropdownMenuButton2" ngbDropdownToggle>
+                      <p><i class="mdi mdi-dots-vertical"></i></p>
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2" ngbDropdownMenu>
+                      <a class="dropdown-item" href="#" translate>Sales</a>
+                      <a class="dropdown-item" href="#" translate>Track Invoice</a>
+                      <a class="dropdown-item" href="#" translate>Payment History</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="list-card">
+            <div class="row align-items-center">
+              <div class="col-7 col-sm-8">
+                <div class="row align-items-center">
+                  <div class="col-sm-4">
+                    <img class="mr-2"  src="assets/images/faces/face3.jpg" alt="">
+                  </div>
+                  <div class="col-sm-8 pr-0 pl-sm-0">
+                    <span translate>18 Mar 2019</span>
+                    <h6 class="mb-1 mb-sm-0" translate>Carrie Parker</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5 col-sm-4">
+                <div class="d-flex pt-1 align-items-center">
+                  <div class="reload-outer bg-primary">
+                    <i class="mdi mdi-reload"></i>
+                  </div>
+                  <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
+                    <div id="dropdownMenuButton3" ngbDropdownToggle>
+                      <p><i class="mdi mdi-dots-vertical"></i></p>
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3" ngbDropdownMenu>
+                      <a class="dropdown-item" href="#" translate>Sales</a>
+                      <a class="dropdown-item" href="#" translate>Track Invoice</a>
+                      <a class="dropdown-item" href="#" translate>Payment History</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="list-card">
+            <div class="row align-items-center">
+              <div class="col-7 col-sm-8">
+                <div class="row align-items-center">
+                  <div class="col-sm-4">
+                    <img class="mr-2"  src="assets/images/faces/face11.jpg" alt="">
+                  </div>
+                  <div class="col-sm-8 pr-0 pl-sm-0">
+                    <span translate>10 Apr 2019</span>
+                    <h6 class="mb-1 mb-sm-0" translate>Don Bennett</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5 col-sm-4">
+                <div class="d-flex pt-1 align-items-center">
+                  <div class="reload-outer bg-warning">
+                    <i class="mdi mdi-reload"></i>
+                  </div>
+                  <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
+                    <div id="dropdownMenuButton4" ngbDropdownToggle>
+                      <p><i class="mdi mdi-dots-vertical"></i></p>
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4" ngbDropdownMenu>
+                      <a class="dropdown-item" href="#" translate>Sales</a>
+                      <a class="dropdown-item" href="#" translate>Track Invoice</a>
+                      <a class="dropdown-item" href="#" translate>Payment History</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="list-card">
+            <div class="row align-items-center">
+              <div class="col-7 col-sm-8">
+                <div class="row align-items-center">
+                  <div class="col-sm-4">
+                    <img class="mr-2"  src="assets/images/faces/face3.jpg" alt="">
+                  </div>
+                  <div class="col-sm-8 pr-0 pl-sm-0">
+                    <span translate>18 Mar 2019</span>
+                    <h6 class="mb-1 mb-sm-0" translate>Carrie Parker</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5 col-sm-4">
+                <div class="d-flex pt-1 align-items-center">
+                  <div class="reload-outer bg-info">
+                    <i class="mdi mdi-reload"></i>
+                  </div>
+                  <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
+                    <div id="dropdownMenuButton5" ngbDropdownToggle>
+                      <p><i class="mdi mdi-dots-vertical"></i></p>
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton5" ngbDropdownMenu>
+                      <a class="dropdown-item" href="#" translate>Sales</a>
+                      <a class="dropdown-item" href="#" translate>Track Invoice</a>
+                      <a class="dropdown-item" href="#" translate>Payment History</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-md-6 grid-margin stretch-card">
+      <!--datepicker-->
+      <div class="card">
+        <div class="card-body ngb-dp-custom pt-2">
+          <ngb-datepicker class="w-100 border-0" [navigation]="'arrows'"></ngb-datepicker>
+        </div>
+      </div>
+      <!--datepicker ends-->
+    </div>
+    <div class="col-xl-4 col-md-6 stretch-card grid-margin stretch-card">
+      <!--browser stats-->
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" translate>Browser stats</h4>
+          <div class="row py-2">
+            <div class="col-sm-12">
+              <div class="d-flex justify-content-between pb-3 border-bottom">
+                <div>
+                  <img class="ml-2" src="assets/images/browser-logo/opera-logo.png" alt=""><span class="p" translate>opera mini</span>
+                </div>
+                <p class="mb-0">23%</p>
+              </div>
+            </div>
+          </div>
+          <div class="row py-2">
+            <div class="col-sm-12">
+              <div class="d-flex justify-content-between pb-3 border-bottom">
+                <div>
+                  <img class="ml-2" src="assets/images/browser-logo/safari-logo.png" alt=""> <span
+                    class="p" translate>Safari</span>
+                </div>
+                <p class="mb-0">07%</p>
+              </div>
+            </div>
+          </div>
+          <div class="row py-2">
+            <div class="col-sm-12">
+              <div class="d-flex justify-content-between pb-3 border-bottom">
+                <div>
+                  <img class="ml-2" src="assets/images/browser-logo/chrome-logo.png" alt=""> <span
+                    class="p" translate>Chrome</span>
+                </div>
+                <p class="mb-0">33%</p>
+              </div>
+            </div>
+          </div>
+          <div class="row py-2">
+            <div class="col-sm-12">
+              <div class="d-flex justify-content-between pb-3 border-bottom">
+                <div>
+                  <img class="ml-2" src="assets/images/browser-logo/firefox-logo.png" alt=""> <span
+                    class="p" translate>Firefox</span>
+                </div>
+                <p class="mb-0">17%</p>
+              </div>
+            </div>
+          </div>
+          <div class="row py-2">
+            <div class="col-sm-12">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <img class="ml-2" src="assets/images/browser-logo/explorer-logo.png" alt=""> <span
+                    class="p" translate>Explorer</span>
+                </div>
+                <p class="mb-0">05%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--browser stats ends-->
+    </div>
+  </div>

@@ -1,0 +1,261 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <li class="nav-item">
+        <a class="brand-logo"(click)="clickedMenu($event)" routerLink="/"><img src="assets/images/logo.svg" alt="logo" /></a>
+        <a class="brand-logo-mini" (click)="clickedMenu($event)" routerLink="/"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
+    </li>
+    <li class="nav-item nav-profile">
+      <a href="javascript:;" class="nav-link">
+        <div class="nav-profile-image">
+          <img src="assets/images/faces/face1.jpg" alt="profile">
+          <span class="login-status online"></span> <!--change to offline or busy as needed-->
+        </div>
+        <div class="nav-profile-text">
+          <span class="font-weight-medium mb-2" translate>J. KIBASSA</span>
+        </div>
+        <i class="badge badge-danger nav-profile-badge">3</i>
+      </a>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" routerLink="/dashboard" routerLinkActive #dashboard="routerLinkActive">
+        <i class="mdi mdi-home menu-icon"></i>
+        <span class="menu-title" translate>Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active': rtl.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" routerLink="/rtl" routerLinkActive #rtl="routerLinkActive">
+        <i class="mdi mdi-file-restore menu-icon"></i>
+        <span class="menu-title" translate>RTL</span>
+      </a>
+    </li>
+    <li class="nav-item" [ngClass]="{'active' : accordions.isActive || buttons.isActive || badges.isActive || breadcrumbs.isActive || dropdowns.isActive || modals.isActive || progressbar.isActive || pagination.isActive || tabs.isActive || typography.isActive || tooltips.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link1">
+        <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+        <span class="menu-title" translate>Basic UI Elements</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="ui-basic" [ngbCollapse]="parentId !== 'nav-link1'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/accordions" routerLinkActive="active" #accordions="routerLinkActive" translate>Accordions</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/buttons" routerLinkActive="active" #buttons="routerLinkActive" translate>Buttons</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/badges" routerLinkActive="active" #badges="routerLinkActive" translate>Badges</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/breadcrumbs" routerLinkActive="active" #breadcrumbs="routerLinkActive" translate>Breadcrumbs</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/dropdowns" routerLinkActive="active" #dropdowns="routerLinkActive" translate>Dropdowns</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/modals" routerLinkActive="active" #modals="routerLinkActive" translate>Modals</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/progressbar" routerLinkActive="active" #progressbar="routerLinkActive" translate>Progress bar</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/pagination" routerLinkActive="active" #pagination="routerLinkActive" translate>Pagination</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/tabs" routerLinkActive="active" #tabs="routerLinkActive" translate>Tabs</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/typography" routerLinkActive="active" #typography="routerLinkActive" translate>Typography</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="basic-ui/tooltips" routerLinkActive="active" #tooltips="routerLinkActive" translate>Tooltips</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : dragula.isActive || clipboard.isActive || contextMenu.isActive || slider.isActive || carousel.isActive || loaders.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link2">
+        <i class="mdi mdi-cards-variant menu-icon"></i>
+        <span class="menu-title" translate>Advanced UI</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="ui-advanced" [ngbCollapse]="parentId !== 'nav-link2'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="advanced-ui/dragula" routerLinkActive="active" #dragula="routerLinkActive" translate>Dragula</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="advanced-ui/clipboard" routerLinkActive="active" #clipboard="routerLinkActive" translate>Clipboard</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="advanced-ui/context-menu" routerLinkActive="active" #contextMenu="routerLinkActive" translate>Context menu</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="advanced-ui/slider" routerLinkActive="active" #slider="routerLinkActive" translate>Sliders</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="advanced-ui/carousel" routerLinkActive="active" #carousel="routerLinkActive" translate>Carousel</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="advanced-ui/loaders" routerLinkActive="active" #loaders="routerLinkActive" translate>Loaders</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : basicElements.isActive || advancedElements.isActive || validation.isActive || wizard.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link3">
+        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+        <span class="menu-title" translate>Form elements</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="form-elements" [ngbCollapse]="parentId !== 'nav-link3'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"><a class="nav-link" routerLink="forms/basic-elements" routerLinkActive="active" #basicElements="routerLinkActive" translate>Basic Elements</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="forms/advanced-elements" routerLinkActive="active" #advancedElements="routerLinkActive" translate>Advanced Elements</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="forms/validation" routerLinkActive="active" #validation="routerLinkActive" translate>Validation</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="forms/wizard" routerLinkActive="active" #wizard="routerLinkActive" translate>Wizard</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : textEditor.isActive || codeEditor.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link4">
+        <i class="mdi mdi-pencil-box-outline menu-icon"></i>
+        <span class="menu-title" translate>Editors</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="editors" [ngbCollapse]="parentId !== 'nav-link4'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"><a class="nav-link" routerLink="editors/text-editor" routerLinkActive="active" #textEditor="routerLinkActive" translate>Text editors</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="editors/code-editor" routerLinkActive="active" #codeEditor="routerLinkActive" translate>Code editors</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : chartjs.isActive || morris.isActive || chartist.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link5">
+        <i class="mdi mdi-chart-bar menu-icon"></i>
+        <span class="menu-title" translate>Charts</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="charts" [ngbCollapse]="parentId !== 'nav-link5'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="charts/chartjs" routerLinkActive="active" #chartjs="routerLinkActive" translate>ChartJs</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="charts/morris" routerLinkActive="active" #morris="routerLinkActive" translate>Morris</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="charts/chartist" routerLinkActive="active" #chartist="routerLinkActive" translate>Chartist</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : basicTable.isActive || dataTable.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link6">
+        <i class="mdi mdi-table-large menu-icon"></i>
+        <span class="menu-title" translate>Tables</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="tables" [ngbCollapse]="parentId !== 'nav-link6'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="tables/basic-table" routerLinkActive="active" #basicTable="routerLinkActive" translate>Basic table</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="tables/data-table" routerLinkActive="active" #dataTable="routerLinkActive" translate>Data table</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : popups.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" routerLink="advanced-ui/popups" routerLinkActive #popups="routerLinkActive">
+        <i class="mdi mdi-forum menu-icon"></i>
+        <span class="menu-title" translate>Popups</span>
+      </a>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : notifications.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" routerLink="basic-ui/notifications" routerLinkActive #notifications="routerLinkActive">
+        <i class="mdi mdi-bell-ring menu-icon"></i>
+        <span class="menu-title" translate>Notifications</span>
+      </a>
+    </li>
+    <li class="nav-item" [ngClass]=" { 'active' : flagIcons.isActive || mdi.isActive || fontAwesome.isActive || simpleLineIcons.isActive || themify.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link7">
+        <i class="mdi mdi-contacts menu-icon"></i>
+        <span class="menu-title" translate>Icons</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="icons" [ngbCollapse]="parentId !== 'nav-link7'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="icons/mdi" routerLinkActive="active" #mdi="routerLinkActive" translate>Material</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="icons/flag-icons" routerLinkActive="active" #flagIcons="routerLinkActive" translate>Flag icons</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="icons/font-awesome" routerLinkActive="active" #fontAwesome="routerLinkActive" translate>Font Awesome</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="icons/simple-line-icons" routerLinkActive="active" #simpleLineIcons="routerLinkActive" translate>Simple line icons</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="icons/themify" routerLinkActive="active" #themify="routerLinkActive" translate>Themify icons</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : googleMaps.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link8">
+        <i class="mdi mdi-map-marker-radius menu-icon"></i>
+        <span class="menu-title" translate>Maps</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="maps" [ngbCollapse]="parentId !== 'nav-link8'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="maps/google-map" routerLinkActive="active" #googleMaps="routerLinkActive" translate>Google Map</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : login.isActive || login2.isActive || register.isActive || register2.isActive || lockScreen.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link9">
+        <i class="mdi mdi-lock menu-icon"></i>
+        <span class="menu-title" translate>User Pages</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="auth" [ngbCollapse]="parentId !== 'nav-link9'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="user-pages/login" routerLinkActive="active" #login="routerLinkActive" translate>Login</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="user-pages/login-2" routerLinkActive="active" #login2="routerLinkActive" translate>Login 2</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="user-pages/register" routerLinkActive="active" #register="routerLinkActive" translate>Register</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="user-pages/register-2" routerLinkActive="active" #register2="routerLinkActive" translate>Register 2</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="user-pages/lock-screen" routerLinkActive="active" #lockScreen="routerLinkActive" translate>Lockscreen</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : error404.isActive || error500.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link10">
+        <i class="mdi mdi-security menu-icon"></i>
+        <span class="menu-title" translate>Error pages</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="error" [ngbCollapse]="parentId !== 'nav-link10'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="error-pages/404" routerLinkActive="active" #error404="routerLinkActive"> 404 </a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="error-pages/500" routerLinkActive="active" #error500="routerLinkActive"> 500 </a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : blankPage.isActive || profile.isActive || faq.isActive || faq2.isActive || newsGrid.isActive || timeline.isActive || searchResult.isActive || portfolio.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link11">
+        <i class="mdi mdi-medical-bag menu-icon"></i>
+        <span class="menu-title" translate>General Pages</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="general-pages" [ngbCollapse]="parentId !== 'nav-link11'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="general-pages/blank-page" routerLinkActive="active" #blankPage="routerLinkActive" translate>Blank Page</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="general-pages/profile" routerLinkActive="active" #profile="routerLinkActive" translate>Profile</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="general-pages/faq" routerLinkActive="active" #faq="routerLinkActive" translate>FAQ</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="general-pages/faq-2" routerLinkActive="active" #faq2="routerLinkActive" translate>FAQ 2</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="general-pages/news-grid" routerLinkActive="active" #newsGrid="routerLinkActive" translate>News grid</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="general-pages/timeline" routerLinkActive="active" #timeline="routerLinkActive" translate>Timeline</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="general-pages/search-results" routerLinkActive="active" #searchResult="routerLinkActive" translate>Search Results</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="general-pages/portfolio" routerLinkActive="active" #portfolio="routerLinkActive" translate>Portfolio</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : invoice.isActive || pricing.isActive || orders.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link12">
+        <i class="mdi mdi-shopping menu-icon"></i>
+        <span class="menu-title" translate>E-commerce</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="e-commerce" [ngbCollapse]="parentId !== 'nav-link12'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="ecommerce/invoice" routerLinkActive="active" #invoice="routerLinkActive" translate>Invoice</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="ecommerce/pricing" routerLinkActive="active" #pricing="routerLinkActive" translate>Pricing Table</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="ecommerce/orders" routerLinkActive="active" #orders="routerLinkActive" translate>Orders</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : email.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" routerLink="apps/email" routerLinkActive #email="routerLinkActive">
+        <i class="mdi mdi-email menu-icon"></i>
+        <span class="menu-title" translate>E-mail</span>
+      </a>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : calendar.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" routerLink="apps/calendar" routerLinkActive #calendar="routerLinkActive">
+        <i class="mdi mdi-calendar-today menu-icon"></i>
+        <span class="menu-title" translate>Calendar</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <span class="nav-link">
+        <span class="menu-title" translate>Docs</span>
+      </span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="clickedMenu($event)" href="http://bootstrapdash.com/demo/breeze/angular/documentation/documentation.html" target="_blank">
+        <i class="mdi mdi-file-document-box menu-icon"></i>
+        <span class="menu-title" translate>Documentation</span>
+      </a>
+    </li>
+    <li class="nav-item mt-5">
+      <a class="nav-link" (click)="clickedMenu($event)" href="#" target="_blank">
+        <span class="menu-title font-weight-medium" translate>Notification</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link"(click)="clickedMenu($event)" href="#" target="_blank">
+        <span class="menu-title signout-color font-weight-medium" translate>Sign Out</span>
+      </a>
+    </li>
+  </ul>
+</nav>
