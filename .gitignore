@@ -21,3 +21,5 @@ unlabeled_data
 
 #Jupyter NB Checkpoints
 .ipynb_checkpoints/
+
+ia/notebooks/*.*/*.*jpg
