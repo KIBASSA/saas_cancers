@@ -1,0 +1,117 @@
+<div class="page-header">
+  <h3 class="page-title">
+    Context menu
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">UI Elements</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Context menu</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-md-6 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">simple</h4>
+        <p class="card-description">
+          A simple context menu
+        </p>
+        <div class="card card-inverse-info" [contextMenu]="simpleMenu">
+          <div class="card-body">
+            <p class="card-text">
+              Right click somewhere in this colored area for simple context menu</p>
+          </div>
+        </div>
+        <context-menu #simpleMenu>
+          <ng-template contextMenuItem>Edit</ng-template>
+          <ng-template contextMenuItem>Cut</ng-template>
+          <ng-template contextMenuItem>Copy</ng-template>
+          <ng-template contextMenuItem>Paste</ng-template>
+          <ng-template contextMenuItem>Delete</ng-template>
+          <ng-template contextMenuItem>Quit</ng-template>
+        </context-menu>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Access keys</h4>
+        <p class="card-description">
+          Context menu with actions
+        </p>
+        <div class="card card-inverse-success" [contextMenu]="actionMenu">
+          <div class="card-body">
+            <p class="card-text">
+              Right click in this colored area for context menu with action</p>
+          </div>
+        </div>
+        <context-menu #actionMenu>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Edit')">Edit</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Cut')">Cut</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Copy')">Copy</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Paste')">Paste</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Delete')">Delete</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Quit')">Quit</ng-template>
+        </context-menu>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">keeping menu open</h4>
+        <p class="card-description">
+          Context menu that keeps opened            
+        </p>
+        <div class="card card-inverse-warning" [contextMenu]="keepMenuOpen">
+          <div class="card-body">
+            <p class="card-text">
+              Right click somewhere in this colored area for context menu that keeps opened</p>
+          </div>
+        </div>
+        <context-menu #keepMenuOpen>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Edit')">Edit</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Cut')">Cut</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Copy')">Copy</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Paste')">Paste</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Delete')">Delete</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Quit')">Quit</ng-template>
+        </context-menu>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Multi-level menu</h4>
+        <p class="card-description">
+          Context menu with sub menu                    
+        </p>
+        <div class="card card-inverse-danger" [contextMenu]="multiLevelMenu">
+          <div class="card-body">
+            <p class="card-text">
+              Right click somewhere in this colored area for context menu with multiple levels (sub menu)
+            </p>
+          </div>
+        </div>
+        <context-menu #multiLevelMenu>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Edit')">Edit</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Cut')">Cut</ng-template>
+          <ng-template contextMenuItem (execute)="actionMenuClick('Copy')">Copy</ng-template>
+          <ng-template contextMenuItem [subMenu]="submenu1">Submenu</ng-template>
+          <context-menu #submenu1>
+            <ng-template contextMenuItem [subMenu]="submenu11">Submenu Content</ng-template>        
+            <ng-template contextMenuItem>Submenu Content</ng-template>
+            <context-menu #submenu11>
+              <ng-template contextMenuItem>Submenu Content</ng-template>
+              <ng-template contextMenuItem>Submenu Content</ng-template>
+              <ng-template contextMenuItem>Submenu Content</ng-template>
+            </context-menu>      
+          </context-menu>
+        </context-menu>
+      </div>
+    </div>
+  </div>                       
+</div>

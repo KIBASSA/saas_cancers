@@ -1,0 +1,78 @@
+<div class="page-header">
+  <h3 class="page-title">
+    Clipboard
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">UI Elements</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Clipboard</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card-body">
+            <h4 class="card-title">clipboard on text input</h4>
+            <p class="card-description">Cut/copy from text input</p>
+            <input type="text" #clipboardExample1 class="form-control" value="hello">
+            <div class="mt-3">
+              <button type="button" class="btn btn-info btn-clipboard" [ngxClipboard]="clipboardExample1">Copy</button>
+              <button type="button" class="btn btn-success btn-clipboard" [ngxClipboard]="clipboardExample1" (cbOnSuccess)="cut(clipboardExample1)">Cut</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card-body">
+            <h4 class="card-title">Clipboard on textarea</h4>
+            <p class="card-description">Cut/copy from textarea</p>
+            <textarea #clipboardExample2 class="form-control" rows="3">Hello</textarea>
+            <div class="mt-3">
+              <button type="button" class="btn btn-info btn-clipboard" [ngxClipboard]="clipboardExample2">Copy</button>
+              <button type="button" class="btn btn-success btn-clipboard" [ngxClipboard]="clipboardExample2" (cbOnSuccess)="cut(clipboardExample2)">Cut</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card-body">
+            <h4 class="card-title">Clipboard on paragraph</h4>
+            <p class="card-description">Copy paragraph</p>
+            <div class="card card-inverse-secondary">
+              <div class="card-body">
+                <p #clipboardExample3>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+            <div class="mt-3">
+              <button type="button" class="btn btn-info btn-clipboard" ngxClipboard [cbContent]="clipboardExample3.innerHTML">Copy</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card-body">
+            <h4 class="card-title">Copy portion from paragraph</h4>
+            <p class="card-description">Copy the highlighted text from this paragraph</p>
+            <div class="card card-inverse-secondary">
+              <div class="card-body">
+                <p>
+                  Lorem ipsum <span class="bg-info text-white" #clipboardExample4>dolor sit amet</span>, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+              </div>
+            </div>
+            <div class="mt-3">
+              <button type="button" class="btn btn-info btn-clipboard" ngxClipboard [cbContent]="clipboardExample4.innerHTML">Copy highlighted text</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

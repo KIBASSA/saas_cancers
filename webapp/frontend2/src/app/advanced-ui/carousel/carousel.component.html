@@ -1,0 +1,189 @@
+<div class="page-header">
+  <h3 class="page-title">
+    Carousel
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">UI Elements</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Carousel</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Basic carousel</h4>
+        <owl-carousel-o [options]="carouselOption1" class="full-width">
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_12.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_2.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_1.jpg" alt="image"/>
+          </ng-template>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Carousel with captions</h4>
+        <owl-carousel-o class="full-width" [options]="carouselOption1">
+          <ng-template carouselSlide>
+            <div class="card text-white">
+              <img class="card-img" src="assets/images/carousel/banner_4.jpg" alt="Card image">
+              <div class="card-img-overlay d-flex">
+                <div class="mt-auto text-center w-100">
+                  <h3>First Slide Label</h3>
+                  <h6 class="card-text mb-4 font-weight-normal">Nulla vitae elit libero, a pharetra augue mollis interdum.</h6>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template carouselSlide>
+            <div class="card text-white">
+              <img class="card-img" src="assets/images/carousel/banner_5.jpg" alt="Card image">
+              <div class="card-img-overlay d-flex">
+                <div class="mt-auto text-center w-100">
+                  <h3>Second Slide Label</h3>
+                  <h6 class="card-text mb-4 font-weight-normal">Nulla vitae elit libero, a pharetra augue mollis interdum.</h6>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template carouselSlide>
+            <div class="card text-white">
+              <img class="card-img" src="assets/images/carousel/banner_6.jpg" alt="Card image">
+              <div class="card-img-overlay d-flex">
+                <div class="mt-auto text-center w-100">
+                  <h3>Third Slide Label</h3>
+                  <h6 class="card-text mb-4 font-weight-normal">Nulla vitae elit libero, a pharetra augue mollis interdum.</h6>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row grid-margin">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Loop</h4>
+        <owl-carousel-o [options]="carouselOption2">
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_7.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_8.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_9.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_10.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_11.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_12.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_2.jpg" alt="image"/>
+          </ng-template>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row grid-margin">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">non-Loop</h4>
+        <owl-carousel-o [options]="carouselOption3">
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_3.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_5.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_6.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_8.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_11.jpg" alt="image"/>
+          </ng-template>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row grid-margin">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Lazy load</h4>
+        <owl-carousel-o [options]="carouselOption4">
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_8.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_10.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_11.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_6.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_3.jpg" alt="image"/>
+          </ng-template>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row grid-margin">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Right to left</h4>
+        <owl-carousel-o [options]="carouselOption5">
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_6.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_9.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_12.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_3.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_7.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_10.jpg" alt="image"/>
+          </ng-template>
+          <ng-template carouselSlide>
+            <img src="assets/images/carousel/banner_2.jpg" alt="image"/>
+          </ng-template>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </div>
+</div>
