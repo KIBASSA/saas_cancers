@@ -1,0 +1,127 @@
+<div class="page-header">
+  <h3 class="page-title">
+    Advanced Elements
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Forms</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Advanced Elements</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-lg-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Fontawesome rating</h4>
+        <p class="card-description">Simple rating with font-awesome icons</p>
+        <bar-rating [(rate)]="fontAwesomeRate" [max]="5" [theme]="'fontawesome'"></bar-rating>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">CSS rating</h4>
+        <p class="card-description">CSS star rating</p>
+        <bar-rating [(rate)]="cssRate" [max]="5"></bar-rating>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">1/10 rating</h4>
+        <p class="card-description">Rating from 1 to 10</p>
+        <bar-rating [(rate)]="oneToTenRate" [max]="10" [theme]="'horizontal'"></bar-rating>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Movie rating</h4>
+        <p class="card-description">Rating reviews</p>
+        <div class="br-wrapper br-theme-bars-movie mb-4">
+          <bar-rating [(rate)]="movieRate" [max]="4" [showText]="true" [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']" [theme]="'movie'"></bar-rating>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Square rating</h4>
+        <p class="card-description">Rating in square options</p>
+        <bar-rating [(rate)]="squareRate" [max]="5" [theme]="'square'"></bar-rating>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Vertical rating</h4>
+        <p class="card-description">Rating as vertical options</p>
+        <bar-rating [(rate)]="verticalRate" [max]="5" [theme]="'vertical'"></bar-rating>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Datepicker</h4>
+        <p class="card-description">Click to open datepicker</p>
+        <angular2-date-picker [(ngModel)]="date" [settings]="datePickersettings"></angular2-date-picker>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Clockpicker</h4>
+        <p class="card-description">A simple clockpicker</p>
+        <input class="form-control" type="time" atp-time-picker value="19:00"/>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Dropzone</h4>
+        <p class="card-description">Click or drag images to upload</p>
+        <dropzone [message]="'Click or drag images here to upload'"></dropzone>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Color picker (default)</h4>
+        <p class="card-description">Click to select color</p>
+        <div class="d-flex align-items-center flex-wrap">
+          <input class="border-0 cursor-pointer" [(colorPicker)]="pickerColor" [style.background]="pickerColor"/>
+          <p class="mb-0 ml-2 text-muted"> Picked: {{pickerColor}}</p>
+        </div>
+      </div>
+    </div>  
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card-body">
+            <h4 class="card-title">Input Tag</h4>
+            <p class="card-description">Type to add a new tag</p>
+            <tag-input [(ngModel)]='tagInputItems' class="ngx-chips"></tag-input>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
