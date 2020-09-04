@@ -1,0 +1,30 @@
+<div class="page-header">
+  <h3 class="page-title">
+    Code editors
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Editors</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Code editors</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Code mirror</h4>
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="card-subtitle">Code Editable</h5>
+            <codemirror [(ngModel)]="codeMirrorData1" [config]="{ theme : 'dracula', lineNumbers: true, mode: 'htmlmixed' }"></codemirror>
+          </div>
+          <div class="col-md-6">
+            <h5 class="card-subtitle">Code Read-only</h5>
+            <codemirror [(ngModel)]="codeMirrorData2" [config]="{ theme : 'dracula', readOnly: 'nocursor', mode: 'shell' }"></codemirror>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
