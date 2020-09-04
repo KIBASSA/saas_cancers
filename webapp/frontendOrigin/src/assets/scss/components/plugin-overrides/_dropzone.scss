@@ -1,0 +1,10 @@
+/* Dropzone */
+dropzone {
+  >.dropzone {
+      &.dz-wrapper {
+          .dz-message {
+              @extend .bg-light;
+          }
+      }
+  }    
+}

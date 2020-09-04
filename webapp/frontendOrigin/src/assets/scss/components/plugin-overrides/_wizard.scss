@@ -1,0 +1,22 @@
+// Wizard
+
+.form-wizard {
+  .card {
+      border: 0;
+      .card-header {
+
+      }
+      .card-block {
+          .content {
+              padding: 2rem 0 0 0;
+              min-height: 24rem;
+          }
+      }
+      .card-footer {
+          padding: 0;
+          button {
+              @extend .btn-primary;
+          }
+      }
+  }    
+}

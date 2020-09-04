@@ -1,0 +1,12 @@
+// Background Mixins //
+@each $color, $value in $theme-gradient-colors {
+	.bg-gradient-#{$color} {
+		background: theme-gradient-color($color);
+	}
+}
+
+@each $color, $value in $theme-colors {
+	.bg-inverse-icon-#{$color} {
+	  @include bg-inverse-icon($value);
+	}
+  }

@@ -1,0 +1,20 @@
+// ngx-context menu
+
+.ngx-contextmenu {
+  .dropdown-menu {
+      li {
+          padding: .2rem .5rem;
+          a {
+              color: $black;
+              text-decoration: none;
+              display: block;
+          }
+          &:hover {
+              background: $black;
+              a {
+                  color: $white;
+              }
+          }
+      }
+  }
+}

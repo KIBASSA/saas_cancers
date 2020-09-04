@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h3 class="page-title">
+    Morris
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">Charts</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Morris</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Line chart</h4>
+        <div mk-morris-js [data]="chartLineData" [options]="chartLineOptions" type="Line"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Bar chart</h4>
+        <div mk-morris-js [data]="chartBarData" [options]="chartBarOptions" type="Bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Area chart</h4>
+        <div mk-morris-js [data]="chartAreaData" [options]="chartAreaOptions" type="Area"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Donut chart</h4>
+        <div mk-morris-js [data]="chartDonutData" [options]="chartDonutOptions" type="Donut"></div>
+      </div>
+    </div>
+  </div>
+</div>

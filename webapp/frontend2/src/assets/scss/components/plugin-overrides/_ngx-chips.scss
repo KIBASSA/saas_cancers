@@ -1,0 +1,44 @@
+// ngx-chips (tag input)
+
+.ngx-chips {
+  .ng2-tag-input {
+      border: 1px solid $border-color;
+      &.ng2-tag-input--focused {
+        border-bottom: 1px solid $border-color;
+      }
+      .ng2-tags-container {
+          padding-left: 5px;
+          padding-right: 5px;
+          tag {
+              background: theme-color(primary);
+              color: $white;
+              font-size: .875rem;
+              padding: .08rem .95rem;
+              line-height: 1.937rem;
+              .tag-wrapper {
+                  delete-icon {
+                      svg {
+                          path {
+                              fill: $white;
+                          }
+                      }
+                  }
+              }
+              &:not(:focus) {
+                  &:not(.tag--editing) {
+                      &:not(:active) {
+                          &:not(.readonly) {
+                              &:hover {
+                                  background: theme-color(primary);
+                                  color: $white;
+                                  box-shadow: none;
+                                  -webkit-box-shadow: none;
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+}

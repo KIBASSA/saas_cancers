@@ -1,0 +1,115 @@
+<div class="page-header">
+  <h3 class="page-title">
+    Slider
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript:;">UI Elements</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Slider</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Horizontal slider</h4>
+        <p class="card-description">noUiSlider is a range slider without bloat. It offers a ton off features, and it is as small, lightweight and minimal as possible</p>
+        <div class="template-demo">
+          <nouislider [min]="0" [max]="100" [(ngModel)]="range1" class="ul-slider slider-primary" ></nouislider>
+          <nouislider [min]="0" [max]="100" [(ngModel)]="range2" class="ul-slider slider-danger" ></nouislider>
+          <nouislider [min]="0" [max]="100" [(ngModel)]="range3" class="ul-slider slider-warning" ></nouislider>
+          <nouislider [min]="0" [max]="100" [(ngModel)]="range4" class="ul-slider slider-info" ></nouislider>
+          <nouislider [min]="0" [max]="100" [(ngModel)]="range5" class="ul-slider slider-success" ></nouislider>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Vertical slider</h4>
+        <p class="card-description">The orientation setting can be used to set the slider to <code>"vertical"</code> or <code>"horizontal"</code></p>
+        <div class="template-demo d-flex justify-content-center">
+            <nouislider [min]="0" [max]="100" [(ngModel)]="range6" [config]="verticalSliderConfig" class="ul-slider slider-primary" ></nouislider>
+            <nouislider [min]="0" [max]="100" [(ngModel)]="range7" [config]="verticalSliderConfig" class="ul-slider slider-danger" ></nouislider>
+            <nouislider [min]="0" [max]="100" [(ngModel)]="range8" [config]="verticalSliderConfig" class="ul-slider slider-warning" ></nouislider>
+            <nouislider [min]="0" [max]="100" [(ngModel)]="range9" [config]="verticalSliderConfig" class="ul-slider slider-info" ></nouislider>
+            <nouislider [min]="0" [max]="100" [(ngModel)]="range10" [config]="verticalSliderConfig" class="ul-slider slider-success" ></nouislider>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Values range</h4>
+        <p class="card-description">noUiSlider will keep your values within the slider range, which saves you a bunch of validation.</p>
+        <div class="template-demo">
+          <nouislider [min]="0" [max]="100" [(ngModel)]="range11" class="ul-slider slider-success" ></nouislider>
+          <p class="mt-3">Value: <span>{{range11}}</span></p>
+        </div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Slider handles</h4>
+        <div class="template-demo">
+          <nouislider [min]="0" [max]="100" [(ngModel)]="range12" class="ul-slider slider-success" ></nouislider>
+          <div class="d-flex justify-content-between">
+            <p class="mt-3">Value: <span>{{range12[0]}}</span></p>
+            <p class="mt-3">Value: <span>{{range12[1]}}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Connected Handles</h4>
+        <p class="card-description">The connect setting can be used to control the bar between the handles, or the edges of the slider</p>
+        <div class="template-demo">
+          <nouislider [min]="0" [max]="100" [connect]="true" [(ngModel)]="range13" class="ul-slider slider-warning" ></nouislider>          
+          <div class="d-flex justify-content-between">
+            <p class="mt-3">Value: <span>{{range13[0]}}</span></p>
+            <p class="mt-3">Value: <span>{{range13[1]}}</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Connected Handles Variation</h4>
+        <div class="template-demo">
+          <nouislider [min]="0" [max]="100" [connect]="true" [(ngModel)]="range14" class="ul-slider slider-danger" ></nouislider>          
+          <div class="d-flex justify-content-between">
+            <p class="mt-3">Value: <span>{{range14[0]}}</span></p>
+            <p class="mt-3">Value: <span>{{range14[1]}}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 grid-margin">
+    <div class="card">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card-body">
+            <h4 class="card-title">Slider with tooltip</h4>
+            <p class="card-description">noUiSlider can provide a basic tooltip without using its events system. Set the tooltips option to <code>true</code> to enable.</p>
+            <div class="mt-5 pt-4 w-75 mx-auto">
+              <nouislider [config]="tooltipSliderConfig" [(ngModel)]="range15" class="ul-slider slider-primary mb-5" ></nouislider>
+            </div>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">Color Variations</h4>
+            <p class="card-description">Tooltip slider with different color options, use class <code>slider-*</code> to quickly create a styled slider. Uses native boostrap colors scheme classes</p>
+            <div class="mt-5 pt-4 w-75 mx-auto">
+              <nouislider [config]="tooltipSliderConfig" [(ngModel)]="range16" class="ul-slider slider-success mb-5 mt-5" ></nouislider>
+            </div>
+            <div class="mt-5 pt-4 w-75 mx-auto pt-5">
+              <nouislider [config]="tooltipSliderConfig" [(ngModel)]="range17" class="ul-slider slider-danger mb-5 mt-5" ></nouislider>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
