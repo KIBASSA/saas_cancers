@@ -23,6 +23,9 @@ import { ContentAnimateDirective } from './shared/directives/content-animate.dir
 import { TodoListComponent } from './apps/todo-list/todo-list.component';
 import { RtlComponent } from './rtl/rtl.component';
 
+
+import {PatientsApiService} from './patients/patient.service';
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/');
@@ -60,7 +63,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }
     })
   ],
-  providers: [],
+  providers: [PatientsApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

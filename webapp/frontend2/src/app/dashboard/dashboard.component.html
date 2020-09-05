@@ -394,3 +394,46 @@
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-xl-4 col-md-6 grid-margin stretch-card">
+    <div class="card card-invoice">
+      <div class="card-body">
+        <h4 class="card-title" style="text-transform: none;">Patiens en attente de diagnostic</h4>
+        <div class="list-card" *ngFor="let patient of undiagnosedPatientList">
+          <div class="row align-items-center">
+            <div class="col-7 col-sm-8">
+              <div class="row align-items-center">
+                <div class="col-sm-4">
+                  <img [src]="patient.image" alt="">
+                </div>
+                <div class="col-sm-8 pr-0 pl-sm-0">
+                  <span>06 Jan 2019</span>
+                  <h6 class="mb-1 mb-sm-0">{{patient.name}}</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-5 col-sm-4">
+              <div class="d-flex pt-1 align-items-center">
+                <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
+                  <i class="mdi mdi-hospital text-dark"></i>
+                </button>
+                <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
+                  <div id="dropdownMenuButton2" ngbDropdownToggle>
+                    <p><i class="mdi mdi-dots-vertical"></i></p>
+                  </div>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2" ngbDropdownMenu>
+                    <a class="dropdown-item" href="#">Sales</a>
+                    <a class="dropdown-item" href="#">Track Invoice</a>
+                    <a class="dropdown-item" href="#">Payment History</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-md-6 grid-margin stretch-card"></div>
+  <div class="col-xl-4 col-md-6 grid-margin stretch-card"></div>
+</div>

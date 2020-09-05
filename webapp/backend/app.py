@@ -11,7 +11,7 @@ from models import Patient, PatientEncoder
 app = Flask(__name__)
 api = Api(app)  # type: Api
 
-db_api = CancerDBAPI()
+
 
 @app.route("/")
 def hello():
@@ -26,18 +26,11 @@ def get_exams():
 
 @app.route('/undiagnosed_patients')
 def get_get_undiagnosed_patients():
+    db_api = CancerDBAPI()
     result = db_api.get_undiagnosed_patients()
     response = []
     for patient in result:
         response.append(PatientEncoder().encode(patient))
-    #patient = Patient("qsdq","qsddqsd", "dsqq", False, False)
-    #{
-    #              name = "Martin Smith",
-    #              image = "https://www.bootstrapdash.com/demo/breeze/angular/preview/demo_1/assets/images/faces/face1.jpg",
-    #              is_diagnosed = True,
-    #              has_cancer = True                  
-    #            }
-    #PatientEncoder().encode(employee)
     return jsonify(response)
 
 @app.after_request
