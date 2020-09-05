@@ -45,7 +45,7 @@
     "datatables.net-dt": "^1.10.19",
     "flag-icon-css": "^3.3.0",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "morris.js": "^0.5.0",
     "ng-chartist": "^4.1.0",
     "ng-fullcalendar": "^2.0.3",
