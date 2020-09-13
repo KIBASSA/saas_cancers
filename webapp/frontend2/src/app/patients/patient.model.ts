@@ -6,7 +6,9 @@ export class Patient
     public name:string,
     public image:string,
     public isDiagnosed:boolean,
-    public hasCancer:boolean
+    public hasCancer:boolean,
+    public registrationDate:Date,
+    public diagnosisDate:Date
   )
   {}
 }

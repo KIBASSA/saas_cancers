@@ -40,7 +40,14 @@ class CancerDBAPI:
         try:
             result = self.collection_patients.find({"is_diagnosed":False})
             for item in result:
-                patient = Patient(id=str(item["_id"]),name=item["name"],image=item["image"],is_diagnosed=item["is_diagnosed"], has_cancer=item["has_cancer"])
+                patient = Patient(id=str(item["_id"]),
+                                    name=item["name"],
+                                        image=item["image"],
+                                            is_diagnosed=item["is_diagnosed"], 
+                                                has_cancer=item["has_cancer"],
+                                                  registration_date=item["registration_date"],
+                                                   diagnosis_date=item["diagnosis_date"])
+                
                 patients.append(patient)
         except Exception as e:
             raise Exception(e)

@@ -407,8 +407,8 @@
                   <img [src]="patient.image" alt="">
                 </div>
                 <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>06 Jan 2019</span>
                   <h6 class="mb-1 mb-sm-0">{{patient.name}}</h6>
+                  <span>{{datePicker.date | patient.registrationDate : 'yyyy-MM-dd'}}</span>
                 </div>
               </div>
             </div>

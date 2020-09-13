@@ -21,8 +21,19 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       this.undiagnosedPatients = this.patientsApi
                                               .getUndiagnosedPatients()
       .subscribe(res => {
-          this.undiagnosedPatientList = res;
-          console.log(this.undiagnosedPatientList)
+          var items : Patient[] = [];
+          res.forEach(function (value) {
+            let item = JSON.parse(value);
+            let patient = new Patient(item["id"], 
+                                        item["name"], 
+                                            item["image"], 
+                                                item["is_diagnosed"], 
+                                                  item["has_cancer"],
+                                                    item["registration_date"],
+                                                        item["diagnosis_date"])
+            items.push(patient)
+          }); 
+          this.undiagnosedPatientList = items;
         },
         console.error
       );

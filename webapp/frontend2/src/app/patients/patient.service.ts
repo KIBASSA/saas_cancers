@@ -16,7 +16,7 @@ export class PatientsApiService {
   }
 
   // GET list of public, future events
-  getUndiagnosedPatients(): Observable<Patient[]> {
+  getUndiagnosedPatients(): Observable<string[]> {
     return this.http
       .get(`${API_URL}/undiagnosed_patients`).pipe(
         retry(3),

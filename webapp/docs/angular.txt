@@ -1,0 +1,3 @@
+Pour lancer l'appli angular :
+1. se positionner sur le répertoire frontend2
+2. lancer ng serve

@@ -31,6 +31,7 @@ def get_get_undiagnosed_patients():
     response = []
     for patient in result:
         response.append(PatientEncoder().encode(patient))
+    print(jsonify(response))
     return jsonify(response)
 
 @app.after_request

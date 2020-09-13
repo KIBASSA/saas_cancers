@@ -1,0 +1,3 @@
+Pour lancer flask :
+1. se positionner sur le répertoire backend
+2. lancer python app.py
