@@ -35,10 +35,10 @@ class CancerDBAPI:
         except Exception as e:
             print(e)
 
-    def get_undiagnosed_patients(self):
+    def get_diagnosed_patients(self, is_diagnosed):
         patients = []
         try:
-            result = self.collection_patients.find({"is_diagnosed":False})
+            result = self.collection_patients.find({"is_diagnosed":is_diagnosed})
             for item in result:
                 patient = Patient(id=str(item["_id"]),
                                     name=item["name"],

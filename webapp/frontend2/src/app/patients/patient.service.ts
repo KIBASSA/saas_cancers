@@ -25,4 +25,15 @@ export class PatientsApiService {
                  return of(null);
         }));
   }
+
+   // GET list of public, future events
+   getDiagnosedPatients(): Observable<string[]> {
+    return this.http
+      .get(`${API_URL}/diagnosed_patients`).pipe(
+        retry(3),
+        catchError(err => {
+                 console.log(err);
+                 return of(null);
+        }));
+  }
 }

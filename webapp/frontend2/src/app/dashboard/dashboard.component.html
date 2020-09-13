@@ -7,17 +7,17 @@
   <div class="col-xl-4 col-md-6 grid-margin stretch-card">
     <div class="card card-invoice">
       <div class="card-body">
-        <h4 class="card-title" style="text-transform: none;">Patiens en attente de diagnostic</h4>
-        <div class="list-card">
+        <h4 class="card-title" style="text-transform: none;">Patients en attente de diagnostic</h4>
+        <div class="list-card" *ngFor="let patient of undiagnosedPatientList">
           <div class="row align-items-center">
             <div class="col-7 col-sm-8">
               <div class="row align-items-center">
                 <div class="col-sm-4">
-                  <img src="assets/images/faces/face2.jpg" alt="">
+                  <img [src]="patient.image" alt="">
                 </div>
                 <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>06 Jan 2019</span>
-                  <h6 class="mb-1 mb-sm-0">Isabel Cross</h6>
+                  <h6 class="mb-1 mb-sm-0">{{patient.name}}</h6>
+                  <span>{{patient.registrationDateStr}}</span>
                 </div>
               </div>
             </div>
@@ -40,101 +40,11 @@
             </div>
           </div>
         </div>
-        <div class="list-card">
-          <div class="row align-items-center">
-            <div class="col-7 col-sm-8">
-              <div class="row align-items-center">
-                <div class="col-sm-4">
-                  <img src="assets/images/faces/face3.jpg" alt="">
-                </div>
-                <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>18 Mar 2019</span>
-                  <h6 class="mb-1 mb-sm-0">Carrie Parker</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-5 col-sm-4">
-              <div class="d-flex pt-1 align-items-center">
-                <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                  <i class="mdi mdi-hospital text-dark"></i>
-                </button>
-                <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
-                  <div id="dropdownMenuButton3" ngbDropdownToggle>
-                    <p><i class="mdi mdi-dots-vertical"></i></p>
-                  </div>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3" ngbDropdownMenu>
-                    <a class="dropdown-item" href="#">Sales</a>
-                    <a class="dropdown-item" href="#">Track Invoice</a>
-                    <a class="dropdown-item" href="#">Payment History</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="list-card">
-          <div class="row align-items-center">
-            <div class="col-7 col-sm-8">
-              <div class="row align-items-center">
-                <div class="col-sm-4">
-                  <img src="assets/images/faces/face11.jpg" alt="">
-                </div>
-                <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>10 Apr 2019</span>
-                  <h6 class="mb-1 mb-sm-0">Don Bennett</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-5 col-sm-4">
-              <div class="d-flex pt-1 align-items-center">
-                <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                  <i class="mdi mdi-hospital text-dark"></i>
-                </button>
-                <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
-                  <div id="dropdownMenuButton4" ngbDropdownToggle>
-                    <p><i class="mdi mdi-dots-vertical"></i></p>
-                  </div>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4" ngbDropdownMenu>
-                    <a class="dropdown-item" href="#">Sales</a>
-                    <a class="dropdown-item" href="#">Track Invoice</a>
-                    <a class="dropdown-item" href="#">Payment History</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="list-card">
-          <div class="row align-items-center">
-            <div class="col-7 col-sm-8">
-              <div class="row align-items-center">
-                <div class="col-sm-4">
-                  <img src="assets/images/faces/face3.jpg" alt="">
-                </div>
-                <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>18 Mar 2019</span>
-                  <h6 class="mb-1 mb-sm-0">Carrie Parker</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-5 col-sm-4">
-              <div class="d-flex pt-1 align-items-center">
-                <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                  <i class="mdi mdi-hospital text-dark"></i>
-                </button>
-                <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
-                  <div id="dropdownMenuButton5" ngbDropdownToggle>
-                    <p><i class="mdi mdi-dots-vertical"></i></p>
-                  </div>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton5" ngbDropdownMenu>
-                    <a class="dropdown-item" href="#">Sales</a>
-                    <a class="dropdown-item" href="#">Track Invoice</a>
-                    <a class="dropdown-item" href="#">Payment History</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="text-center">
+          <button type="button" class="btn btn-outline-info btn-icon-text mt-auto">
+            Lancer le diagnostic
+            <i class="mdi mdi-hospital btn-icon-append"></i>                                                                              
+          </button>
         </div>
       </div>
     </div>
@@ -142,23 +52,24 @@
   <div class="col-xl-4 col-md-6 grid-margin stretch-card">
     <div class="card card-invoice">
       <div class="card-body">
-        <h4 class="card-title" style="text-transform: none;">Patiens récement diagnostiqués</h4>
-        <div class="list-card">
+        <h4 class="card-title" style="text-transform: none;">Patients récemment diagnostiqués</h4>
+        <div class="list-card" *ngFor="let patient of diagnosedPatientList">
           <div class="row align-items-center">
             <div class="col-7 col-sm-7">
               <div class="row align-items-center">
                 <div class="col-sm-4">
-                  <img src="assets/images/faces/face2.jpg" alt="">
+                  <img [src]="patient.image" alt="">
                 </div>
                 <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>06 Jan 2019</span>
-                  <h6 class="mb-1 mb-sm-0">Isabel Cross</h6>
+                  <h6 class="mb-1 mb-sm-0">{{patient.name}}</h6>
+                  <span>{{patient.diagnosisDateStr}}</span>
                 </div>
               </div>
             </div>
             <div class="col-5 col-sm-5">
               <div class="d-flex pt-1 align-items-center">
-                <div class="badge badge-inverse-danger" translate>Positif </div>
+                <div *ngIf="patient.hasCancer" class="badge badge-inverse-danger" translate>Positif </div>
+                <div *ngIf="!patient.hasCancer" class="badge badge-inverse-success" translate>Negatif</div>
                 <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
                   <div id="dropdownMenuButton2" ngbDropdownToggle>
                     <p><i class="mdi mdi-dots-vertical"></i></p>
@@ -173,95 +84,11 @@
             </div>
           </div>
         </div>
-        <div class="list-card">
-          <div class="row align-items-center">
-            <div class="col-7 col-sm-7">
-              <div class="row align-items-center">
-                <div class="col-sm-4">
-                  <img src="assets/images/faces/face3.jpg" alt="">
-                </div>
-                <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>18 Mar 2019</span>
-                  <h6 class="mb-1 mb-sm-0">Carrie Parker</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-5 col-sm-5">
-              <div class="d-flex pt-1 align-items-center">
-                <div class="badge badge-inverse-success" translate>Negatif</div>
-                <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
-                  <div id="dropdownMenuButton3" ngbDropdownToggle>
-                    <p><i class="mdi mdi-dots-vertical"></i></p>
-                  </div>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3" ngbDropdownMenu>
-                    <a class="dropdown-item" href="#">Sales</a>
-                    <a class="dropdown-item" href="#">Track Invoice</a>
-                    <a class="dropdown-item" href="#">Payment History</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="list-card">
-          <div class="row align-items-center">
-            <div class="col-7 col-sm-7">
-              <div class="row align-items-center">
-                <div class="col-sm-4">
-                  <img src="assets/images/faces/face11.jpg" alt="">
-                </div>
-                <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>10 Apr 2019</span>
-                  <h6 class="mb-1 mb-sm-0">Don Bennett</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-5 col-sm-5">
-              <div class="d-flex pt-1 align-items-center">
-                <div class="badge badge-inverse-danger" translate>Positif </div>
-                <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
-                  <div id="dropdownMenuButton4" ngbDropdownToggle>
-                    <p><i class="mdi mdi-dots-vertical"></i></p>
-                  </div>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4" ngbDropdownMenu>
-                    <a class="dropdown-item" href="#">Sales</a>
-                    <a class="dropdown-item" href="#">Track Invoice</a>
-                    <a class="dropdown-item" href="#">Payment History</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="list-card">
-          <div class="row align-items-center">
-            <div class="col-7 col-sm-7">
-              <div class="row align-items-center">
-                <div class="col-sm-4">
-                  <img src="assets/images/faces/face3.jpg" alt="">
-                </div>
-                <div class="col-sm-8 pr-0 pl-sm-0">
-                  <span>18 Mar 2019</span>
-                  <h6 class="mb-1 mb-sm-0">Carrie Parker</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-5 col-sm-5">
-              <div class="d-flex pt-1 align-items-center">
-                <div class="badge badge-inverse-danger" translate>Positif </div>
-                <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
-                  <div id="dropdownMenuButton5" ngbDropdownToggle>
-                    <p><i class="mdi mdi-dots-vertical"></i></p>
-                  </div>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton5" ngbDropdownMenu>
-                    <a class="dropdown-item" href="#">Sales</a>
-                    <a class="dropdown-item" href="#">Track Invoice</a>
-                    <a class="dropdown-item" href="#">Payment History</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="text-center">
+          <button type="button" class="btn btn-outline-info btn-icon-text mt-auto">
+            Voir tous les patients
+            <i class="mdi mdi-account-multiple btn-icon-append"></i>                                                                              
+          </button>
         </div>
       </div>
     </div>
@@ -269,7 +96,7 @@
   <div class="col-xl-4 col-md-6 grid-margin stretch-card">
     <div class="card card-invoice">
       <div class="card-body">
-        <h4 class="card-title" style="text-transform: none;">Patiens mal diagnostiqués</h4>
+        <h4 class="card-title" style="text-transform: none;">Patiens mal diagnostiqués (SIMULATION)</h4>
         <div class="list-card">
           <div class="row align-items-center">
             <div class="col-7 col-sm-6">
@@ -390,50 +217,14 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xl-4 col-md-6 grid-margin stretch-card">
-    <div class="card card-invoice">
-      <div class="card-body">
-        <h4 class="card-title" style="text-transform: none;">Patiens en attente de diagnostic</h4>
-        <div class="list-card" *ngFor="let patient of undiagnosedPatientList">
-          <div class="row align-items-center">
-            <div class="col-7 col-sm-8">
-              <div class="row align-items-center">
-                <div class="col-sm-4">
-                  <img [src]="patient.image" alt="">
-                </div>
-                <div class="col-sm-8 pr-0 pl-sm-0">
-                  <h6 class="mb-1 mb-sm-0">{{patient.name}}</h6>
-                  <span>{{datePicker.date | patient.registrationDate : 'yyyy-MM-dd'}}</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-5 col-sm-4">
-              <div class="d-flex pt-1 align-items-center">
-                <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                  <i class="mdi mdi-hospital text-dark"></i>
-                </button>
-                <div class="dropdown dropleft pl-1 pt-3" ngbDropdown>
-                  <div id="dropdownMenuButton2" ngbDropdownToggle>
-                    <p><i class="mdi mdi-dots-vertical"></i></p>
-                  </div>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2" ngbDropdownMenu>
-                    <a class="dropdown-item" href="#">Sales</a>
-                    <a class="dropdown-item" href="#">Track Invoice</a>
-                    <a class="dropdown-item" href="#">Payment History</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="text-center">
+          <button type="button" class="btn btn-outline-info btn-icon-text mt-auto">
+            Voir tous les patients
+            <i class="mdi mdi-account-multiple btn-icon-append"></i>                                                                              
+          </button>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-xl-4 col-md-6 grid-margin stretch-card"></div>
-  <div class="col-xl-4 col-md-6 grid-margin stretch-card"></div>
 </div>
+

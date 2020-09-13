@@ -27,12 +27,23 @@ def get_exams():
 @app.route('/undiagnosed_patients')
 def get_get_undiagnosed_patients():
     db_api = CancerDBAPI()
-    result = db_api.get_undiagnosed_patients()
+    result = db_api.get_diagnosed_patients(False)
     response = []
     for patient in result:
         response.append(PatientEncoder().encode(patient))
     print(jsonify(response))
     return jsonify(response)
+
+@app.route('/diagnosed_patients')
+def get_get_diagnosed_patients():
+    db_api = CancerDBAPI()
+    result = db_api.get_diagnosed_patients(True)
+    response = []
+    for patient in result:
+        response.append(PatientEncoder().encode(patient))
+    print(jsonify(response))
+    return jsonify(response)
+
 
 @app.after_request
 def after_request(response):

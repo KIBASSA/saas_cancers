@@ -1,6 +1,8 @@
 
 export class Patient 
 {
+  registrationDateStr: string;
+  diagnosisDateStr : string;
   constructor(
     public id:string,
     public name:string,
@@ -10,5 +12,15 @@ export class Patient
     public registrationDate:Date,
     public diagnosisDate:Date
   )
-  {}
+  {
+    this.id = id
+    this.name = name
+    this.image = image
+    this.isDiagnosed = isDiagnosed
+    this.hasCancer = hasCancer
+    this.registrationDate = registrationDate
+    this.diagnosisDate = diagnosisDate
+    this.registrationDateStr = registrationDate.toDateString()
+    this.diagnosisDateStr = diagnosisDate.toDateString()
+  }
 }

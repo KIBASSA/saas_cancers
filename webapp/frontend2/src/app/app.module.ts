@@ -25,6 +25,7 @@ import { RtlComponent } from './rtl/rtl.component';
 
 
 import {PatientsApiService} from './patients/patient.service';
+import {PatientsProviders} from './patients/patients.tools'
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -63,7 +64,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }
     })
   ],
-  providers: [PatientsApiService],
+  providers: [PatientsApiService, PatientsProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

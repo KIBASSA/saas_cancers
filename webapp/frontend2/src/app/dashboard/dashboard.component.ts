@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {PatientsApiService} from '../patients/patient.service';
+import {PatientsProviders} from '../patients/patients.tools'
 import {Patient} from '../patients/patient.model';
 
 @Component({
@@ -11,35 +12,40 @@ import {Patient} from '../patients/patient.model';
 
 export class DashboardComponent implements OnInit, OnDestroy  {
 
-  undiagnosedPatients: Subscription;
+  undiagnosedPatientsSubscription: Subscription;
+  diagnosedPatientsSubscription: Subscription;
   undiagnosedPatientList : Patient[];
+  diagnosedPatientList: Patient[];
 
-  constructor(private patientsApi: PatientsApiService) {}
+  constructor(private patientsApi: PatientsApiService, private patientsProviders:PatientsProviders) {}
 
+  
   ngOnInit() 
   {
-      this.undiagnosedPatients = this.patientsApi
+      this.undiagnosedPatientsSubscription = this.patientsApi
                                               .getUndiagnosedPatients()
       .subscribe(res => {
-          var items : Patient[] = [];
-          res.forEach(function (value) {
-            let item = JSON.parse(value);
-            let patient = new Patient(item["id"], 
-                                        item["name"], 
-                                            item["image"], 
-                                                item["is_diagnosed"], 
-                                                  item["has_cancer"],
-                                                    item["registration_date"],
-                                                        item["diagnosis_date"])
-            items.push(patient)
-          }); 
-          this.undiagnosedPatientList = items;
+                  this.undiagnosedPatientList = this.patientsProviders.getPatients(res).filter((u, i) => i < 4);
         },
         console.error
       );
+
+
+      this.diagnosedPatientsSubscription = this.patientsApi
+                                              .getDiagnosedPatients()
+      .subscribe(res => {
+                  this.diagnosedPatientList = this.patientsProviders.getPatients(res).filter((u, i) => i < 4);
+        },
+        console.error
+      );
+
   }
 
+ 
+  
+
   ngOnDestroy() {
-    this.undiagnosedPatients.unsubscribe();
+    this.undiagnosedPatientsSubscription.unsubscribe();
+    this.diagnosedPatientsSubscription.unsubscribe();
   }
 }
