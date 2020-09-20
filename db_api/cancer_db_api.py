@@ -35,6 +35,9 @@ class CancerDBAPI:
         except Exception as e:
             print(e)
 
+    def add_patient(self, name, email):
+        
+
     def get_diagnosed_patients(self, is_diagnosed):
         patients = []
         try:
