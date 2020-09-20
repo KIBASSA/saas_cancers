@@ -22,6 +22,28 @@
         <span class="menu-title" translate>Dashboard</span>
       </a>
     </li>
+    <li class="nav-item" [ngClass]="{'active' : accordions.isActive || buttons.isActive || badges.isActive || breadcrumbs.isActive || dropdowns.isActive || modals.isActive || progressbar.isActive || pagination.isActive || tabs.isActive || typography.isActive || tooltips.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link1">
+        <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+        <span class="menu-title" translate>Patients</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="ui-basic" [ngbCollapse]="parentId !== 'nav-link1'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="patients/list" 
+                                    routerLinkActive="active" 
+                                    #accordions="routerLinkActive" 
+                                    translate>list</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active': rtl.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" routerLink="/diagnostics/home" routerLinkActive #dashboard="routerLinkActive">
+        <i class="mdi mdi-home menu-icon"></i>
+        <span class="menu-title" translate>Diagnostics</span>
+      </a>
+    </li>
     <li class="nav-item" [ngClass]="{ 'active': rtl.isActive }">
       <a class="nav-link" (click)="clickedMenu($event)" routerLink="/rtl" routerLinkActive #rtl="routerLinkActive">
         <i class="mdi mdi-file-restore menu-icon"></i>

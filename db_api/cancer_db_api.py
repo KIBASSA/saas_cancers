@@ -40,14 +40,28 @@ class CancerDBAPI:
         try:
             result = self.collection_patients.find({"is_diagnosed":is_diagnosed})
             for item in result:
-                patient = Patient(id=str(item["_id"]),
-                                    name=item["name"],
-                                        image=item["image"],
-                                            is_diagnosed=item["is_diagnosed"], 
-                                                has_cancer=item["has_cancer"],
-                                                  registration_date=item["registration_date"],
-                                                   diagnosis_date=item["diagnosis_date"])
-                
+                patient = self.get_patient(item)
+                patients.append(patient)
+        except Exception as e:
+            raise Exception(e)
+        
+        return patients
+    
+    def get_patient(self,mongo_patient):
+        return Patient(id=str(mongo_patient["_id"]),
+                                    name=mongo_patient["name"],
+                                        image=mongo_patient["image"],
+                                            is_diagnosed=mongo_patient["is_diagnosed"], 
+                                                has_cancer=mongo_patient["has_cancer"],
+                                                  registration_date=mongo_patient["registration_date"],
+                                                   diagnosis_date=mongo_patient["diagnosis_date"])
+
+    def get_all_patients(self):
+        patients = []
+        try:
+            result = self.collection_patients.find({})
+            for item in result:
+                patient = self.get_patient(item)
                 patients.append(patient)
         except Exception as e:
             raise Exception(e)

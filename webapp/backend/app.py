@@ -44,6 +44,14 @@ def get_get_diagnosed_patients():
     print(jsonify(response))
     return jsonify(response)
 
+@app.route('/all_patients')
+def all_patients():
+    db_api = CancerDBAPI()
+    result = db_api.get_all_patients()
+    response = []
+    for patient in result:
+        response.append(PatientEncoder().encode(patient))
+    return jsonify(response)
 
 @app.after_request
 def after_request(response):

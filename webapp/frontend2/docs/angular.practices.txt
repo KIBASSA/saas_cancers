@@ -1,0 +1,8 @@
+- Pour créer un component, se prositionner sur le dossier du projet angular (frontend2 ici) :
+                           - ng g c <component_name>
+                           - ng g c parentfolder/<component_name>
+
+- s'il y a erreur :
+  + FullyQualifiedErrorId : UnauthorizedAccess
+  solution: exécuter la commande  : Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+

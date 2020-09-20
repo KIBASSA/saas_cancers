@@ -36,4 +36,16 @@ export class PatientsApiService {
                  return of(null);
         }));
   }
+
+  // GET list of public, future events
+  getAllPatients(): Observable<string[]> {
+    return this.http
+      .get(`${API_URL}/all_patients`).pipe(
+        retry(3),
+        catchError(err => {
+                 console.log(err);
+                 return of(null);
+        }));
+  }
+
 }

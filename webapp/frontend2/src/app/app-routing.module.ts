@@ -8,6 +8,8 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'diagnostics', loadChildren: () => import('./diagnostics/diagnostics.module').then(m => m.DiagnosticsModule) },
+  { path: 'patients', loadChildren: () => import('./patients/patients.module').then(m => m.PatientsModule) },
   { path: '', redirectTo: '/rtl', pathMatch: 'full' },
   { path: 'rtl', component: RtlComponent },
   { path: 'basic-ui', loadChildren: () => import('./basic-ui/basic-ui.module').then(m => m.BasicUiModule) },
