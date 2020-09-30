@@ -3,14 +3,15 @@ export class Patient
 {
   registrationDateStr: string;
   diagnosisDateStr : string;
+
   constructor(
     public id:string,
     public name:string,
     public image:string,
-    public isDiagnosed:boolean,
-    public hasCancer:boolean,
-    public registrationDate:Date,
-    public diagnosisDate:Date
+    public isDiagnosed?:boolean,
+    public hasCancer?:boolean,
+    public registrationDate?:Date,
+    public diagnosisDate?:Date
   )
   {
     this.id = id
@@ -20,7 +21,11 @@ export class Patient
     this.hasCancer = hasCancer
     this.registrationDate = registrationDate
     this.diagnosisDate = diagnosisDate
-    this.registrationDateStr = registrationDate.toDateString()
-    this.diagnosisDateStr = diagnosisDate.toDateString()
+    
+    if (registrationDate != undefined)
+        this.registrationDateStr = registrationDate.toDateString()
+    
+    if (diagnosisDate != undefined)
+        this.diagnosisDateStr = diagnosisDate.toDateString()
   }
 }

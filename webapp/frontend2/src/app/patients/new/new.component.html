@@ -2,25 +2,51 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Nouveau Patient</h4>
-        <form class="forms-sample">
+        <form class="forms-sample"  [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="exampleInputUsername1">Nom de famille</label>
-            <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Nom de famille">
+            <input type="text" 
+                   class="form-control"
+                   formControlName="firstName"
+                   placeholder="Nom de famille"
+                   [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
+            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                <div *ngIf="f.firstName.errors.required">Le Nom de famille est obligatoire</div>
+            </div>
           </div>
           <div class="form-group">
             <label for="exampleInputUsername1">Prénom</label>
-            <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Prénom">
+            <input type="text" 
+                   class="form-control"
+                   formControlName="lastName"
+                   placeholder="Prénom"
+                   [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
+            <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                <div *ngIf="f.lastName.errors.required">Le Prénom est obligatoire</div>
+            </div>
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Adresse email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Adresse email">
+            <input type="email" 
+                   class="form-control"
+                   formControlName="email" 
+                   placeholder="Adresse email"
+                   [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">L'Adresse email obligatoire</div>
+            </div>
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Photo de Profile</label>
-            <dropzone [message]="'Click or drag images here to upload'"></dropzone>
+            <dropzone 
+                [message]="'Click or drag images here to upload'"
+                (error)="onError($event)"
+                (sending)="onSending($event)"
+                (sendingmultiple)="onSendingmultiple($event)"
+                (success)="onSuccess($event)"></dropzone>
           </div>
           <button type="submit" class="btn btn-primary mr-2">Créer</button>
-          <button class="btn btn-light">Annuler</button>
+          <button class="btn btn-light" (click)="onReset()">Annuler</button>
         </form>
       </div>
     </div>

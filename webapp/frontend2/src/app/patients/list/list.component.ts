@@ -26,5 +26,4 @@ export class ListComponent implements OnInit {
         console.error
       );
   }
-
 }

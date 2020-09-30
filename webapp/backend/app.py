@@ -3,7 +3,7 @@ import os
 import sys
 sys.path.append("../../db_api")
 
-from flask import Flask,render_template,Response, jsonify
+from flask import Flask,render_template,Response, jsonify, request
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 from cancer_db_api import CancerDBAPI
@@ -25,7 +25,7 @@ def get_exams():
     return jsonify(data)
 
 @app.route('/undiagnosed_patients')
-def get_get_undiagnosed_patients():
+def get_undiagnosed_patients():
     db_api = CancerDBAPI()
     result = db_api.get_diagnosed_patients(False)
     response = []
@@ -35,7 +35,7 @@ def get_get_undiagnosed_patients():
     return jsonify(response)
 
 @app.route('/diagnosed_patients')
-def get_get_diagnosed_patients():
+def get_diagnosed_patients():
     db_api = CancerDBAPI()
     result = db_api.get_diagnosed_patients(True)
     response = []
@@ -51,6 +51,24 @@ def all_patients():
     response = []
     for patient in result:
         response.append(PatientEncoder().encode(patient))
+    return jsonify(response)
+
+@app.route('/add_patient', methods=['POST'])
+def add_patient():
+    print("begin...")
+
+    keys = request.form.keys()
+    keys = [key for key in keys]
+    keys = sorted(keys)
+    print("len(keys))", len(keys))
+    for key in keys:
+        #print(key, request.form[key])
+        print(key, request.form.get(key))
+
+    patient = request.form['patient']
+    print('patient :', patient)
+
+    response = []
     return jsonify(response)
 
 @app.after_request

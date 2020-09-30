@@ -9,18 +9,34 @@ import { RouterModule, Routes,  } from '@angular/router';
 import { NewComponent } from './new/new.component';
 import { ListComponent } from './list/list.component';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 const routes: Routes = [
     { path: 'new', component: NewComponent },
     { path: 'list', component: ListComponent }
   ];
-  
+
+  const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+    // Change this to your upload POST address:
+      url: 'https://httpbin.org/post',
+      maxFilesize: 50,
+      acceptedFiles: 'image/*'
+  };
   
 @NgModule({
     declarations: [NewComponent, ListComponent],
     imports: [
       CommonModule,
       DropzoneModule,
+      FormsModule,
+      ReactiveFormsModule,
       RouterModule.forChild(routes)
+    ],
+    providers: [
+      {
+        provide: DROPZONE_CONFIG,
+        useValue: DEFAULT_DROPZONE_CONFIG
+      }
     ]
   })
   export class PatientsModule { }
