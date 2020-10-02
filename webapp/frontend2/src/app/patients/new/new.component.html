@@ -4,25 +4,25 @@
         <h4 class="card-title">Nouveau Patient</h4>
         <form class="forms-sample"  [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label for="exampleInputUsername1">Nom de famille</label>
-            <input type="text" 
-                   class="form-control"
-                   formControlName="firstName"
-                   placeholder="Nom de famille"
-                   [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
-            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                <div *ngIf="f.firstName.errors.required">Le Nom de famille est obligatoire</div>
-            </div>
-          </div>
-          <div class="form-group">
             <label for="exampleInputUsername1">Prénom</label>
             <input type="text" 
                    class="form-control"
-                   formControlName="lastName"
+                   formControlName="firstName"
                    placeholder="Prénom"
+                   [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
+            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                <div *ngIf="f.firstName.errors.required">Le Prénom est obligatoire</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputUsername1">Nom de famille</label>
+            <input type="text" 
+                   class="form-control"
+                   formControlName="lastName"
+                   placeholder="Nom de famille"
                    [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
             <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                <div *ngIf="f.lastName.errors.required">Le Prénom est obligatoire</div>
+                <div *ngIf="f.lastName.errors.required">Le Nom de famille est obligatoire</div>
             </div>
           </div>
           <div class="form-group">
@@ -44,6 +44,15 @@
                 (sending)="onSending($event)"
                 (sendingmultiple)="onSendingmultiple($event)"
                 (success)="onSuccess($event)"></dropzone>
+          </div>
+          <div class="form-group" class="text-center" *ngIf="loading" style="padding: 10px;">
+            <div class="loader-demo-box" style="height: 50px; width: 50%;margin: 0 auto;">
+                <div class="dot-opacity-loader">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
           </div>
           <button type="submit" class="btn btn-primary mr-2">Créer</button>
           <button class="btn btn-light" (click)="onReset()">Annuler</button>

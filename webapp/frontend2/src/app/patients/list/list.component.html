@@ -9,7 +9,7 @@
                   New Patient
               </a>
             </h4>
-            <h4 class="card-title" style="text-transform: none;">Patients récemment diagnostiqués</h4>
+            <h4 class="card-title" style="text-transform: none;">Patients récemment ajouté</h4>
             <div class="list-card" *ngFor="let patient of patientList">
               <div class="row align-items-center">
                 <div class="col-4 col-sm-4">
@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-sm-8 pr-0 pl-sm-0">
                       <h6 class="mb-1 mb-sm-0">{{patient.name}}</h6>
-                      <span>{{patient.diagnosisDateStr}}</span>
+                      <span>{{patient.registrationDateStr}}</span>
                     </div>
                   </div>
                 </div>

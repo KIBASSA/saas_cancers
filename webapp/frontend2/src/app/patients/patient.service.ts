@@ -51,10 +51,8 @@ FormData
 
   //Put new Patient
   addPatient(patient : Patient): Observable<Patient> {
-    let urlSearchParams = new URLSearchParams();
-    urlSearchParams.append('patient', "{name:'salut'}");
     const formData = new FormData();
-    formData.append('ptient',  JSON.stringify(patient));
+    formData.append('patient',  JSON.stringify(patient));
     //urlSearchParams.append('password', password);
     return this.http.post<any>(`${API_URL}/add_patient`, formData)
       .pipe(

@@ -12,10 +12,6 @@ class CancerDBAPI:
 
         self.collection_cancers = self.db.cancers
         self.collection_patients = self.db.patients
-
-        #bulk insert
-        #print("bulk insert")
-        #self.insert_first_data()
         
     
     def add_cancers(self,external_ids, types, names, imagelinks):
@@ -41,7 +37,7 @@ class CancerDBAPI:
     def get_diagnosed_patients(self, is_diagnosed):
         patients = []
         try:
-            result = self.collection_patients.find({"is_diagnosed":is_diagnosed})
+            result = self.collection_patients.find({"is_diagnosed":is_diagnosed}).sort("diagnosis_date",pymongo.DESCENDING)
             for item in result:
                 patient = self.get_patient(item)
                 patients.append(patient)
@@ -50,6 +46,8 @@ class CancerDBAPI:
         
         return patients
     
+
+
     def get_patient(self,mongo_patient):
         return Patient(id=str(mongo_patient["_id"]),
                                     name=mongo_patient["name"],
@@ -59,10 +57,35 @@ class CancerDBAPI:
                                                   registration_date=mongo_patient["registration_date"],
                                                    diagnosis_date=mongo_patient["diagnosis_date"])
 
+    def get_json_patient(self, patient_model):
+        data = {}
+
+        if patient_model.id:
+            data["id"] = patient_model.id
+
+        
+        data["name"] = patient_model.name
+        
+        data["image"] = patient_model.image
+        
+        if patient_model.is_diagnosed:
+            data["is_diagnosed"] = patient_model.is_diagnosed
+
+        if patient_model.has_cancer:
+            data["has_cancer"] = patient_model.has_cancer
+
+        if patient_model.registration_date:
+            data["registration_date"] = patient_model.registration_date
+        
+        if patient_model.diagnosis_date:
+            data["diagnosis_date"] = patient_model.diagnosis_date
+
+        return data
+
     def get_all_patients(self):
         patients = []
         try:
-            result = self.collection_patients.find({})
+            result = self.collection_patients.find({}).sort("registration_date",pymongo.DESCENDING)
             for item in result:
                 patient = self.get_patient(item)
                 patients.append(patient)
@@ -72,9 +95,26 @@ class CancerDBAPI:
         return patients
     
     def insert_patient(self, patient):
-        item_count = self.collection_patients.count_documents({'name': patient['name']})
+        item_count = self.collection_patients.count_documents({'name': patient.name})
+        
         if item_count == 0:
-            result = self.collection_patients.insert_one(patient)
+            json_patient = self.get_json_patient(patient)
+            return self.collection_patients.insert_one(json_patient).inserted_id
+        
+        return self.get_patient_by_name(patient.name)
+
+    def get_patient_by_id(self, patient_id):
+        return self.collection_patients.find({'_id':ObjectId(patient_id)})
+    
+    def get_patient_by_name(self, name):
+        return self.collection_patients.find({'name':name})
+
+    def update_patient(self,patient):
+        self.collection_patients.update_one({"_id": patient.id}, 
+                                               {"$set":
+                                                       {"image": patient.image,
+                                                       "is_diagnosed": patient.is_diagnosed,
+                                                       "has_cancer": patient.has_cancer}})
 
     def insert_first_data(self):
         post_data = {
@@ -188,3 +228,27 @@ class CancerDBAPI:
             'has_cancer':False
         }
         self.insert_patient(post_data)
+
+        post_data = {
+            'name': 'Allen Moreno',
+            'image': "https://www.bootstrapdash.com/demo/star-admin-pro/src/assets/images/faces/face1.jpg",
+            'is_diagnosed': False,
+            'has_cancer':False
+        }
+        result = self.insert_patient(post_data)
+
+        post_data = {
+            'name': 'Fukuyo Kazutoshi',
+            'image': "https://www.bootstrapdash.com/demo/star-admin-pro/src/assets/images/faces/face4.jpg",
+            'is_diagnosed': True,
+            'has_cancer':False
+        }
+        result = self.insert_patient(post_data)
+
+        return result
+
+#if __name__ == "__main__":
+#     api = CancerDBAPI()
+#     result = api.insert_first_data()
+#     if result != None:
+#         print("result : ", result.inserted_id)

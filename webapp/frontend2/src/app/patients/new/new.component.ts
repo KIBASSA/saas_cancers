@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Subscription} from 'rxjs/Subscription';
+import {Router} from '@angular/router';
 
 import {PatientsApiService} from '../patient.service';
 import {Patient} from '../patient.model';
@@ -16,8 +17,9 @@ export class NewComponent implements OnInit {
   registerForm: FormGroup;
   submitted = false;
   patientsSubscription: Subscription;
+  loading:boolean
 
-  constructor(private patientsApi: PatientsApiService, private formBuilder: FormBuilder) { }
+  constructor(private patientsApi: PatientsApiService, private formBuilder: FormBuilder, private route:Router) { }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -50,23 +52,23 @@ export class NewComponent implements OnInit {
     if (this.registerForm.invalid) {
         return;
     }
-    //alert("ici")
     // display form values on success
-    let result  = this.registerForm.value//JSON.stringify(this.registerForm.value, null, 4)
-    //alert(result["firstName"])
-    //let name = result["firstName"] + " "  + result["lastName"]
-    //alert(this.patient.name)
-    //alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
+    let result  = this.registerForm.value //JSON.stringify(this.registerForm.value, null, 4)
+    
     this.patient = new Patient("",result["firstName"] + " "  + result["lastName"], this.uploadedImage)
+    this.loading = true
     this.patientsSubscription = this.patientsApi
                                       .addPatient(this.patient)
                                       .subscribe(res => {
                                           if (res != null)
-                                              console.log("patient " + res.name + " created!")
+                                          {
+                                            console.log("patient " + res.name + " created!")
+                                            this.route.navigate(['/patients/list']);
+                                            this.loading = false
+                                          }
                                         },
                                         console.error
                                         );
-    alert("added")
   }
 
   onReset() {
