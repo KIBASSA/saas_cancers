@@ -3,9 +3,9 @@
 </div>
 <div class="row">
     <div class="col-12 grid-margin stretch-card">
-        <div class="card card-invoice">
+        <div class="card card-invoice card-patient">
             <div class="card-body">
-                <div class="list-card">
+                <div class="list-card" *ngFor="let patient of patientList">
                     <div class="row align-items-center">
                         <div class="col-1">
                             <div class="form-check form-check-flat form-check-primary">
@@ -18,29 +18,20 @@
                         <div class="col-5">
                             <div class="row align-items-center">
                                 <div class="col-sm-4">
-                                  <img src="https://www.bootstrapdash.com/demo/breeze/angular/preview/demo_1/assets/images/faces/face11.jpg" alt="">
+                                  <img id="loc1"[src]="patient.image" />
                                 </div>
                                 <div class="col-sm-8 pr-0 pl-sm-0">
-                                  <h6 class="mb-1 mb-sm-0">Carrie Parker</h6>
+                                  <h6 class="mb-1 mb-sm-0"><a class="text-name"  [routerLink]="['/patients/patient', patient.id]">{{patient.name}}</a></h6>
                                   <span>Wed Feb 19 2020</span>
                                 </div>
                               </div>
                         </div>
                         <div class="col-6">
-                            <ul>
-                                <li class="loc-caption" title="location 1">
-                                  <img id="loc1" src="https://diagnozstorage.blob.core.windows.net/diagnoz/patients/5f76ae1ab18cb6ab2172b606/cancer/breast/images/5f76ae1ab18cb6ab2172b606_0_.png" />
-                                </li>
-                                <li class="loc-caption" title="location 2">
-                                  <img id="loc2" src="https://diagnozstorage.blob.core.windows.net/diagnoz/patients/5f76ae1ab18cb6ab2172b606/cancer/breast/images/5f76ae1ab18cb6ab2172b606_0_.png" />
-                                </li>
-                                <li class="loc-caption" title="location 3">
-                                  <img id="loc3" src="https://diagnozstorage.blob.core.windows.net/diagnoz/patients/5f76ae1ab18cb6ab2172b606/cancer/breast/images/5f76ae1ab18cb6ab2172b606_0_.png" />
-                                </li>
-                                <li class="loc-caption" title="location 3">
-                                    <img id="loc3" src="https://diagnozstorage.blob.core.windows.net/diagnoz/patients/5f76ae1ab18cb6ab2172b606/cancer/breast/images/5f76ae1ab18cb6ab2172b606_0_.png" />
-                                  </li>
-                              </ul>        
+                          <ul>
+                            <li class="loc-caption" *ngFor="let image of patient.cancerImages">
+                              <img id="loc1"[src]="image" />
+                            </li>
+                          </ul>  
                         </div>
                     </div>
                 </div>

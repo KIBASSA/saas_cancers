@@ -34,6 +34,22 @@ class CancerDBAPI:
 
     #def add_patient(self, name, email):
 
+    def patient_awaiting_diagnosis(self):
+        """
+        This method returns the list of undiagnosed patients who have images of their cancer. 
+        """
+        patients = []
+        try:
+            result = self.collection_patients.find({"is_diagnosed":False}).sort("registration_date",pymongo.DESCENDING)
+            for item in result:
+                cancer_images = self._get_cancer_images(item)
+                if len(cancer_images):
+                    patient = self._get_patient(item)
+                    patients.append(patient)
+        except Exception as e:
+            raise Exception(e)
+        
+        return patients
 
     def get_diagnosed_patients(self, is_diagnosed):
         patients = []

@@ -34,6 +34,18 @@ def get_exams():
     data = [{"test":1}, {"test":2}]
     return jsonify(data)
 
+def _get_structure_patients_data(data):
+    response = []
+    for patient in data:
+        response.append(PatientEncoder().encode(patient))
+    print(jsonify(response))
+    return jsonify(response)
+
+@app.route('/patient_awaiting_diagnosis')
+def patient_awaiting_diagnosis():
+    result = db_api.patient_awaiting_diagnosis()
+    return _get_structure_patients_data(result)
+
 @app.route('/undiagnosed_patients')
 def get_undiagnosed_patients():
     #db_api = CancerDBAPI()

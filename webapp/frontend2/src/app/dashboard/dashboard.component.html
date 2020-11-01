@@ -16,7 +16,7 @@
                   <img [src]="patient.image" alt="">
                 </div>
                 <div class="col-sm-8 pr-0 pl-sm-0">
-                  <h6 class="mb-1 mb-sm-0">{{patient.name}}</h6>
+                  <h6 class="mb-1 mb-sm-0"><a class="text-name"  [routerLink]="['/patients/patient', patient.id]">{{patient.name}}</a></h6>
                   <span>{{patient.registrationDateStr}}</span>
                 </div>
               </div>
@@ -62,7 +62,7 @@
                   <img [src]="patient.image" alt="">
                 </div>
                 <div class="col-sm-8 pr-0 pl-sm-0">
-                  <h6 class="mb-1 mb-sm-0">{{patient.name}}</h6>
+                  <h6 class="mb-1 mb-sm-0"><a class="text-name"  [routerLink]="['/patients/patient', patient.id]">{{patient.name}}</a></h6>
                   <span>{{patient.diagnosisDateStr}}</span>
                 </div>
               </div>
