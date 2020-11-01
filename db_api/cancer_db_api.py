@@ -3,6 +3,7 @@ from pymongo import errors
 import pymongo 
 from datetime import date
 from models import Patient
+from bson.objectid import ObjectId
 
 class CancerDBAPI:
     def __init__(self, connectionstring="mongodb://admincancer:2563crRT8@localhost:27017/"):
@@ -39,7 +40,7 @@ class CancerDBAPI:
         try:
             result = self.collection_patients.find({"is_diagnosed":is_diagnosed}).sort("diagnosis_date",pymongo.DESCENDING)
             for item in result:
-                patient = self.get_patient(item)
+                patient = self._get_patient(item)
                 patients.append(patient)
         except Exception as e:
             raise Exception(e)
@@ -47,17 +48,18 @@ class CancerDBAPI:
         return patients
     
 
-
-    def get_patient(self,mongo_patient):
+    def _get_patient(self,mongo_patient):
+        cancer_images = self._get_cancer_images(mongo_patient)
         return Patient(id=str(mongo_patient["_id"]),
                                     name=mongo_patient["name"],
                                         image=mongo_patient["image"],
                                             is_diagnosed=mongo_patient["is_diagnosed"], 
                                                 has_cancer=mongo_patient["has_cancer"],
                                                   registration_date=mongo_patient["registration_date"],
-                                                   diagnosis_date=mongo_patient["diagnosis_date"])
+                                                   diagnosis_date=mongo_patient["diagnosis_date"],
+                                                   cancer_images=cancer_images)
 
-    def get_json_patient(self, patient_model):
+    def _get_json_patient(self, patient_model):
         data = {}
 
         if patient_model.id:
@@ -82,12 +84,13 @@ class CancerDBAPI:
 
         return data
 
+
     def get_all_patients(self):
         patients = []
         try:
             result = self.collection_patients.find({}).sort("registration_date",pymongo.DESCENDING)
             for item in result:
-                patient = self.get_patient(item)
+                patient = self._get_patient(item)
                 patients.append(patient)
         except Exception as e:
             raise Exception(e)
@@ -98,13 +101,16 @@ class CancerDBAPI:
         item_count = self.collection_patients.count_documents({'name': patient.name})
         
         if item_count == 0:
-            json_patient = self.get_json_patient(patient)
+            json_patient = self._get_json_patient(patient)
             return self.collection_patients.insert_one(json_patient).inserted_id
         
         return self.get_patient_by_name(patient.name)
 
     def get_patient_by_id(self, patient_id):
-        return self.collection_patients.find({'_id':ObjectId(patient_id)})
+        result = list(self.collection_patients.find({'_id':ObjectId(patient_id)}))
+        if len(result) == 0:
+            return None
+        return self._get_patient(result[0])
     
     def get_patient_by_name(self, name):
         return self.collection_patients.find({'name':name})
@@ -246,6 +252,38 @@ class CancerDBAPI:
         result = self.insert_patient(post_data)
 
         return result
+
+    def _get_cancer_images(self, mongo_patient_data):
+        original_images = []
+        if "cancers" in mongo_patient_data:
+            if "breast" in mongo_patient_data["cancers"]:
+                if "images" in mongo_patient_data["cancers"]["breast"]:
+                    original_images = mongo_patient_data["cancers"]["breast"]["images"]
+        return original_images
+
+    def insert_cancer_images(self, patient_id,images):
+        item_count = self.collection_patients.count_documents({'_id':ObjectId(patient_id)})
+
+        if item_count == 0:
+            raise Exception("The targeted patient does not exist ")
+        
+        result = list(self.collection_patients.find({'_id':ObjectId(patient_id)}))[0]
+        original_images = self._get_cancer_images(result)
+        images.extend(original_images)
+        print("images after extend : ", images)           
+
+        self.collection_patients.update_one({"_id": ObjectId(patient_id)}, 
+                                               {"$set":
+                                                       {"cancers": 
+                                                            {
+                                                                "breast":
+                                                                {
+                                                                    "images":images
+                                                                }
+                                                            }
+                                                       }
+                                                })
+        print("patient updated")
 
 #if __name__ == "__main__":
 #     api = CancerDBAPI()

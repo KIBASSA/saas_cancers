@@ -12,6 +12,7 @@ from apis_utilities import BlobStorageManager
 from models import Patient, PatientEncoder
 import json
 import datetime
+from flask_api import status
 app = Flask(__name__)
 api = Api(app)  # type: Api
 
@@ -62,6 +63,11 @@ def all_patients():
         response.append(PatientEncoder().encode(patient))
     return jsonify(response)
 
+@app.route('/get_patient_by_id', methods=['GET'])
+def get_patient():
+    patient = db_api.get_patient_by_id(request.args.get('id'))
+    return jsonify(PatientEncoder().encode(patient))
+
 @app.route('/add_patient', methods=['POST'])
 def add_patient():
     patient_form = request.form['patient']
@@ -76,6 +82,24 @@ def add_patient():
         db_api.update_patient(patient_model)
 
     return jsonify(PatientEncoder().encode(patient_model))
+
+@app.route('/add_cancer_images', methods=['POST'])
+def add_cancers_images():
+    if "patient_id" not in request.form:
+        return "patient_id must be provided", status.HTTP_400_BAD_REQUEST
+    
+    if "images" not in request.form:
+        return "images must be provided", status.HTTP_400_BAD_REQUEST
+    
+    patient_id = request.form['patient_id']
+    patient_cancer_images = json.loads(request.form['images'])
+    
+    #upload_cancer_images
+    uploaded_images = patient_img_manager.upload_cancer_images(patient_id, patient_cancer_images)
+    #print("uploaded_images :", uploaded_images)
+    db_api.insert_cancer_images(patient_id, uploaded_images)
+    patient = db_api.get_patient_by_id(patient_id)
+    return jsonify(PatientEncoder().encode(patient))
 
 @app.after_request
 def after_request(response):

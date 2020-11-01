@@ -1,0 +1,101 @@
+  <div class="row" *ngIf="patient">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="border-bottom text-center pb-4">
+                <img [src]="patient.image" alt="profile" class="img-lg rounded-circle mb-3"/>
+                <div class="mb-3">
+                  <h3>{{patient.name}}</h3>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <h5 class="mb-0 mr-2 text-muted">Paris, France</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="py-4">
+                <p class="clearfix">
+                  <span class="float-left">
+                    Inscription
+                  </span>
+                  <span class="float-right text-muted">
+                    {{patient.registrationDateStr}}
+                  </span>
+                </p>
+                <p class="clearfix">
+                    <span class="float-left">
+                      Diagnostiqué
+                    </span>
+                    <span class="float-right text-muted">
+                        <div *ngIf="patient.hasCancer" class="badge badge-inverse-success" translate>Oui</div>
+                        <div *ngIf="!patient.hasCancer" class="badge badge-inverse-info" translate>Non</div>
+                    </span>
+                </p>
+                <p class="clearfix" *ngIf="patient.hasCancer">
+                    <span class="float-left">
+                      Date de Diagnistique
+                    </span>
+                    <span class="float-right text-muted">
+                        {{patient.diagnosisDateStr}}
+                    </span>
+                </p>
+                <p class="clearfix">
+                  <span class="float-left">
+                    Phone
+                  </span>
+                  <span class="float-right text-muted">
+                    006 3435 22
+                  </span>
+                </p>
+                <p class="clearfix">
+                  <span class="float-left">
+                    Mail
+                  </span>
+                  <span class="float-right text-muted">
+                    Jacod@testmail.com
+                  </span>
+                </p>
+              </div>
+              <button class="btn btn-primary btn-block mb-2">Preview</button>
+            </div>
+            <div class="col-lg-8">
+              <div class="d-block d-md-flex justify-content-between mt-4 mt-md-0">
+                <div class="text-center mt-4 mt-md-0">
+                 
+                </div>
+              </div>
+              <div class="mt-4 py-2 border-top border-bottom">
+                <div class="template-demo text-center">
+                  <button type="button" class="btn btn-outline-primary btn-fw">Sein</button>
+                  <button type="button" [disabled]="true" class="btn btn-outline-secondary btn-fw">Prostate</button>
+                  <button type="button" [disabled]="true" class="btn btn-outline-secondary btn-fw">Poumon</button>
+                </div>
+              </div>
+              <div class="d-block d-md-flex text-center mt-4 mt-md-0">
+                <div class="text-center mt-4 mt-md-0" style="width: 100%; padding: 7px 0 7px 0;">
+                  <div class="border-bottom text-center pb-4" >
+                    <div class="mb-3">
+                      <h4>Images liées au cancer</h4>
+                      <ul>
+                        <li class="loc-caption" *ngFor="let image of patient.cancerImages">
+                          <img id="loc1"[src]="image" />
+                        </li>
+                      </ul>
+                      <dropzone 
+                              [message]="'Click or drag images here to upload'"
+                              (error)="onError($event)"
+                              (sending)="onSending($event)"
+                              (sendingmultiple)="onSendingmultiple($event)"
+                              (success)="onSuccess($event)"></dropzone>
+                        </div>
+                      <button (click)="onSubmit()" [disabled]="submitted == true" class="btn btn-primary mr-2">Télécharger</button>
+                      <button class="btn btn-light" (click)="onReset()">Annuler</button>    
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -31,9 +31,6 @@ export class NewComponent implements OnInit {
   onSending(data: any): void {
     // data [ File , xhr, formData]
     const file = data[0];
-    //const formData = data[2];
-    //formData.append('Name', "Midhun");
-    //console.log("enetered");
     console.log(data[0])
     console.log(typeof(data[0]))
     //console.log(data[0]["dataURL"])

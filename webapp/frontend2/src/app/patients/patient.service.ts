@@ -49,6 +49,18 @@ FormData
         }));
   }
 
+  // Get Patient by her id
+  getPatientById(patient_id:string): Observable<any> {
+    //urlSearchParams.append('password', password);
+    return this.http.get<any>(`${API_URL}/get_patient_by_id?id=${patient_id}`)
+      .pipe(
+        catchError(err => {
+          console.log(err);
+          return of(null);
+            })
+      );
+  }
+
   //Put new Patient
   addPatient(patient : Patient): Observable<Patient> {
     const formData = new FormData();
@@ -62,4 +74,21 @@ FormData
             })
       );
   }
+
+  //add cancer images 
+  //add_cancers_images
+  addCancerImages(patient_id: string, images:string[]):Observable<any>
+  {
+    const formData = new FormData();
+    formData.append('patient_id',  patient_id);
+    formData.append('images',  JSON.stringify(images));
+    return this.http.post<any>(`${API_URL}/add_cancer_images`, formData)
+      .pipe(
+        catchError(err => {
+          console.log(err);
+          return of(null);
+            })
+      );
+  }
+
 }

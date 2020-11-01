@@ -10,10 +10,12 @@ import { NewComponent } from './new/new.component';
 import { ListComponent } from './list/list.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ItemComponent } from './item/item.component';
 
 const routes: Routes = [
     { path: 'new', component: NewComponent },
-    { path: 'list', component: ListComponent }
+    { path: 'list', component: ListComponent },
+    { path: 'patient/:id', component: ItemComponent },
   ];
 
   const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -24,7 +26,7 @@ const routes: Routes = [
   };
   
 @NgModule({
-    declarations: [NewComponent, ListComponent],
+    declarations: [NewComponent, ListComponent, ItemComponent],
     imports: [
       CommonModule,
       DropzoneModule,

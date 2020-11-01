@@ -11,7 +11,8 @@ export class Patient
     public isDiagnosed?:boolean,
     public hasCancer?:boolean,
     public registrationDate?:Date,
-    public diagnosisDate?:Date
+    public diagnosisDate?:Date,
+    public cancerImages?:string[]
   )
   {
     this.id = id
@@ -21,6 +22,7 @@ export class Patient
     this.hasCancer = hasCancer
     this.registrationDate = registrationDate
     this.diagnosisDate = diagnosisDate
+    this.cancerImages = cancerImages
     
     if (registrationDate != undefined)
         this.registrationDateStr = registrationDate.toDateString()

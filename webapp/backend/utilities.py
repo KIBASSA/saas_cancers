@@ -4,6 +4,7 @@ from mimetypes import guess_extension, guess_type
 import base64
 class Consts:
     BREAST = "breast"
+    DIAGNOZ = "diagnoz"
     DIAGNOZ_PATIENTS = "diagnoz/patients"
 
 class PatientImageURLBuilder:
@@ -20,8 +21,11 @@ class PatientImageCloudManager:
         self.blob_manager = blob_manager
         self.host = "https://diagnozstorage.blob.core.windows.net"
         
-    def _get_container(self,patient,img_data):
+    def _get_profile_container(self,patient,img_data):
         return "{0}/{1}/profile".format(Consts.DIAGNOZ_PATIENTS, patient.id)
+    
+    def _get_cancer_images_container(self, patient_id):
+        return "{0}/{1}/cancer/breast/images".format(Consts.DIAGNOZ_PATIENTS, patient_id)
 
     def _get_uploaded_image_file(self,blob_container, file_name):
         return "{0}/{1}/{2}".format(self.host, blob_container, file_name)
@@ -41,11 +45,35 @@ class PatientImageCloudManager:
             img_data = self._clean_image(img_data)
             with open(local_full_path_file, "wb") as fh:
                 fh.write(base64.decodestring(img_data.encode()))
-            blob_container = self._get_container(patient, img_data)
+            blob_container = self._get_profile_container(patient, img_data)
             self.blob_manager.upload(blob_container, local_full_path_file, overwrite_v = True)
             uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container, local_file_name)
             print("uploaded_image :", uploaded_image)
         return uploaded_image
+
+
+    def upload_cancer_images(self, patient_id, images):
+        uploaded_images = []
+        existing_images = self.blob_manager.get_list_file(Consts.DIAGNOZ, "patients/{0}/cancer/breast/images".format(patient_id))
+        index = len(existing_images)
+        with tempfile.TemporaryDirectory() as dir:
+            for img_data in images:
+                print("img_data :", img_data)
+                ext = guess_extension(guess_type(img_data)[0])
+                local_file_name = "{0}_{1}_{2}".format(patient_id,index,ext)
+                local_full_path_file = os.path.join(dir, local_file_name)
+                img_data = self._clean_image(img_data)
+                with open(local_full_path_file, "wb") as fh:
+                    fh.write(base64.decodestring(img_data.encode()))
+                blob_container = self._get_cancer_images_container(patient_id)
+                self.blob_manager.upload(blob_container, local_full_path_file, overwrite_v = True)
+                uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container, local_file_name)
+                uploaded_images.append(uploaded_image)
+                print("uploaded_image :", uploaded_image)
+                index = index + 1 
+        return uploaded_images
+
+
 
 
 

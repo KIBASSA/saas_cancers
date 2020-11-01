@@ -1,13 +1,15 @@
 import {Patient} from './patient.model';
 export class PatientFactory {
     public getPatient(item): Patient {
+        console.log("item :" + typeof(item))
         return new Patient(item["id"], 
                                 item["name"], 
                                     item["image"], 
                                         item["is_diagnosed"], 
                                         item["has_cancer"],
                                         new Date(item["registration_date"]["year"], item["registration_date"]["month"], item["registration_date"]["day"]),
-                                        new Date(item["diagnosis_date"]["year"], item["diagnosis_date"]["month"], item["diagnosis_date"]["day"]));
+                                        new Date(item["diagnosis_date"]["year"], item["diagnosis_date"]["month"], item["diagnosis_date"]["day"]),
+                                        item["cancer_images"]);
     }
   }
   
