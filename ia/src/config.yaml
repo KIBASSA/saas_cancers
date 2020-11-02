@@ -1,7 +1,47 @@
-batch_size: 128
-out_dim: 256
-s: 1
-temperature: 0.5
-use_cosine_similarity: True
-epochs: 30
-input_shape: (50, 50, 3)
+appName: HuML
+logLevel: WARN
+
+Azure:
+  AmlComputes:
+    DataScience:
+      ClusterName: "dsclusterdev"
+      ClusterType: "Standard_NC12"
+    Sampling:
+      ClusterName: "smlclusterdev"
+      ClusterType: "Standard_NC12"
+    ClusterMinNode: 0
+    ClusterMaxNode: 4  
+    IdleSecondes_Before_Scaledown: 1800
+  StorageAccount:
+    BlobDatastoreName: "diagnozdatastore"
+    AccountName : "diagnozstorage"
+    ContainerName : "diagnoz"
+    AccountKey : "SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag=="
+    BlobStorageConnectionString : "DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net"
+  Azureml:
+    Location : "eastus"
+    ResourceGroup : "diagnoz"
+    WorkspaceName : "diagnozws"
+    Experiments :
+      DataScience :
+        Name : "exp_ds_dev"
+      Sampling : 
+        Name : "exp_sampling_dev"
+    Pipelines:
+      DataScience :
+        Name : "pipeline_ds_dev"
+        EndPoint : "pipeline_ds_endpoint_dev"
+      Sampling :
+        Name : "pipeline_sampling_dev"
+        EndPoint : "pipeline_sampling_endpoint_dev"
+    Model:
+      Name : "diagnoz_model_dev"
+    Deploy:
+      ServiceName : "huml_inference_service"
+      ModelThreshold : 0.7
+  ServicePrincipalAuthentication:
+    TenantId: "8fdd4a62-bf91-4b4a-a88e-b9bedc16ed32"
+    ApplicationId : "85cf0e5a-efd9-4198-a676-4b0652db520b"
+    Password : "8J~Tqk6XZSfPy0q_hVf8nlHJkhd96rXldq"
+  Subscriptions:
+    Value: "e112014e-a856-4c71-8fc1-4836d72b7c4c"

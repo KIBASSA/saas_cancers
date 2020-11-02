@@ -19,7 +19,7 @@ config = ConfigProto()
 config.gpu_options.allow_growth = True
 session = InteractiveSession(config=config)
 
-config = yaml.load(open("./config.yaml", "r"), Loader=yaml.FullLoader)
+config = yaml.load(open("./config.ml.yaml", "r"), Loader=yaml.FullLoader)
 input_shape = eval(config['input_shape'])
 
 train_dataset = tf.data.TFRecordDataset('../data/tfrecords/train.tfrecords')
@@ -96,7 +96,7 @@ def check_point(model):
     model_checkpoints_folder = os.path.join(train_log_dir, 'checkpoints')
     if not os.path.exists(model_checkpoints_folder):
         os.makedirs(model_checkpoints_folder)
-        shutil.copy('./config.yaml', os.path.join(model_checkpoints_folder, 'config.yaml'))
+        shutil.copy('./config.ml.yaml', os.path.join(model_checkpoints_folder, 'config.ml.yaml'))
 
     print("save model : ",os.path.join(model_checkpoints_folder, 'model.h5') )
     model.save_weights(os.path.join(model_checkpoints_folder, 'model.h5'))
