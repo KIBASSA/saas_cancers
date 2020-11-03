@@ -6,7 +6,16 @@ from distutils.dir_util import copy_tree
 import shutil
 script_path = os.path.join(os.path.dirname(__file__), "../../src/scripts")
 sys.path.append(script_path)
+script_path = os.path.join(os.path.dirname(__file__), "../../src/utils")
+sys.path.append(script_path)
+script_path = os.path.join(os.path.dirname(__file__), "../../src/models/Gans/DCGAN")
+sys.path.append(script_path)
+script_path = os.path.join(os.path.dirname(__file__), "../../src/models/processors")
+sys.path.append(script_path)
 from prep_data import DataMerger, DataPreparator
+from train import ModelTrainer
+from eval_model import ModelValidator
+from global_helpers import AzureMLLogsProvider
 
 """|||||||||| DataMerger ||||||||||
 Testing the useful functions of the DataMerger class.
@@ -42,7 +51,8 @@ class AzureExperimentMoq:
         return self.runs
 
 class AzureMLRunMoq:
-    def __init__(self):
+    def __init__(self, parent):
+        self.parent = parent
 
         self.children = []
         self.json_data = {}
@@ -123,7 +133,7 @@ def test_if_method___prepare__to_eval_folder____is_running_properly():
     data_merger = DataMerger()
     blob_manager = BlobManagerMoq()
     data_uploader = DataUploaderMoq(blob_manager)
-    run = AzureMLRunMoq()
+    run = AzureMLRunMoq(None)
     data_peparator = DataPreparator(run)
     data_peparator.prepare(input_data,prepped_data,data_merger,data_uploader)
 
@@ -146,7 +156,7 @@ def test_if_method___prepare__to_train_folder____is_running_properly():
     data_merger = DataMerger()
     blob_manager = BlobManagerMoq()
     data_uploader = DataUploaderMoq(blob_manager)
-    run = AzureMLRunMoq()
+    run = AzureMLRunMoq(None)
     data_peparator = DataPreparator(run)
     data_peparator.prepare(input_data,prepped_data,data_merger,data_uploader)
 
@@ -157,5 +167,52 @@ def test_if_method___prepare__to_train_folder____is_running_properly():
     train_label_1_files = glob.glob(train_folder_label_1 + '/*.png')
     assert len(train_label_1_files) == 7
 
-#if __name__ == "__main__":
-#    test_if_method___prepare__to_train_folder____is_running_properly()
+
+"""|||||||||| ModelTrainer ||||||||||
+Testing the useful functions of the ModelTrainer class.
+"""
+
+def test_if_ModelTrainer_method___train____is_running_properly():
+    input_data = prepped_data = os.path.join(os.path.dirname(__file__),"data/model_trainer/train")
+    model_candidate_folder = os.path.join(prepped_data,"diagnoz/mldata/models")
+    if os.path.isdir(model_candidate_folder):
+        clean_dir(model_candidate_folder)
+
+    run = AzureMLRunMoq(None)
+    trainer = ModelTrainer(run)
+    trainer.train(input_data, prepped_data, model_candidate_folder)
+    classifier_file = os.path.join(model_candidate_folder, "classifier.hdf5")
+    assert os.path.isfile(classifier_file) == True
+    generator_file = os.path.join(model_candidate_folder, "generator.hdf5")
+    assert os.path.isfile(generator_file) == True
+
+
+"""|||||||||| ModelValidator ||||||||||
+Testing the useful functions of the ModelValidator class.
+"""
+
+def test_if_ModelTrainer___evaluate___is_running_properly():
+    input_data = os.path.join(os.path.dirname(__file__),"data/model_validator/evaluate")
+    model_candidate_folder = os.path.join(input_data,"diagnoz/mldata/model_candidate")
+    validated_model_folder = os.path.join(input_data,"diagnoz/mldata/validated_model")
+    if os.path.isdir(validated_model_folder):
+        clean_dir(validated_model_folder)
+        shutil.rmtree(validated_model_folder, ignore_errors=True)
+    
+    parent = AzureMLRunMoq(None)
+    child = AzureMLRunMoq(parent)
+    child.json_data = {"runDefinition": {"script": "prep_data.py"}}
+    child.tags = {"IGNORE_TRAIN_STEP":False}
+    parent.children.append(child)
+    run = AzureMLRunMoq(parent)
+    azure_ml_logs_provider = AzureMLLogsProvider(run)
+    model_validator = ModelValidator(run, azure_ml_logs_provider)
+    model_validator.evaluate(input_data,model_candidate_folder, validated_model_folder)
+    classifier_file = os.path.join(validated_model_folder, "classifier.hdf5")
+    assert os.path.isfile(classifier_file) == True
+
+
+
+
+if __name__ == "__main__":
+    test_if_ModelTrainer___evaluate___is_running_properly()

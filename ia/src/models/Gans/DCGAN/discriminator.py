@@ -1,15 +1,20 @@
 from tensorflow.keras.layers import *
+from tensorflow.keras.models import *
+import tensorflow.keras.backend as K
+
 # Discriminator: Shared weights between the supervised classifier and standard discriminator 
 # as found in GANs
 # Reference: Chapter 20, GANs in Python by Jason Brownlee, Chapter 7 of GANs in Action
 
 # Activation function for the discriminator as proposed in https://arxiv.org/abs/1606.03498
+
 def custom_activation(output):
     logexpsum = K.sum(K.exp(output), axis=-1, keepdims=True)
     result = logexpsum / (logexpsum + 1.0)
     return result
 
 def disc_network(in_shape=(50,50,3), n_classes=2):
+    
     in_image = Input(shape=in_shape)
  
     fe = Conv2D(32, (3,3), strides=(2,2), padding='same')(in_image)

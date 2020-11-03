@@ -2,16 +2,19 @@ from generator import generator_network
 from discriminator import disc_network
 from global_helpers import AzureMLLogsProvider
 from abstract_model import AbstractProcessorModel
+import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 import os
+import numpy as np
+from tqdm import tqdm
+
+
 
 class ModelTrainer(AbstractProcessorModel):
-    def __init__(self, run, azure_ml_logs_provider):
+    def __init__(self, run):
         super().__init__()
         self.run = run
-        self.azure_ml_logs_provider = azure_ml_logs_provider
 
-    
     @tf.function
     def _train_classifier(self, images, labels, classifier, classifier_loss_fn):
         with tf.GradientTape() as tape:
@@ -43,8 +46,8 @@ class ModelTrainer(AbstractProcessorModel):
         
         return g_loss, grads
 
+    
     def train(self,input_data, prepped_data, model_candidate_folder):
-        
         #Prepare data 
         train_datagen = ImageDataGenerator(rescale=1./255,
                                                 shear_range=0.2,
@@ -66,7 +69,7 @@ class ModelTrainer(AbstractProcessorModel):
                                         subset='training') # set as training data
 
         unlabeled_dataset = train_datagen.flow_from_directory(
-                                os.path.join(prepped_data, "diagnoz/mldata/unlabeled_data/"),
+                                os.path.join(input_data, "diagnoz/mldata/unlabeled_data/"),
                                 target_size=(self.IMAGE_RESIZE, self.IMAGE_RESIZE),
                                 batch_size=self.BATCH_SIZE_TRAINING_UNLABELED_SUBSET,
                                 class_mode=None,
@@ -76,12 +79,12 @@ class ModelTrainer(AbstractProcessorModel):
 
         #instance models 
         generator = generator_network(latent_dim=128)
-        disc_network, classifier = disc_network()
+        disc, classifier = disc_network()
 
 
         assert classifier(np.expand_dims(x_batch[0], 0)).shape == (1, 2)
-        assert disc_network(np.expand_dims(x_batch[0], 0)).shape == (1, 1)
-        assert print(generator(np.random.normal(size=(1, 128))).shape) == (1, 50, 50, 3)
+        assert disc(np.expand_dims(x_batch[0], 0)).shape == (1, 1)
+        assert generator(np.random.normal(size=(1, 128))).shape == (1, 50, 50, 3)
 
         """Define the optimizers
         """
@@ -134,15 +137,15 @@ class ModelTrainer(AbstractProcessorModel):
                 [tf.zeros((batch_size, 1)), tf.ones((batch_size, 1))], axis=0
             ) # 0 -> Fake images, 1 -> Real images
 
-            disc_loss, grads = self._train_disc(combined_images, combined_labels, disc_network, disc_loss_fn)
-            d_optimizer.apply_gradients(zip(grads, disc_network.trainable_weights)) # The shared weights of the classifier and the discriminator will therefore be updated on a total of 32 images
+            disc_loss, grads = self._train_disc(combined_images, combined_labels, disc, disc_loss_fn)
+            d_optimizer.apply_gradients(zip(grads, disc.trainable_weights)) # The shared weights of the classifier and the discriminator will therefore be updated on a total of 32 images
             d_loss_mean.update_state(disc_loss)
 
             # Train the generator via signals from the discriminator
             random_latent_vectors = tf.random.normal(shape=(batch_size*4, 128)) # 32 images
             misleading_labels = tf.ones((batch_size*4, 1))
 
-            g_loss, grads = self._train_gen(random_latent_vectors, misleading_labels, disc_network, generator, gan_loss_fn)
+            g_loss, grads = self._train_gen(random_latent_vectors, misleading_labels, disc, generator, gan_loss_fn)
             g_optimizer.apply_gradients(zip(grads, generator.trainable_weights))
             g_loss_mean.update_state(g_loss)
                 
@@ -157,6 +160,7 @@ class ModelTrainer(AbstractProcessorModel):
 
         """ Save classifier and generator
         """
+        os.makedirs(model_candidate_folder, exist_ok = True)
         classifier_file = os.path.join(model_candidate_folder, "classifier.hdf5")
         classifier.save(classifier_file)
         self.run.upload_file(name="diagnoz_classifier", path_or_stream=classifier_file)

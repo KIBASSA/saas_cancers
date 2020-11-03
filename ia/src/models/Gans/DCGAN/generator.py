@@ -1,5 +1,6 @@
 from tensorflow.keras.layers import *
-
+from tensorflow.keras.models import *
+import tensorflow.keras.backend as K
 # Generator
 # Reference: Chapter 20, GANs in Python by Jason Brownlee, Chapter 7 of GANs in Action
 def generator_network(latent_dim):

@@ -5,15 +5,16 @@ from global_helpers import AzureMLLogsProvider, WebServiceDeployer
 from keras.preprocessing.image import ImageDataGenerator
 from abstract_model import AbstractProcessorModel
 from discriminator import disc_network
+import os
+import shutil
 class ModelValidator(AbstractProcessorModel):
-    def __init__(self, ws, config, azure_ml_logs_provider):
+    def __init__(self, run, azure_ml_logs_provider):
         super().__init__()
-        self.ws = ws
-        self.config = config
+        self.run = run
         self.azure_ml_logs_provider = azure_ml_logs_provider
 
     def evaluate(self,input_data,
-                                model_candidate_folder, 
+                          model_candidate_folder, 
                                     validated_model_folder):
         
         IGNORE_TRAIN_STEP = self.azure_ml_logs_provider.get_tag_from_brother_run("prep_data.py","IGNORE_TRAIN_STEP")   
@@ -23,7 +24,7 @@ class ModelValidator(AbstractProcessorModel):
 
         test_datagen = ImageDataGenerator(rescale=1./255)
         test_generator = test_datagen.flow_from_directory(
-                                os.path.join(input_data, "diagnoz/mldata/train_data/"),
+                                os.path.join(input_data, "diagnoz/mldata/eval_data/"),
                                 target_size=(self.IMAGE_RESIZE, self.IMAGE_RESIZE),
                                 batch_size=self.BATCH_SIZE_TRAINING_LABELED_SUBSET,
                                 class_mode='categorical') # set as training data
@@ -32,10 +33,11 @@ class ModelValidator(AbstractProcessorModel):
 
         _, classifier = disc_network()
         classifier_name = "classifier.hdf5"
-        classifier.load_weights(os.path.join(model_candidate_file, classifier_name))
+        model_candidate_file = os.path.join(model_candidate_folder, classifier_name)
+        classifier.load_weights(model_candidate_file)
 
         classifier.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer="adam")
-        loss, acc = classifier.evaluate_generator(test_testing_generator, steps=steps, verbose=0)
+        loss, acc = classifier.evaluate_generator(test_generator, steps=steps, verbose=0)
         self.run.log("acc", round(acc,5))
 
         validated_model_file = os.path.join(validated_model_folder, classifier_name)
