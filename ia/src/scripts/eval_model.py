@@ -14,8 +14,7 @@ class ModelValidator(AbstractProcessorModel):
 
     def evaluate(self,input_data,
                                 model_candidate_folder, 
-                                    validated_model_folder, 
-                                        web_service_deployer ):
+                                    validated_model_folder):
         
         IGNORE_TRAIN_STEP = self.azure_ml_logs_provider.get_tag_from_brother_run("prep_data.py","IGNORE_TRAIN_STEP")   
         if IGNORE_TRAIN_STEP == True:
@@ -45,12 +44,7 @@ class ModelValidator(AbstractProcessorModel):
         
         _ = shutil.copy(model_candidate_file, validated_model_file)
 
-        #deploy model
-        if web_service_deployer.to_deploy(fscore):
-            print("deploying...")
-            web_service_deployer.deploy()
-            print("model deployed")
-
+       
 if __name__ == "__main__":
 
     # get hold of the current run
@@ -80,8 +74,7 @@ if __name__ == "__main__":
         """We create the instance of the ModelValidator class by passing the Run to it 
             and then we launch the evaluation of model.
         """
-        deployer = WebServiceDeployer(run.experiment.workspace, config)
-        validator = ModelValidator(run, azure_ml_logs_provider, deployer)
+        validator = ModelValidator(run, azure_ml_logs_provider)
         validator.evaluate(input_data,
                                 model_candidate_folder, 
                                     validated_model_folder)

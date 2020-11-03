@@ -11,6 +11,7 @@ from models.resnet_simclr import ResNetSimCLR
 from utils.losses import _dot_simililarity_dim1 as sim_func_dim1, _dot_simililarity_dim2 as sim_func_dim2
 from utils.helpers import get_negative_mask, gaussian_filter
 from augmentation.transforms import read_images, distort_simclr, read_record, distort_with_rand_aug
+from azureml.core import Run
 
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession

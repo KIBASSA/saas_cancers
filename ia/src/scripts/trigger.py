@@ -145,18 +145,43 @@ try:
                             allow_reuse=False)
 
     # Step 3, run the model registration script
+    registered_model_folder = PipelineData('registered_model_folder',  datastore = data_store)
     register_step = PythonScriptStep(name = "Register Model",
                                     source_directory = script_folder,
                                     script_name = "register.py",
                                     arguments = ['--input_data',input_data,
-                                                '--validated_model_folder', validated_model_folder],
+                                                '--validated_model_folder', validated_model_folder,
+                                                '--registered_model_folder', registered_model_folder],
                                     inputs=[input_data, validated_model_folder],
+                                    outputs=[registered_model_folder],
                                     compute_target = compute_target,
                                     runconfig = pipeline_run_config, 
                             allow_reuse=False)
 
+
+    estimator_sampling = Estimator(source_directory=script_folder,
+                        compute_target = compute_target,
+                        environment_definition=pipeline_run_config.environment,
+                        entry_script='sampling.py')
+
+    sampled_data = PipelineData('sampled_data',  datastore=data_store)
+    # Step 4 to run a Python script
+    sampling_step = EstimatorStep(name = 'Sampling',
+                        estimator = estimator_sampling,
+                        compute_target = compute_target,
+                        # Specify PipelineData as input
+                        inputs=[input_data, merged_data,prepped_data,registered_model_folder],
+                        outputs=[sampled_data],
+                        # Pass as data reference to estimator script
+                        estimator_entry_script_arguments=['--input_data', input_data,
+                                                            '--prepped_data', prepped_data, 
+                                                            '--registered_model_folder',registered_model_folder,
+                                                            '--sampled_data', sampled_data], 
+                            allow_reuse=False)
+
+
     # Construct the pipeline
-    pipeline_steps = [prep_step, train_step, evaluate_step, register_step]
+    pipeline_steps = [prep_step, train_step, evaluate_step, register_step, sampling_step]
     #pipeline_steps = [step_test]
     pipeline = Pipeline(workspace = ws, steps=pipeline_steps)
     print("Pipeline is built.")

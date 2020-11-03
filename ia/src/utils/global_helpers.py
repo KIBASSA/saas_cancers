@@ -11,6 +11,50 @@ from azureml.exceptions import WebserviceException
 from azureml.core import Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication
 
+class AzureMLLogsProvider:
+    def __init__(self, run):
+        self.run = run
+    
+    def get_log_from_brother_run(self, script_name, log_name):
+        if not self.run.parent :
+            raise Exception("this run has not parent")
+        
+        log_value = None
+        
+        for brother_run in self.run.parent.get_children():
+            if brother_run.get_details()["runDefinition"]["script"] != script_name:
+                continue
+            run_metrics = brother_run.get_metrics()
+            
+            if log_name in run_metrics:
+                log_value = run_metrics[log_name]
+                print("log_value :", log_value)
+
+        return  log_value
+    
+    def get_tag_from_brother_run(self, script_name, tag_name):
+        if not self.run.parent :
+            raise Exception("this run has not parent")
+
+        tag_value = None
+        for brother_run in self.run.parent.get_children():
+            if brother_run.get_details()["runDefinition"]["script"] != script_name:
+                continue
+            run_tags = brother_run.get_tags()
+            
+            if tag_name in run_tags:
+                tag_value = run_tags[tag_name]
+                print("tag_value :", tag_value)
+
+        #check if bool
+        if (tag_value == "True"):
+            tag_value = True
+        elif (tag_value == "False"):
+            tag_value = False
+
+        return  tag_value
+
+
 class WebServiceDeployer:
     def __init__(self, ws, config):
         self.ws = ws
