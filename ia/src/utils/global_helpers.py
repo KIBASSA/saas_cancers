@@ -98,27 +98,6 @@ class WebServiceDeployer:
         service.wait_for_deployment(show_output=True)
         print("success deployement")
 
-class AzureMLLogsProvider:
-    def __init__(self, run):
-        self.run = run
-    
-    def get_log_from_brother_run(self, script_name, log_name):
-        if not self.run.parent :
-            raise Exception("this run has not parent")
-        
-        log_value = None
-        
-        for brother_run in self.run.parent.get_children():
-            if brother_run.get_details()["runDefinition"]["script"] != script_name:
-                continue
-            run_metrics = brother_run.get_metrics()
-            
-            if log_name in run_metrics:
-                log_value = run_metrics[log_name]
-                print("log_value :", log_value)
-
-        return  log_value
-
 class FilesProviders:
     @staticmethod
     def get_path_files(root, exclude_files=[]):

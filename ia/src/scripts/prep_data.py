@@ -3,15 +3,15 @@ import glob
 import shutil
 import ntpath
 import os
+
 class DataMerger(object):
-    def __init__(self, run):
-        self.run = Run
-    
     def merge(self,annotated_set_folder,  train_set_folder):
         files = glob.glob(annotated_set_folder + '/*.png')
         for file_source in files:
             source_file_name = ntpath.basename(file_source)
-            file_dest = os.path.join(train_set_folder, "0/{0}".format(source_file_name))
+            file_dest = os.path.join(train_set_folder, "{0}".format(source_file_name))
+            os.makedirs(os.path.dirname(file_dest), exist_ok = True)
+            print("absolut: ", os.path.abspath(file_source))
             shutil.copyfile(file_source, file_dest)
             print(file_dest, " copied")
 
@@ -31,9 +31,8 @@ class DataUploader(object):
 
 
 class DataPreparator(object):
-    def __init__(self, run, config):
-        self.run = run 
-        self.config = config
+    def __init__(self, run):
+        self.run = run
     
     def _merge(self, data_merger, annotated_folder,train_folder, label):
         annotated_folder = os.path.join(annotated_folder, label)
@@ -49,7 +48,7 @@ class DataPreparator(object):
         train_container = "{0}/{1}".format(train_container, label)
         data_uploader.upload(annotated_folder, train_container)
 
-    def prepare(input_data, prepped_data, data_merger, data_uploader):
+    def prepare(self, input_data, prepped_data, data_merger, data_uploader):
 
         self.run.tag("IGNORE_TRAIN_STEP", False)
 
@@ -62,8 +61,9 @@ class DataPreparator(object):
         eval_read_folder = os.path.join(input_data, "diagnoz/mldata/eval_data")
         if not os.path.isdir(eval_read_folder):
             eval_write_folder = os.path.join(prepped_data, "diagnoz/mldata/eval_data")
-            self._merge(annotated_file_folder,eval_write_folder, "0")
-            self._merge(annotated_file_folder,eval_write_folder, "1")
+            os.makedirs(eval_write_folder)
+            self._merge(data_merger, annotated_file_folder,eval_write_folder, "0")
+            self._merge(data_merger, annotated_file_folder,eval_write_folder, "1")
 
             eval_blob_container = "diagnoz/mldata/eval_data"
             self._upload(data_uploader, annotated_file_folder, eval_blob_container,"0")
@@ -73,8 +73,8 @@ class DataPreparator(object):
             return
 
         train_folder = os.path.join(prepped_data, "diagnoz/mldata/train_data")
-        self._merge(annotated_file_folder,train_folder, "0")
-        self._merge(annotated_file_folder,train_folder, "1")
+        self._merge(data_merger, annotated_file_folder,train_folder, "0")
+        self._merge(data_merger, annotated_file_folder,train_folder, "1")
 
         #upload to the cloud
         train_blob_container = "diagnoz/mldata/train_data"
