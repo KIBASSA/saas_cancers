@@ -15,7 +15,8 @@ sys.path.append(script_path)
 from prep_data import DataMerger, DataPreparator
 from train import ModelTrainer
 from eval_model import ModelValidator
-from global_helpers import AzureMLLogsProvider
+from register import ModelRegister
+from global_helpers import AzureMLLogsProvider, ConfigHandler
 
 """|||||||||| DataMerger ||||||||||
 Testing the useful functions of the DataMerger class.
@@ -49,10 +50,20 @@ class AzureExperimentMoq:
 
     def get_runs(self):
         return self.runs
+        
+class WeorkspaceMoq:
+    def __init__(self):
+        print("WeorkspaceMoq")
+
+class ExperimentMoq:
+    def __init__(self):
+        self.workspace = WeorkspaceMoq()
 
 class AzureMLRunMoq:
     def __init__(self, parent):
         self.parent = parent
+
+        self.experiment = ExperimentMoq()
 
         self.children = []
         self.json_data = {}
@@ -64,7 +75,7 @@ class AzureMLRunMoq:
     
     def get_details(self):
         return self.json_data
-    
+
     def get_tags(self):
         return self.tags
     
@@ -92,6 +103,21 @@ class AzureMLRunMoq:
     
     def set_temp_dir(self, temp_dir):
         self.temp_dir = temp_dir
+    
+    def register_model(self, model_name,tags,model_path):
+        print("model_name : ", model_name)
+        print("model_path : ", model_path)
+
+class WebServiceDeployerMoq:
+    def __init__(self, ws, config):
+        self.ws = ws
+        self.config = config
+
+    def to_deploy(self, principal_metric_value):
+        return principal_metric_value >= self.config.DEPLOY_THRESHOLD
+    
+    def deploy(self):
+        print("deployed")
 
 def test_if_method___merge__is_running_properly():
     annotated_folder = os.path.join(os.path.dirname(__file__), "data/data_merger/merge/annotated")
@@ -212,7 +238,37 @@ def test_if_ModelTrainer___evaluate___is_running_properly():
     assert os.path.isfile(classifier_file) == True
 
 
+"""|||||||||| ModelRegister ||||||||||
+Testing the useful functions of the ModelRegister class.
+"""
+def test_if_ModelRegister___register___is_running_properly():
+    validated_model_folder = os.path.join(os.path.dirname(__file__),"data/model_register/register/validated_model")
+    registered_model_folder = os.path.join(os.path.dirname(__file__),"data/model_register/register/registered_model")
+    if os.path.isdir(registered_model_folder):
+        clean_dir(registered_model_folder)
+        shutil.rmtree(registered_model_folder, ignore_errors=True)
+    
+    parent = AzureMLRunMoq(None)
+    child = AzureMLRunMoq(parent)
+    child.json_data = {"runDefinition": {"script": "prep_data.py"}}
+    child.tags = {"IGNORE_TRAIN_STEP":False}
+    parent.children.append(child)
 
+    child = AzureMLRunMoq(parent)
+    child.json_data = {"runDefinition": {"script": "eval_model.py"}}
+    child.metrics = {"acc":0.8}
+    parent.children.append(child)
+    
+    run = AzureMLRunMoq(parent)
+    azure_ml_logs_provider = AzureMLLogsProvider(run)
+
+    configHandler = ConfigHandler()
+    config = configHandler.get_file(os.path.join(os.path.dirname(__file__),"data/model_register/register/config.yaml"))
+    model_deployer = WebServiceDeployerMoq(run, config)
+    model_register = ModelRegister(run, config)
+    model_register.register(validated_model_folder, registered_model_folder, azure_ml_logs_provider, model_deployer)
+    classifier_file = os.path.join(registered_model_folder, "classifier.hdf5")
+    assert os.path.isfile(classifier_file) == True
 
 if __name__ == "__main__":
-    test_if_ModelTrainer___evaluate___is_running_properly()
+    test_if_ModelRegister___register___is_running_properly()

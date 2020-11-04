@@ -5,7 +5,6 @@ class AbstractSampler(object):
     def __init__(self, unlabeled_data_list_files):
         self.unlabeled_data_list_files = unlabeled_data_list_files
 
-
 class RandomSampler(AbstractSampler):
     def sample(self, number):
         shuffle(self.unlabeled_data_list_files)

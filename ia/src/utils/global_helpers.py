@@ -10,6 +10,7 @@ from azureml.pipeline.core import PipelineEndpoint
 from azureml.exceptions import WebserviceException
 from azureml.core import Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication
+import yaml
 
 class AzureMLLogsProvider:
     def __init__(self, run):
@@ -61,7 +62,7 @@ class WebServiceDeployer:
         self.config = config
         
     def to_deploy(self, principal_metric_value):
-       return principal_metric_value >= self.config.config.DEPLOY_THRESHOLD
+       return principal_metric_value >= self.config.DEPLOY_THRESHOLD
 
     def deploy(self):
         myenv = CondaDependencies()                                                        
@@ -225,11 +226,17 @@ class ConfigProvider:
     def load(self):
         data = self._load_data()
 
-        self.AML_COMPUTE_CLUSTER_NAME = data["Azure"]["AmlCompute"]["ClusterName"]
-        self.AML_COMPUTE_CLUSTER_MIN_NODES = data["Azure"]["AmlCompute"]["ClusterMinNode"]
-        self.AML_COMPUTE_CLUSTER_MAX_NODES = data["Azure"]["AmlCompute"]["ClusterMaxNode"]
-        self.AML_COMPUTE_CLUSTER_VM_TYPE = data["Azure"]["AmlCompute"]["ClusterType"]
-        self.IDLE_SECONDS_BEFORE_SCALEDOWN = data["Azure"]["AmlCompute"]["IdleSecondes_Before_Scaledown"]
+        #AmlComputes
+        #self.AML_COMPUTE_VEC_CLUSTER_NAME = data["Azure"]["AmlComputes"]["Vectorization"]["ClusterName"]
+        #self.AML_COMPUTE_VEC_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["Vectorization"]["ClusterType"]
+        self.AML_COMPUTE_DS_CLUSTER_NAME = data["Azure"]["AmlComputes"]["DataScience"]["ClusterName"]
+        self.AML_COMPUTE_DS_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["DataScience"]["ClusterType"]
+        self.AML_COMPUTE_SAMPLING_CLUSTER_NAME = data["Azure"]["AmlComputes"]["Sampling"]["ClusterName"]
+        self.AML_COMPUTE_SAMPLING_DS_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["Sampling"]["ClusterType"]
+
+        self.AML_COMPUTE_CLUSTER_MIN_NODES = data["Azure"]["AmlComputes"]["ClusterMinNode"]
+        self.AML_COMPUTE_CLUSTER_MAX_NODES = data["Azure"]["AmlComputes"]["ClusterMaxNode"]
+        self.IDLE_SECONDS_BEFORE_SCALEDOWN = data["Azure"]["AmlComputes"]["IdleSecondes_Before_Scaledown"]
 
         #StorageAccount
         self.BLOB_DATASTORE_NAME = data["Azure"]["StorageAccount"]["BlobDatastoreName"]
@@ -245,18 +252,23 @@ class ConfigProvider:
 
         #ExperimentName
         #self.EXPERIMENT_NAME = data["Azure"]["Azureml"]["Experiment"]["Name"]
-        
+        #self.EXPERIMENT_VEC_NAME = data["Azure"]["Azureml"]["Experiments"]["Vectorization"]["Name"]
         self.EXPERIMENT_DS_NAME = data["Azure"]["Azureml"]["Experiments"]["DataScience"]["Name"]
         self.EXPERIMENT_SAMPLING_NAME = data["Azure"]["Azureml"]["Experiments"]["Sampling"]["Name"]
         
         #self.PIPELINE_NAME = data["Azure"]["Azureml"]["Pipeline"]["Name"]
 
+        #self.PIPELINE_VEC_NAME = data["Azure"]["Azureml"]["Pipelines"]["Vectorization"]["Name"]
+        #self.PIPELINE_VEC_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["Vectorization"]["EndPoint"]
         self.PIPELINE_DS_NAME = data["Azure"]["Azureml"]["Pipelines"]["DataScience"]["Name"]
         self.PIPELINE_DS_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["DataScience"]["EndPoint"]
         self.PIPELINE_SAMPLING_NAME = data["Azure"]["Azureml"]["Pipelines"]["Sampling"]["Name"]
         self.PIPELINE_SAMPLING_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["Sampling"]["EndPoint"]
         #Model
         self.MODEL_NAME = data["Azure"]["Azureml"]["Model"]["Name"]
+        #Deploy
+        self.DEPLOY_SERVICE_NAME = data["Azure"]["Azureml"]["Deploy"]["ServiceName"]
+        self.DEPLOY_THRESHOLD =  data["Azure"]["Azureml"]["Deploy"]["ModelThreshold"]
 
         #ServicePrincipalAuthentication
         self.SPA_TENANTID = data["Azure"]["ServicePrincipalAuthentication"]["TenantId"]
@@ -265,6 +277,8 @@ class ConfigProvider:
 
         #Subscriptions
         self.SUBSCRIPTION_VALUE = data["Azure"]["Subscriptions"]["Value"]
+        #self.SUBSCRIPTION_ENTERPRISE = data["Azure"]["Subscriptions"]["Enterprise"]
+        #self.SUBSCRIPTION_PROFESSIONAL = data["Azure"]["Subscriptions"]["Professional"]
 
 class ConfigGenerator:
     def __init__(self, config_template_file):
