@@ -334,5 +334,13 @@ def test_if_SamplingProcessor___sample___is_running_properly():
     sampled_data_images = glob.glob(sampled_data_folder + '/*.png')
     assert len(sampled_data_images) == 200
 
-#if __name__ == "__main__":
-#    test_if_SamplingProcessor___sample___is_running_properly()
+if __name__ == "__main__":
+    test_if_method___merge__is_running_properly()
+    test_if_method___prepare__to_eval_folder____is_running_properly()
+    test_if_method___prepare__to_train_folder____is_running_properly()
+    test_if_ModelTrainer_method___train____is_running_properly()
+    test_if_ModelTrainer___evaluate___is_running_properly()
+    test_if_ModelRegister___register___is_running_properly()
+    test_if_RandomSampler___sample___is_running_properly()
+    test_if_LowConfUnlabeledSampler___sample___is_running_properly()
+    test_if_SamplingProcessor___sample___is_running_properly()
