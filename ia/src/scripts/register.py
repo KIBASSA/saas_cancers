@@ -4,6 +4,7 @@ from azureml.core import Run
 from azureml.core import Model
 import os
 import shutil
+
 class ModelRegister(object):
     def __init__(self, run, config):
         self.run = run

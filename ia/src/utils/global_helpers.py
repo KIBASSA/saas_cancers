@@ -11,6 +11,19 @@ from azureml.exceptions import WebserviceException
 from azureml.core import Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication
 import yaml
+import ntpath
+class ImagePathListUploader(object):
+    def __init__(self, blob_manager):
+        self.blob_manager = blob_manager
+        self.host = "https://diagnozstorage.blob.core.windows.net/"
+    
+    def upload(self,files_source, blob_container_dest):
+        for file_source in files_source:
+            file_source_name = ntpath.basename(file_source)
+            self.blob_manager.upload(blob_container_dest, file_source, overwrite_v = True)
+            uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container_dest, file_source_name)
+            print("uploaded_image :", uploaded_image)
+
 
 class AzureMLLogsProvider:
     def __init__(self, run):

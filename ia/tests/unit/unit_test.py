@@ -16,7 +16,9 @@ from prep_data import DataMerger, DataPreparator
 from train import ModelTrainer
 from eval_model import ModelValidator
 from register import ModelRegister
+from sampling import RandomSampler, LowConfUnlabeledSampler, SamplingProcessor
 from global_helpers import AzureMLLogsProvider, ConfigHandler
+from discriminator import disc_network
 
 """|||||||||| DataMerger ||||||||||
 Testing the useful functions of the DataMerger class.
@@ -32,6 +34,13 @@ def clean_dir(folder):
                 shutil.rmtree(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+class ImagePathListUploaderMoq(object):
+    def __init__(self, blob_manager):
+        self.blob_manager = blob_manager
+    
+    def upload(self,files_source, blob_container_dest):
+        print("upload")
 
 class BlobManagerMoq(object):
     def upload(self, blob_container, file_path, overwrite = False):
@@ -270,5 +279,60 @@ def test_if_ModelRegister___register___is_running_properly():
     classifier_file = os.path.join(registered_model_folder, "classifier.hdf5")
     assert os.path.isfile(classifier_file) == True
 
-if __name__ == "__main__":
-    test_if_ModelRegister___register___is_running_properly()
+
+"""|||||||||| RandomSampler ||||||||||
+Testing the useful functions of the RandomSampler class.
+"""
+def test_if_RandomSampler___sample___is_running_properly():
+    unlabeled_path = os.path.join(os.path.dirname(__file__), "data/random_sampler/sample/unlabeled_data/data")
+    unlabeled_images_list = glob.glob(unlabeled_path + '\*.png')
+    random_sampler = RandomSampler()
+    sampled_images = random_sampler.sample(unlabeled_images_list, 20)
+    assert len(sampled_images) == 20
+    
+
+
+"""|||||||||| LowConfUnlabeledSampler ||||||||||
+Testing the useful functions of the LowConfUnlabeledSampler class.
+"""
+def test_if_LowConfUnlabeledSampler___sample___is_running_properly():
+    unlabeled_path = os.path.join(os.path.dirname(__file__), "data/low_conf_unlabeled_sampler/sample/unlabeled_data/data")
+    unlabeled_images_list = glob.glob(unlabeled_path + '\*.png')
+    classifier_file = os.path.join(os.path.dirname(__file__), "data/low_conf_unlabeled_sampler/sample/model_register/classifier.hdf5")
+    assert os.path.isfile(classifier_file) == True
+    _, classifier = disc_network()
+    classifier.load_weights(classifier_file)
+    low_conf_sampler = LowConfUnlabeledSampler()
+    sampled_images = low_conf_sampler.sample(classifier, unlabeled_images_list, 30)
+    assert len(sampled_images) == 30
+
+
+"""|||||||||| SamplingProcessor ||||||||||
+Testing the useful functions of the SamplingProcessor class.
+"""
+def test_if_SamplingProcessor___sample___is_running_properly():
+    input_data = os.path.join(os.path.dirname(__file__),"data/sampling_processor/process")
+    registered_model_folder = os.path.join(os.path.dirname(__file__),"data/sampling_processor/process/registered_model")
+    sampled_data_folder = os.path.join(os.path.dirname(__file__),"data/sampling_processor/process/sampled_data")
+    if os.path.isdir(sampled_data_folder):
+        clean_dir(sampled_data_folder)
+        shutil.rmtree(sampled_data_folder, ignore_errors=True)
+    
+    random_sampler = RandomSampler()
+    low_conf_sampler = LowConfUnlabeledSampler()
+    blob_manager = BlobManagerMoq()
+    imagepath_list_uploader = ImagePathListUploaderMoq(blob_manager)
+    run = AzureMLRunMoq(None)
+    sampler_processor = SamplingProcessor(run)
+    sampler_processor.process(input_data, 
+                                registered_model_folder,
+                                        sampled_data_folder, 
+                                                random_sampler, 
+                                                        low_conf_sampler, 
+                                                                imagepath_list_uploader)
+
+    sampled_data_images = glob.glob(sampled_data_folder + '/*.png')
+    assert len(sampled_data_images) == 200
+
+#if __name__ == "__main__":
+#    test_if_SamplingProcessor___sample___is_running_properly()
