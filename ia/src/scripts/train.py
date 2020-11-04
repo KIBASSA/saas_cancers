@@ -191,7 +191,7 @@ if __name__ == "__main__":
         """We create the instance of the ModelTrainer class by passing the Run to it 
             and then we launch the training.
         """
-        trainer = ModelTrainer(run, azure_ml_logs_provider)
+        trainer = ModelTrainer(run)
         trainer.train(input_data, prepped_data, model_candidate_folder)
         
     else:

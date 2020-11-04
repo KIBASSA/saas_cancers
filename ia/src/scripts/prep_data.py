@@ -3,6 +3,7 @@ import glob
 import shutil
 import ntpath
 import os
+from cloud_helpers import BlobStorageHandler
 
 class DataMerger(object):
     def merge(self,annotated_set_folder,  train_set_folder):
@@ -99,6 +100,10 @@ if __name__ == "__main__":
         configHandler = ConfigHandler()
         config = configHandler.get_file("config.yaml")
 
+        data_merger = DataMerger()
+        blob_manager = BlobStorageHandler()
+        data_uploader = DataUploader(blob_manager)
+        data_peparator = DataPreparator(run)
         preparator = DataPreparator(run, config)
         preparator.prepare(input_data,prepped_data_path)
     else:

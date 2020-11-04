@@ -9,6 +9,8 @@ import os
 import glob
 import shutil
 import ntpath
+from cloud_helpers import BlobStorageHandler
+from global_helpers import 
 class RandomSampler(object):
     def sample(self, unlabeled_data_list_files, number):
         shuffle(unlabeled_data_list_files)
@@ -101,7 +103,16 @@ if __name__ == "__main__":
         configHandler = ConfigHandler()
         config = configHandler.get_file("config.yaml")
 
-        sampler = SamplingProcessor(run, config)
-        sampler.process(input_data,registered_model_folder, sampled_data)
+        random_sampler = RandomSampler()
+        low_conf_sampler = LowConfUnlabeledSampler()
+        blob_manager = BlobStorageHandler()
+        imagepath_list_uploader = ImagePathListUploader(blob_manager)
+        sampler = SamplingProcessor(run)
+        sampler.process(input_data,
+                            registered_model_folder, 
+                                sampled_data, 
+                                    random_sampler, 
+                                        low_conf_sampler, 
+                                            imagepath_list_uploader):
     else:
         print("the mode has value '{0}' so no need to execute data sampling step".format(mode))

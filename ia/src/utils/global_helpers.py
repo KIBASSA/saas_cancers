@@ -12,6 +12,7 @@ from azureml.core import Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication
 import yaml
 import ntpath
+
 class ImagePathListUploader(object):
     def __init__(self, blob_manager):
         self.blob_manager = blob_manager
@@ -23,7 +24,6 @@ class ImagePathListUploader(object):
             self.blob_manager.upload(blob_container_dest, file_source, overwrite_v = True)
             uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container_dest, file_source_name)
             print("uploaded_image :", uploaded_image)
-
 
 class AzureMLLogsProvider:
     def __init__(self, run):
@@ -67,7 +67,6 @@ class AzureMLLogsProvider:
             tag_value = False
 
         return  tag_value
-
 
 class WebServiceDeployer:
     def __init__(self, ws, config):
@@ -225,7 +224,6 @@ class DataStoreConfig:
             print("Registered blob datastore with name: %s" % blob_datastore_name)
         
         return blob_datastore
-
 
 class ConfigProvider:
     def __init__(self, config_path):
@@ -408,8 +406,6 @@ class ConfigGenerator:
 
         with open(confile_fle,'w') as f:
             f.write(config_template)
-
-
 
 class ConfigHandler:
     def get_file(self,config_path):
