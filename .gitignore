@@ -23,3 +23,18 @@ unlabeled_data
 .ipynb_checkpoints/
 
 ia/notebooks/*.*/*.*jpg
+
+*.log
+
+*.pot
+
+*.pyc
+
+*/*/*/__pycache__/
+
+*/*/__pycache__/
+
+*/__pycache__/
+
+#working script folder
+diagnoz_data_science_scripts_pipeline

@@ -7,7 +7,8 @@ from keras.preprocessing.image import ImageDataGenerator
 import os
 import numpy as np
 from tqdm import tqdm
-
+from azureml.core import Run
+import argparse
 
 
 class ModelTrainer(AbstractProcessorModel):
@@ -47,7 +48,7 @@ class ModelTrainer(AbstractProcessorModel):
         return g_loss, grads
 
     
-    def train(self,input_data, prepped_data, model_candidate_folder):
+    def train(self,input_data, model_candidate_folder):
         #Prepare data 
         train_datagen = ImageDataGenerator(rescale=1./255,
                                                 shear_range=0.2,
@@ -62,14 +63,14 @@ class ModelTrainer(AbstractProcessorModel):
                                                 validation_split=0.2) # set validation split
 
         labeled_subset = train_datagen.flow_from_directory(
-                                        os.path.join(prepped_data, "diagnoz/mldata/train_data/"),
+                                        os.path.join(input_data, "train/"),
                                         target_size=(self.IMAGE_RESIZE, self.IMAGE_RESIZE),
                                         batch_size=self.BATCH_SIZE_TRAINING_LABELED_SUBSET,
                                         class_mode='categorical',
                                         subset='training') # set as training data
 
         unlabeled_dataset = train_datagen.flow_from_directory(
-                                os.path.join(input_data, "diagnoz/mldata/unlabeled_data/"),
+                                os.path.join(input_data, "unlabeled/"),
                                 target_size=(self.IMAGE_RESIZE, self.IMAGE_RESIZE),
                                 batch_size=self.BATCH_SIZE_TRAINING_UNLABELED_SUBSET,
                                 class_mode=None,
@@ -178,21 +179,19 @@ if __name__ == "__main__":
     if mode == "execute":
         parser = argparse.ArgumentParser()
         parser.add_argument('--input_data', type=str, dest='input_data', help='data folder mounting point')
-        parser.add_argument('--prepped_data', type=str, dest='prepped_data', help='prepped data folder mounting point')
         parser.add_argument('--model_candidate_folder', type=str, dest='model_candidate_folder', help='model candidate destination folder mounting point')
         args = parser.parse_args()
         
         """We retrieve the arguments and put them into variables.
         """
         input_data = args.input_data
-        prepped_data = args.prepped_data
         model_candidate_folder = args.model_candidate_folder
 
         """We create the instance of the ModelTrainer class by passing the Run to it 
             and then we launch the training.
         """
         trainer = ModelTrainer(run)
-        trainer.train(input_data, prepped_data, model_candidate_folder)
+        trainer.train(input_data, model_candidate_folder)
         
     else:
         print("the mode has value '{0}' so no need to execute training step".format(mode))

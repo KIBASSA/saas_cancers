@@ -5,12 +5,27 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card card-invoice card-patient">
             <div class="card-body">
+              <div class="list-card">
+                <div class="form-check form-check-flat form-check-primary">
+                  <label class="form-check-label">
+                    <input type="checkbox" 
+                                  [(ngModel)]="allChecked"
+                                      (ngModelChange)="onToDiagnoseAllPatientChange($event)" 
+                                          class="form-check-input">
+                    Check All
+                    <i class="input-helper"></i>
+                  </label>
+                </div>
+              </div>
                 <div class="list-card" *ngFor="let patient of patientList">
                     <div class="row align-items-center">
                         <div class="col-1">
                             <div class="form-check form-check-flat form-check-primary">
                                 <label class="form-check-label">
-                                  <input type="checkbox" class="form-check-input">
+                                  <input type="checkbox"
+                                        [(ngModel)]="patient.checked" 
+                                          (ngModelChange)="onToDiagnosePatientChange($event)"
+                                                  class="form-check-input">
                                   <i class="input-helper"></i>
                                 </label>
                               </div>    
@@ -20,9 +35,12 @@
                                 <div class="col-sm-4">
                                   <img id="loc1"[src]="patient.image" />
                                 </div>
-                                <div class="col-sm-8 pr-0 pl-sm-0">
+                                <div class="col-sm-6 pr-0 pl-sm-0">
                                   <h6 class="mb-1 mb-sm-0"><a class="text-name"  [routerLink]="['/patients/patient', patient.id]">{{patient.name}}</a></h6>
                                   <span>Wed Feb 19 2020</span>
+                                </div>
+                                <div class="col-sm-2">
+                                  
                                 </div>
                               </div>
                         </div>
@@ -40,6 +58,7 @@
                     class="btn btn-outline-info btn-icon-text mt-auto">
                       Lancer                                                                             
                     </a>
+                    <img src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif" style="height: 20px;width: 20px;"/>
                   </div>
             </div>
         </div>

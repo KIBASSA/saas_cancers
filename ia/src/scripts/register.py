@@ -2,9 +2,11 @@
 from discriminator import disc_network
 from azureml.core import Run
 from azureml.core import Model
+from global_helpers import AzureMLLogsProvider
 import os
 import shutil
-
+import argparse
+from global_helpers import ConfigHandler
 class ModelRegister(object):
     def __init__(self, run, config):
         self.run = run

@@ -4,6 +4,9 @@ import shutil
 import ntpath
 import os
 from cloud_helpers import BlobStorageHandler
+from global_helpers import ConfigHandler
+import argparse
+import tempfile
 
 class DataMerger(object):
     def merge(self,annotated_set_folder,  train_set_folder):
@@ -12,9 +15,7 @@ class DataMerger(object):
             source_file_name = ntpath.basename(file_source)
             file_dest = os.path.join(train_set_folder, "{0}".format(source_file_name))
             os.makedirs(os.path.dirname(file_dest), exist_ok = True)
-            print("absolut: ", os.path.abspath(file_source))
             shutil.copyfile(file_source, file_dest)
-            print(file_dest, " copied")
 
 class DataUploader(object):
     def __init__(self, blob_manager):
@@ -26,7 +27,7 @@ class DataUploader(object):
             files_source = glob.glob(folder_source + '/*.png')
             for file_source in files_source:
                 file_source_name = ntpath.basename(file_source)
-                self.blob_manager.upload(blob_container_dest, file_source, overwrite_v = True)
+                self.blob_manager.upload(blob_container_dest, file_source, overwrite = True)
                 uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container_dest, file_source_name)
                 print("uploaded_image :", uploaded_image)
 
@@ -53,32 +54,38 @@ class DataPreparator(object):
 
         self.run.tag("IGNORE_TRAIN_STEP", False)
 
-        annotated_file_folder = os.path.join(input_data, "diagnoz/mldata/annotated_data/current")
+        annotated_file_folder = os.path.join(input_data, "annotated_data/current")
         if not os.path.isdir(annotated_file_folder):
             self.run.tag("IGNORE_TRAIN_STEP", True)
             print("No annotation data provided")
             return
 
-        eval_read_folder = os.path.join(input_data, "diagnoz/mldata/eval_data")
+        if not os.path.isdir(os.path.join(annotated_file_folder, "0")):
+            raise Exception("the annotation/current folder must contain the folder 0")
+
+        if not os.path.isdir(os.path.join(annotated_file_folder, "1")):
+            raise Exception("the annotation/current folder must contain the folder 1")
+
+        eval_read_folder = os.path.join(input_data, "eval")
         if not os.path.isdir(eval_read_folder):
-            eval_write_folder = os.path.join(prepped_data, "diagnoz/mldata/eval_data")
+            eval_write_folder = os.path.join(prepped_data, "eval")
             os.makedirs(eval_write_folder)
             self._merge(data_merger, annotated_file_folder,eval_write_folder, "0")
             self._merge(data_merger, annotated_file_folder,eval_write_folder, "1")
 
-            eval_blob_container = "diagnoz/mldata/eval_data"
+            eval_blob_container = "diagnoz/mldata/eval"
             self._upload(data_uploader, annotated_file_folder, eval_blob_container,"0")
             self._upload(data_uploader, annotated_file_folder, eval_blob_container,"1")
             self.run.tag("IGNORE_TRAIN_STEP", True)
             print("There is no training data available.")
             return
 
-        train_folder = os.path.join(prepped_data, "diagnoz/mldata/train_data")
+        train_folder = os.path.join(prepped_data, "train")
         self._merge(data_merger, annotated_file_folder,train_folder, "0")
         self._merge(data_merger, annotated_file_folder,train_folder, "1")
 
         #upload to the cloud
-        train_blob_container = "diagnoz/mldata/train_data"
+        train_blob_container = "diagnoz/mldata/train"
         self._upload(data_uploader, annotated_file_folder, train_blob_container,"0")
         self._upload(data_uploader, annotated_file_folder, train_blob_container,"1")
 
@@ -94,6 +101,20 @@ if __name__ == "__main__":
     input_data = args.input_data
     prepped_data_path = args.prepped_data
     mode = args.mode
+    
+    print("input_data : ", input_data)
+    for dirpath, dirs, files in os.walk(input_data):
+        print("dirpath :", dirpath)
+        #for filename in files:
+        #    fname = os.path.join(dirpath,filename)
+        #    print(fname)
+        
+    print("prepped_data_path : ", prepped_data_path)
+    for dirpath, dirs, files in os.walk(prepped_data_path):
+        print("dirpath :", dirpath)
+        #for filename in files:
+        #    fname = os.path.join(dirpath,filename)
+        #    print(fname)
 
     run.tag("MODE", mode)
     if mode == "execute":
@@ -104,7 +125,6 @@ if __name__ == "__main__":
         blob_manager = BlobStorageHandler()
         data_uploader = DataUploader(blob_manager)
         data_peparator = DataPreparator(run)
-        preparator = DataPreparator(run, config)
-        preparator.prepare(input_data,prepped_data_path)
+        data_peparator.prepare(input_data,prepped_data_path, data_merger, data_uploader)
     else:
         print("the mode has value '{0}' so no need to execute data preparation step".format(mode))

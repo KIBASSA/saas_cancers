@@ -2,12 +2,20 @@ import os
 import sys 
 script_path = os.path.join(os.getcwd(), "../utils")
 sys.path.append(script_path)
-from global_helpers import FilesProviders
-from utils import  ConfigHandler
+from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig
 from azureml.core import Workspace,Experiment
+from azureml.core.dataset import Dataset
 from azureml.core.runconfig import DEFAULT_GPU_IMAGE
+from azureml.pipeline.core import PipelineData
+from azureml.pipeline.steps import PythonScriptStep, EstimatorStep
+from azureml.pipeline.core import PipelineEndpoint
+from azureml.train.estimator import Estimator
+from azureml.pipeline.core import Pipeline
 from azureml.pipeline.core.graph import PipelineParameter
 import shutil
+from azureml.core.conda_dependencies import CondaDependencies
+from azureml.core import Environment
+from azureml.core.runconfig import RunConfiguration
 script_folder = 'diagnoz_data_science_scripts_pipeline'
 
 try:
@@ -30,6 +38,10 @@ try:
                                                     config.AML_COMPUTE_CLUSTER_MAX_NODES,
                                                     config.IDLE_SECONDS_BEFORE_SCALEDOWN)
     
+    print("config.BLOB_DATASTORE_NAME : ", config.BLOB_DATASTORE_NAME)
+    print("config.ACCOUNT_NAME :",  config.ACCOUNT_NAME)
+    print("config.CONTAINER_NAME :", config.CONTAINER_NAME)
+    print("config.ACCOUNT_KEY :", config.ACCOUNT_KEY)
     blob_datastore = DataStoreConfig.config(ws,config.BLOB_DATASTORE_NAME,
                                             config.ACCOUNT_NAME,
                                             config.CONTAINER_NAME,
@@ -54,6 +66,8 @@ try:
                                                                    'Keras',
                                                                       'tensorflow-hub',
                                                                         'joblib',
+                                                                         'tqdm',
+                                                                         'Pillow',
                                                                           'azureml-dataprep[pandas,fuse]>=1.1.14'])
 
     diagnoz_env = Environment("diagnoz-pipeline-env")
@@ -83,24 +97,8 @@ try:
     input_data = input_dataset.as_named_input('input_dataset').as_mount()
 
     data_store = ws.get_default_datastore()
-    prepped_data = PipelineData('prepped_data',  datastore=data_store)
 
-    pipeline_mode_param = PipelineParameter(name="mode",default_value="deploy")
-
-    prep_step = PythonScriptStep(name = 'Prepare data',
-                          source_directory = script_folder,
-                          script_name = 'prep_data.py',
-                          compute_target = compute_target,
-                          runconfig = pipeline_run_config,
-                          # Specify dataset as initial input
-                          inputs=[input_data],
-                          # Specify PipelineData as output
-                          outputs=[prepped_data],
-                          # Also pass as data reference to script
-                          arguments = ['--input_data',input_data,
-                                        '--prepped_data', prepped_data,
-                                        '--mode', pipeline_mode_param], 
-                          allow_reuse=False)
+    pipeline_mode_param = PipelineParameter(name="mode",default_value="execute")
 
     estimator_train = Estimator(source_directory=script_folder,
                           compute_target = compute_target,
@@ -118,7 +116,7 @@ try:
                             outputs=[model_candidate_folder],
                             # Pass as data reference to estimator script
                             estimator_entry_script_arguments=['--input_data',input_data,
-                                                            '--model_candidate_folder',model_candidate_folder], 
+                                                              '--model_candidate_folder',model_candidate_folder], 
                             allow_reuse=False)
 
 
@@ -135,11 +133,10 @@ try:
                             estimator = estimator_evaluate,
                             compute_target = compute_target,
                             # Specify PipelineData as input
-                            inputs=[prepped_data, model_candidate_folder,input_data],
+                            inputs=[model_candidate_folder,input_data],
                             outputs=[validated_model_folder],
                             # Pass as data reference to estimator script
                             estimator_entry_script_arguments=['--input_data',input_data,
-                                                            '--prepped_data', prepped_data, 
                                                             '--model_candidate_folder',model_candidate_folder,
                                                             '--validated_model_folder',validated_model_folder], 
                             allow_reuse=False)
@@ -149,10 +146,9 @@ try:
     register_step = PythonScriptStep(name = "Register Model",
                                     source_directory = script_folder,
                                     script_name = "register.py",
-                                    arguments = ['--input_data',input_data,
-                                                '--validated_model_folder', validated_model_folder,
+                                    arguments = ['--validated_model_folder', validated_model_folder,
                                                 '--registered_model_folder', registered_model_folder],
-                                    inputs=[input_data, validated_model_folder],
+                                    inputs=[validated_model_folder],
                                     outputs=[registered_model_folder],
                                     compute_target = compute_target,
                                     runconfig = pipeline_run_config, 
@@ -170,23 +166,29 @@ try:
                         estimator = estimator_sampling,
                         compute_target = compute_target,
                         # Specify PipelineData as input
-                        inputs=[input_data, merged_data,prepped_data,registered_model_folder],
+                        inputs=[input_data, registered_model_folder],
                         outputs=[sampled_data],
                         # Pass as data reference to estimator script
                         estimator_entry_script_arguments=['--input_data', input_data,
-                                                            '--prepped_data', prepped_data, 
                                                             '--registered_model_folder',registered_model_folder,
                                                             '--sampled_data', sampled_data], 
                             allow_reuse=False)
 
 
     # Construct the pipeline
-    pipeline_steps = [prep_step, train_step, evaluate_step, register_step, sampling_step]
+    pipeline_steps = [train_step, evaluate_step, register_step, sampling_step]
     #pipeline_steps = [step_test]
     pipeline = Pipeline(workspace = ws, steps=pipeline_steps)
     print("Pipeline is built.")
 
-except expression as identifier:
-    pass
+    # Create an experiment and run the pipeline
+    pipeline_run = experiment.submit(pipeline)
+    print("Pipeline submitted for execution.")
+
+    pipeline_run.wait_for_completion()
+
+except Exception as e:
+  raise Exception(e)
 finally:
-    pass
+  #print("ddd")
+  shutil.rmtree(script_folder, ignore_errors=True)

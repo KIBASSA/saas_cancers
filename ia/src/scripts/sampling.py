@@ -10,7 +10,8 @@ import glob
 import shutil
 import ntpath
 from cloud_helpers import BlobStorageHandler
-from global_helpers import 
+from global_helpers import  ImagePathListUploader, ConfigHandler
+import argparse
 class RandomSampler(object):
     def sample(self, unlabeled_data_list_files, number):
         shuffle(unlabeled_data_list_files)
@@ -65,7 +66,7 @@ class SamplingProcessor(object):
                                     lowfonc_sampler, 
                                         imagepath_list_uploader):
         
-        unlabeled_path = os.path.join(input_data, "diagnoz/mldata/unlabeled_data/data")
+        unlabeled_path = os.path.join(input_data, "unlabeled_data/data")
         unlabeled_images_list = glob.glob(unlabeled_path + '\*.png')
         sampled_images = random_sampler.sample(unlabeled_images_list, 200)
 
@@ -83,7 +84,7 @@ class SamplingProcessor(object):
             os.makedirs(sampled_data, exist_ok = True)
             shutil.copy(image_path, image_path_dest)
 
-        imagepath_list_uploader.upload(sampled_images, "diagnoz/mldata/sampled_data/current")
+        imagepath_list_uploader.upload(sampled_images, "sampled_data/current")
 
 if __name__ == "__main__":
 
@@ -113,6 +114,6 @@ if __name__ == "__main__":
                                 sampled_data, 
                                     random_sampler, 
                                         low_conf_sampler, 
-                                            imagepath_list_uploader):
+                                            imagepath_list_uploader)
     else:
         print("the mode has value '{0}' so no need to execute data sampling step".format(mode))

@@ -2,6 +2,7 @@ from azureml.core.compute import AmlCompute, ComputeTarget
 from azureml.core.datastore import Datastore
 from azureml.core import Environment
 from azureml.core.conda_dependencies import CondaDependencies
+from msrest.exceptions import HttpOperationError
 from azureml.core.runconfig import RunConfiguration
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from azureml.core.webservice import AciWebservice
@@ -12,7 +13,8 @@ from azureml.core import Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication
 import yaml
 import ntpath
-
+import os
+from os.path import isfile, join
 class ImagePathListUploader(object):
     def __init__(self, blob_manager):
         self.blob_manager = blob_manager
@@ -21,7 +23,7 @@ class ImagePathListUploader(object):
     def upload(self,files_source, blob_container_dest):
         for file_source in files_source:
             file_source_name = ntpath.basename(file_source)
-            self.blob_manager.upload(blob_container_dest, file_source, overwrite_v = True)
+            self.blob_manager.upload(blob_container_dest, file_source, overwrite = True)
             uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container_dest, file_source_name)
             print("uploaded_image :", uploaded_image)
 
@@ -174,7 +176,7 @@ class WorkspaceProvider:
         
 class ComputeTargetConfig:
     @staticmethod
-    def config(ws,cluster_name, vm_type, min_nodes, max_nodes,idle_seconds ):
+    def config_create(ws,cluster_name, vm_type, min_nodes, max_nodes,idle_seconds ):
         #Create or Attach existing compute resource
         # choose a name for your cluster
         compute_name = os.environ.get("AML_COMPUTE_CLUSTER_NAME", cluster_name)
@@ -207,6 +209,28 @@ class ComputeTargetConfig:
         
         return compute_target
 
+    @staticmethod
+    def config_attach(ws,compute_target_name, resource_id,username, password):
+        try:
+            attached_dsvm_compute = RemoteCompute(workspace=ws, name=compute_target_name)
+            print('found existing:', attached_dsvm_compute.name)
+        except ComputeTargetException:
+            # Attaching a virtual machine using the public IP address of the VM is no longer supported.
+            # Instead, use resourceId of the VM.
+            # The resourceId of the VM can be constructed using the following string format:
+            # /subscriptions/<subscription_id>/resourceGroups/<resource_group>/providers/Microsoft.Compute/virtualMachines/<vm_name>.
+            # You can also use subscription_id, resource_group and vm_name without constructing resourceId.
+            
+            attach_config = RemoteCompute.attach_configuration(resource_id=resource_id,
+                                                                ssh_port=22,
+                                                                username=username,
+                                                                password=password)
+            attached_dsvm_compute = ComputeTarget.attach(ws, compute_target_name.strip(), attach_config)
+            attached_dsvm_compute.wait_for_completion(show_output=True)
+
+        return attached_dsvm_compute
+        
+
 class DataStoreConfig:
     @staticmethod
     def config(ws, blob_datastore_name,account_name,container_name,account_key):
@@ -238,12 +262,12 @@ class ConfigProvider:
         data = self._load_data()
 
         #AmlComputes
-        #self.AML_COMPUTE_VEC_CLUSTER_NAME = data["Azure"]["AmlComputes"]["Vectorization"]["ClusterName"]
-        #self.AML_COMPUTE_VEC_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["Vectorization"]["ClusterType"]
+        self.AML_COMPUTE_PREP_CLUSTER_NAME = data["Azure"]["AmlComputes"]["DataPreparation"]["ClusterName"]
+        self.AML_COMPUTE_PREP_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["DataPreparation"]["ClusterType"]
         self.AML_COMPUTE_DS_CLUSTER_NAME = data["Azure"]["AmlComputes"]["DataScience"]["ClusterName"]
         self.AML_COMPUTE_DS_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["DataScience"]["ClusterType"]
-        self.AML_COMPUTE_SAMPLING_CLUSTER_NAME = data["Azure"]["AmlComputes"]["Sampling"]["ClusterName"]
-        self.AML_COMPUTE_SAMPLING_DS_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["Sampling"]["ClusterType"]
+        #self.AML_COMPUTE_SAMPLING_CLUSTER_NAME = data["Azure"]["AmlComputes"]["Sampling"]["ClusterName"]
+        #self.AML_COMPUTE_SAMPLING_DS_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["Sampling"]["ClusterType"]
 
         self.AML_COMPUTE_CLUSTER_MIN_NODES = data["Azure"]["AmlComputes"]["ClusterMinNode"]
         self.AML_COMPUTE_CLUSTER_MAX_NODES = data["Azure"]["AmlComputes"]["ClusterMaxNode"]
@@ -263,18 +287,18 @@ class ConfigProvider:
 
         #ExperimentName
         #self.EXPERIMENT_NAME = data["Azure"]["Azureml"]["Experiment"]["Name"]
-        #self.EXPERIMENT_VEC_NAME = data["Azure"]["Azureml"]["Experiments"]["Vectorization"]["Name"]
+        self.EXPERIMENT_PREP_NAME = data["Azure"]["Azureml"]["Experiments"]["DataPreparation"]["Name"]
         self.EXPERIMENT_DS_NAME = data["Azure"]["Azureml"]["Experiments"]["DataScience"]["Name"]
-        self.EXPERIMENT_SAMPLING_NAME = data["Azure"]["Azureml"]["Experiments"]["Sampling"]["Name"]
+        #self.EXPERIMENT_SAMPLING_NAME = data["Azure"]["Azureml"]["Experiments"]["Sampling"]["Name"]
         
         #self.PIPELINE_NAME = data["Azure"]["Azureml"]["Pipeline"]["Name"]
 
-        #self.PIPELINE_VEC_NAME = data["Azure"]["Azureml"]["Pipelines"]["Vectorization"]["Name"]
-        #self.PIPELINE_VEC_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["Vectorization"]["EndPoint"]
+        self.PIPELINE_PREP_NAME = data["Azure"]["Azureml"]["Pipelines"]["DataPreparation"]["Name"]
+        self.PIPELINE_PREP_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["DataPreparation"]["EndPoint"]
         self.PIPELINE_DS_NAME = data["Azure"]["Azureml"]["Pipelines"]["DataScience"]["Name"]
         self.PIPELINE_DS_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["DataScience"]["EndPoint"]
-        self.PIPELINE_SAMPLING_NAME = data["Azure"]["Azureml"]["Pipelines"]["Sampling"]["Name"]
-        self.PIPELINE_SAMPLING_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["Sampling"]["EndPoint"]
+        #self.PIPELINE_SAMPLING_NAME = data["Azure"]["Azureml"]["Pipelines"]["Sampling"]["Name"]
+        #self.PIPELINE_SAMPLING_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["Sampling"]["EndPoint"]
         #Model
         self.MODEL_NAME = data["Azure"]["Azureml"]["Model"]["Name"]
         #Deploy

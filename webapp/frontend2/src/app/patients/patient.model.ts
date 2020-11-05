@@ -31,3 +31,13 @@ export class Patient
         this.diagnosisDateStr = diagnosisDate.toDateString()
   }
 }
+
+
+export class PatientToDiagnose extends Patient
+{
+  checked : boolean
+  constructor(public patient:Patient)
+  {
+      super(patient.id, patient.name,patient.image,patient.isDiagnosed,patient.hasCancer,patient.registrationDate, patient.diagnosisDate, patient.cancerImages);
+  }
+}

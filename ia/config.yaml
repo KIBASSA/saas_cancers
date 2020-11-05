@@ -3,11 +3,11 @@ logLevel: WARN
 
 Azure:
   AmlComputes:
+    DataPreparation:
+        ClusterName: "dsclusterdev"
+        ClusterType: "Standard_NC12"
     DataScience:
       ClusterName: "dsclusterdev"
-      ClusterType: "Standard_NC12"
-    Sampling:
-      ClusterName: "smlclusterdev"
       ClusterType: "Standard_NC12"
     ClusterMinNode: 0
     ClusterMaxNode: 4  
@@ -23,17 +23,17 @@ Azure:
     ResourceGroup : "diagnoz"
     WorkspaceName : "diagnozws"
     Experiments :
+      DataPreparation :
+          Name : "exp_prep_dev"
       DataScience :
         Name : "exp_ds_dev"
-      Sampling : 
-        Name : "exp_sampling_dev"
     Pipelines:
+      DataPreparation :
+          Name : "pipeline_prep_dev"
+          EndPoint : "pipeline_prep_endpoint_dev"
       DataScience :
         Name : "pipeline_ds_dev"
         EndPoint : "pipeline_ds_endpoint_dev"
-      Sampling :
-        Name : "pipeline_sampling_dev"
-        EndPoint : "pipeline_sampling_endpoint_dev"
     Model:
       Name : "diagnoz_model_dev"
     Deploy:

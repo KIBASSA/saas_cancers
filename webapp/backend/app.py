@@ -28,12 +28,6 @@ def hello():
     return render_template("index.html")
 
 
-@app.route('/exams')
-def get_exams():
-    print("KIBS")
-    data = [{"test":1}, {"test":2}]
-    return jsonify(data)
-
 def _get_structure_patients_data(data):
     response = []
     for patient in data:

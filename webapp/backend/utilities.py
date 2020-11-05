@@ -2,6 +2,7 @@ import tempfile
 import os
 from mimetypes import guess_extension, guess_type
 import base64
+import tempfile
 class Consts:
     BREAST = "breast"
     DIAGNOZ = "diagnoz"
@@ -46,7 +47,7 @@ class PatientImageCloudManager:
             with open(local_full_path_file, "wb") as fh:
                 fh.write(base64.decodestring(img_data.encode()))
             blob_container = self._get_profile_container(patient, img_data)
-            self.blob_manager.upload(blob_container, local_full_path_file, overwrite_v = True)
+            self.blob_manager.upload(blob_container, local_full_path_file, overwrite = True)
             uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container, local_file_name)
             print("uploaded_image :", uploaded_image)
         return uploaded_image
@@ -66,7 +67,7 @@ class PatientImageCloudManager:
                 with open(local_full_path_file, "wb") as fh:
                     fh.write(base64.decodestring(img_data.encode()))
                 blob_container = self._get_cancer_images_container(patient_id)
-                self.blob_manager.upload(blob_container, local_full_path_file, overwrite_v = True)
+                self.blob_manager.upload(blob_container, local_full_path_file, overwrite = True)
                 uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container, local_file_name)
                 uploaded_images.append(uploaded_image)
                 print("uploaded_image :", uploaded_image)

@@ -7,6 +7,7 @@ from abstract_model import AbstractProcessorModel
 from discriminator import disc_network
 import os
 import shutil
+from global_helpers import ConfigHandler
 class ModelValidator(AbstractProcessorModel):
     def __init__(self, run, azure_ml_logs_provider):
         super().__init__()
@@ -24,7 +25,7 @@ class ModelValidator(AbstractProcessorModel):
 
         test_datagen = ImageDataGenerator(rescale=1./255)
         test_generator = test_datagen.flow_from_directory(
-                                os.path.join(input_data, "diagnoz/mldata/eval_data/"),
+                                os.path.join(input_data, "eval/"),
                                 target_size=(self.IMAGE_RESIZE, self.IMAGE_RESIZE),
                                 batch_size=self.BATCH_SIZE_TRAINING_LABELED_SUBSET,
                                 class_mode='categorical') # set as training data
