@@ -1,3 +1,5 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import *
 import tensorflow.keras.backend as K

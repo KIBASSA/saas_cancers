@@ -22,7 +22,10 @@ export class StartComponent implements OnInit {
                                               .getPatientAwaitingDiagnosis()
       .subscribe(res => {
                   this.patientList = this.patientsProviders.getPatients(res).map((a)=> new PatientToDiagnose(a));
-                  this.patientList.forEach(item => { item.checked = true});
+                  this.patientList.forEach(item => 
+                    {
+                       item.checked = true;
+                    });
                   this.allChecked = true;
         },
         console.error
@@ -34,6 +37,11 @@ export class StartComponent implements OnInit {
   }
   onToDiagnosePatientChange(eve: any) {
     this.allChecked = !this.patientList.some(u => !u.checked);
+  }
+
+  onLaunch(eve: any)
+  {
+    console.log("salut")
   }
 
   ngOnDestroy(): void {

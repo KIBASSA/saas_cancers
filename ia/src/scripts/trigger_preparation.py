@@ -57,7 +57,6 @@ try:
                                                               'azure-storage-blob',
                                                                  'matplotlib',
                                                                  'seaborn',
-                                                                 'scikit-learn',
                                                                  'tensorflow',
                                                                    'Keras',
                                                                       'tensorflow-hub',

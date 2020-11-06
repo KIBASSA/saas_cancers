@@ -53,20 +53,20 @@ if __name__ == "__main__":
     # get hold of the current run
     run = Run.get_context()
     azure_ml_logs_provider = AzureMLLogsProvider(run)
-    mode = azure_ml_logs_provider.get_tag_from_brother_run("prep_data.py","MODE")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input_data', type=str, dest='input_data', help='data folder mounting point')
+    parser.add_argument('--model_candidate_folder', type=str, dest='model_candidate_folder', help='data destination folder mounting point')
+    parser.add_argument('--validated_model_folder', type=str, dest='validated_model_folder', help='data destination folder mounting point')
+    parser.add_argument('--mode', type=str, dest="mode")
+
+    args = parser.parse_args()
+        
+    input_data = args.input_data
+    model_candidate_folder = args.model_candidate_folder
+    validated_model_folder = args.validated_model_folder
+    mode = args.mode
     
     if mode == "execute":
-        parser = argparse.ArgumentParser()
-        parser.add_argument('--input_data', type=str, dest='input_data', help='data folder mounting point')
-        parser.add_argument('--model_candidate_folder', type=str, dest='model_candidate_folder', help='data destination folder mounting point')
-        
-        parser.add_argument('--validated_model_folder', type=str, dest='validated_model_folder', help='data destination folder mounting point')
-
-        args = parser.parse_args()
-        
-        input_data = args.input_data
-        model_candidate_folder = args.model_candidate_folder
-        validated_model_folder = args.validated_model_folder
         
         """We create an ConfigProvider object from the existing configuration file.
         This object contains all information of config file and facilitates its access.

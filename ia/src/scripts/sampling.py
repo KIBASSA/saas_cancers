@@ -74,9 +74,9 @@ class SamplingProcessor(object):
         classifier_file = os.path.join(register_model_folder, classifier_name)
         if os.path.isfile(classifier_file):
             _, classifier = disc_network()
-            model = classifier.load_weights(classifier_file)
+            classifier.load_weights(classifier_file)
 
-            lowconf_sampled_images = lowfonc_sampler.sample(model, unlabeled_images_list, 180)
+            lowconf_sampled_images = lowfonc_sampler.sample(classifier, unlabeled_images_list, 180)
             sampled_images = sampled_images[:20] + lowconf_sampled_images
         
         for image_path in sampled_images:

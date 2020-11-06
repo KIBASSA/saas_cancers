@@ -15,6 +15,10 @@ import yaml
 import ntpath
 import os
 from os.path import isfile, join
+from PIL import Image, ImageOps
+from io import BytesIO
+import numpy as np
+
 class ImagePathListUploader(object):
     def __init__(self, blob_manager):
         self.blob_manager = blob_manager
@@ -81,6 +85,9 @@ class WebServiceDeployer:
     def deploy(self):
         myenv = CondaDependencies()                                                        
         myenv.add_pip_package("azureml-sdk")
+        myenv.add_pip_package("joblib")
+        myenv.add_pip_package("tensorflow")
+        
         myenv.add_pip_package("azureml-dataprep[pandas,fuse]>=1.1.14")
 
         with open("diagnoz_env.yml","w") as f:
@@ -88,7 +95,12 @@ class WebServiceDeployer:
 
         huml_env = Environment.from_conda_specification(name="diagnoz_env", file_path="diagnoz_env.yml")
 
-        inference_config = InferenceConfig(entry_script="score.py", environment=huml_env)
+        inference_config = InferenceConfig(entry_script="score.py",source_directory='.', environment=huml_env)
+        print("file deployement : ")
+        for root, dir_, files in os.walk(os.getcwd()):
+            print("dir_", dir_)
+            for filename in files:
+                print("filename :", filename)
 
         aciconfig = AciWebservice.deploy_configuration(cpu_cores=1, 
                                                     memory_gb=1, 
@@ -105,7 +117,7 @@ class WebServiceDeployer:
         
 
         service = Model.deploy(workspace=self.ws, 
-                            name=self.config.SERVICE_NAME, 
+                            name=self.config.DEPLOY_SERVICE_NAME, 
                             models=[model], 
                             inference_config=inference_config, 
                             deployment_config=aciconfig)

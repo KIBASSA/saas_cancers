@@ -68,11 +68,12 @@ class DataPreparator(object):
 
         eval_read_folder = os.path.join(input_data, "eval")
         if not os.path.isdir(eval_read_folder):
-            eval_write_folder = os.path.join(prepped_data, "eval")
-            os.makedirs(eval_write_folder)
-            self._merge(data_merger, annotated_file_folder,eval_write_folder, "0")
-            self._merge(data_merger, annotated_file_folder,eval_write_folder, "1")
+            #eval_write_folder = os.path.join(prepped_data, "eval")
+            #os.makedirs(eval_write_folder)
+            #self._merge(data_merger, annotated_file_folder,eval_write_folder, "0")
+            #self._merge(data_merger, annotated_file_folder,eval_write_folder, "1")
 
+            print("upload data to eval container...")
             eval_blob_container = "diagnoz/mldata/eval"
             self._upload(data_uploader, annotated_file_folder, eval_blob_container,"0")
             self._upload(data_uploader, annotated_file_folder, eval_blob_container,"1")
@@ -80,11 +81,12 @@ class DataPreparator(object):
             print("There is no training data available.")
             return
 
-        train_folder = os.path.join(prepped_data, "train")
-        self._merge(data_merger, annotated_file_folder,train_folder, "0")
-        self._merge(data_merger, annotated_file_folder,train_folder, "1")
+        #train_folder = os.path.join(prepped_data, "train")
+        #self._merge(data_merger, annotated_file_folder,train_folder, "0")
+        #self._merge(data_merger, annotated_file_folder,train_folder, "1")
 
         #upload to the cloud
+        print("upload data to train container...")
         train_blob_container = "diagnoz/mldata/train"
         self._upload(data_uploader, annotated_file_folder, train_blob_container,"0")
         self._upload(data_uploader, annotated_file_folder, train_blob_container,"1")
@@ -102,20 +104,6 @@ if __name__ == "__main__":
     prepped_data_path = args.prepped_data
     mode = args.mode
     
-    print("input_data : ", input_data)
-    for dirpath, dirs, files in os.walk(input_data):
-        print("dirpath :", dirpath)
-        #for filename in files:
-        #    fname = os.path.join(dirpath,filename)
-        #    print(fname)
-        
-    print("prepped_data_path : ", prepped_data_path)
-    for dirpath, dirs, files in os.walk(prepped_data_path):
-        print("dirpath :", dirpath)
-        #for filename in files:
-        #    fname = os.path.join(dirpath,filename)
-        #    print(fname)
-
     run.tag("MODE", mode)
     if mode == "execute":
         configHandler = ConfigHandler()

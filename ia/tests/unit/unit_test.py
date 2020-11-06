@@ -160,7 +160,7 @@ def test_if_method___prepare__to_eval_folder____is_running_properly():
     #input_data
     input_data = os.path.join(os.path.dirname(__file__),"data/data_preparator/prepare___to_eval_folder")
     prepped_data = os.path.join(os.path.dirname(__file__),"data/data_preparator/prepare___to_eval_folder")
-    eval_folder = os.path.join(prepped_data,"diagnoz/mldata/eval_data")
+    eval_folder = os.path.join(prepped_data,"eval_data")
     if os.path.isdir(eval_folder):
         clean_dir(eval_folder)
     shutil.rmtree(eval_folder, ignore_errors=True)
@@ -183,7 +183,7 @@ def test_if_method___prepare__to_train_folder____is_running_properly():
     #input_data
     input_data = os.path.join(os.path.dirname(__file__),"data/data_preparator/prepare___to_train_folder")
     prepped_data = os.path.join(os.path.dirname(__file__),"data/data_preparator/prepare___to_train_folder")
-    train_folder = os.path.join(prepped_data,"diagnoz/mldata/train_data")
+    train_folder = os.path.join(prepped_data,"train_data")
     if os.path.isdir(train_folder):
         clean_dir(train_folder)
     shutil.rmtree(train_folder, ignore_errors=True)
@@ -209,7 +209,7 @@ Testing the useful functions of the ModelTrainer class.
 
 def test_if_ModelTrainer_method___train____is_running_properly():
     input_data = prepped_data = os.path.join(os.path.dirname(__file__),"data/model_trainer/train")
-    model_candidate_folder = os.path.join(prepped_data,"diagnoz/mldata/models")
+    model_candidate_folder = os.path.join(prepped_data,"models")
     if os.path.isdir(model_candidate_folder):
         clean_dir(model_candidate_folder)
 
@@ -228,8 +228,8 @@ Testing the useful functions of the ModelValidator class.
 
 def test_if_ModelTrainer___evaluate___is_running_properly():
     input_data = os.path.join(os.path.dirname(__file__),"data/model_validator/evaluate")
-    model_candidate_folder = os.path.join(input_data,"diagnoz/mldata/model_candidate")
-    validated_model_folder = os.path.join(input_data,"diagnoz/mldata/validated_model")
+    model_candidate_folder = os.path.join(input_data,"model_candidate")
+    validated_model_folder = os.path.join(input_data,"validated_model")
     if os.path.isdir(validated_model_folder):
         clean_dir(validated_model_folder)
         shutil.rmtree(validated_model_folder, ignore_errors=True)

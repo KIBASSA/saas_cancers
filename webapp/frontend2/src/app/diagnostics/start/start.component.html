@@ -30,7 +30,7 @@
                                 </label>
                               </div>    
                         </div>
-                        <div class="col-5">
+                        <div class="col-4">
                             <div class="row align-items-center">
                                 <div class="col-sm-4">
                                   <img id="loc1"[src]="patient.image" />
@@ -44,6 +44,11 @@
                                 </div>
                               </div>
                         </div>
+                        <div class="col-1">
+                          <img src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif" style="height: 20px;width: 20px;"/>
+                          <div class="badge badge-outline-danger badge-pill">Positif</div>
+                          <div class="badge badge-outline-success badge-pill">Négatif</div>
+                        </div>
                         <div class="col-6">
                           <ul>
                             <li class="loc-caption" *ngFor="let image of patient.cancerImages">
@@ -55,7 +60,8 @@
                 </div>
                 <div class="text-center">
                     <a routerLink="/diagnostics/start"
-                    class="btn btn-outline-info btn-icon-text mt-auto">
+                    class="btn btn-outline-info btn-icon-text mt-auto"
+                    (click)="onLaunch($event)">
                       Lancer                                                                             
                     </a>
                     <img src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif" style="height: 20px;width: 20px;"/>

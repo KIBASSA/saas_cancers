@@ -37,8 +37,8 @@ Azure:
     Model:
       Name : "diagnoz_model_dev"
     Deploy:
-      ServiceName : "huml_inference_service"
-      ModelThreshold : 0.7
+      ServiceName : "diagnozinferenceservice"
+      ModelThreshold : 0.4
   ServicePrincipalAuthentication:
     TenantId: "8fdd4a62-bf91-4b4a-a88e-b9bedc16ed32"
     ApplicationId : "85cf0e5a-efd9-4198-a676-4b0652db520b"

@@ -108,7 +108,8 @@ class ModelTrainer(AbstractProcessorModel):
 
         ################## Training ##################
         ##############################################
-        for epoch in tqdm(range(7500)):
+        for epoch in tqdm(range(2)):
+        #for epoch in tqdm(range(7500)):
             """Define objects to calculate the mean losses across each epoch
             """
             c_loss_mean = tf.keras.metrics.Mean()
@@ -173,20 +174,16 @@ class ModelTrainer(AbstractProcessorModel):
 if __name__ == "__main__":
 
     run = Run.get_context()
-    azure_ml_logs_provider = AzureMLLogsProvider(run)
-    mode = azure_ml_logs_provider.get_tag_from_brother_run("prep_data.py","MODE")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input_data', type=str, dest='input_data', help='data folder mounting point')
+    parser.add_argument('--model_candidate_folder', type=str, dest='model_candidate_folder', help='model candidate destination folder mounting point')
+    parser.add_argument('--mode', type=str, dest="mode")
+    args = parser.parse_args()
 
+    input_data = args.input_data
+    model_candidate_folder = args.model_candidate_folder
+    mode = args.mode
     if mode == "execute":
-        parser = argparse.ArgumentParser()
-        parser.add_argument('--input_data', type=str, dest='input_data', help='data folder mounting point')
-        parser.add_argument('--model_candidate_folder', type=str, dest='model_candidate_folder', help='model candidate destination folder mounting point')
-        args = parser.parse_args()
-        
-        """We retrieve the arguments and put them into variables.
-        """
-        input_data = args.input_data
-        model_candidate_folder = args.model_candidate_folder
-
         """We create the instance of the ModelTrainer class by passing the Run to it 
             and then we launch the training.
         """

@@ -61,7 +61,6 @@ try:
                                                               'azure-storage-blob',
                                                                  'matplotlib',
                                                                  'seaborn',
-                                                                 'scikit-learn',
                                                                  'tensorflow',
                                                                    'Keras',
                                                                       'tensorflow-hub',
@@ -116,7 +115,8 @@ try:
                             outputs=[model_candidate_folder],
                             # Pass as data reference to estimator script
                             estimator_entry_script_arguments=['--input_data',input_data,
-                                                              '--model_candidate_folder',model_candidate_folder], 
+                                                              '--model_candidate_folder',model_candidate_folder,
+                                                              '--mode', pipeline_mode_param], 
                             allow_reuse=False)
 
 
@@ -138,7 +138,8 @@ try:
                             # Pass as data reference to estimator script
                             estimator_entry_script_arguments=['--input_data',input_data,
                                                             '--model_candidate_folder',model_candidate_folder,
-                                                            '--validated_model_folder',validated_model_folder], 
+                                                            '--validated_model_folder',validated_model_folder,
+                                                            '--mode', pipeline_mode_param], 
                             allow_reuse=False)
 
     # Step 3, run the model registration script
@@ -147,7 +148,8 @@ try:
                                     source_directory = script_folder,
                                     script_name = "register.py",
                                     arguments = ['--validated_model_folder', validated_model_folder,
-                                                '--registered_model_folder', registered_model_folder],
+                                                '--registered_model_folder', registered_model_folder,
+                                                '--mode', pipeline_mode_param],
                                     inputs=[validated_model_folder],
                                     outputs=[registered_model_folder],
                                     compute_target = compute_target,
@@ -171,7 +173,8 @@ try:
                         # Pass as data reference to estimator script
                         estimator_entry_script_arguments=['--input_data', input_data,
                                                             '--registered_model_folder',registered_model_folder,
-                                                            '--sampled_data', sampled_data], 
+                                                            '--sampled_data', sampled_data,
+                                                            '--mode', pipeline_mode_param], 
                             allow_reuse=False)
 
 

@@ -6,7 +6,7 @@ from global_helpers import AzureMLLogsProvider
 import os
 import shutil
 import argparse
-from global_helpers import ConfigHandler
+from global_helpers import ConfigHandler, WebServiceDeployer
 class ModelRegister(object):
     def __init__(self, run, config):
         self.run = run
@@ -31,12 +31,17 @@ class ModelRegister(object):
 
         self.run.upload_file(name = self.config.MODEL_NAME, path_or_stream = validated_model_file)
 
-        _ = self.run.register_model(model_name=self.config.MODEL_NAME,
-                                tags={'Training context':'Pipeline'},
-                                model_path=validated_model_file)
+        #_ = self.run.register_model(model_name=self.config.MODEL_NAME,
+        #                        tags={'Training context':'Pipeline'},
+        #                        model_path=validated_model_file)
+
+        Model.register(workspace=self.run.experiment.workspace,
+                    model_path = validated_model_file,
+                    model_name = self.config.MODEL_NAME,
+                    tags={'Training context':'Pipeline'})
 
         acc = azure_ml_logs_provider.get_log_from_brother_run("eval_model.py", "acc")
-        
+        print("acc :", acc)
         #deploy model
         if web_service_deployer.to_deploy(acc):
             print("deploying...")
@@ -52,20 +57,18 @@ if __name__ == "__main__":
 
     run = Run.get_context()
     azure_ml_logs_provider = AzureMLLogsProvider(run)
-    mode = azure_ml_logs_provider.get_tag_from_brother_run("prep_data.py","MODE")
+    parser = argparse.ArgumentParser()
+   
+    parser.add_argument('--validated_model_folder', type=str, dest='validated_model_folder', help='model location')
+    parser.add_argument('--registered_model_folder', type=str, dest='registered_model_folder', help='model location')
+    parser.add_argument('--mode', type=str, dest="mode")
+    """We retrieve the arguments and put them into variables.
+    """
+    args = parser.parse_args()
+    validated_model_folder = args.validated_model_folder
+    registered_model_folder = args.registered_model_folder
+    mode = args.mode
     if mode == "execute":
-        parser = argparse.ArgumentParser()
-        """The parameter <validated_model_folder> which is output, 
-            passed through the pipeline will contain the valided model file.
-        """
-        parser.add_argument('--validated_model_folder', type=str, dest='validated_model_folder', help='model location')
-        parser.add_argument('--registered_model_folder', type=str, dest='registered_model_folder', help='model location')
-        """We retrieve the arguments and put them into variables.
-        """
-        args = parser.parse_args()
-        validated_model_folder = args.validated_model_folder
-        registered_model_folder = args.registered_model_folder
-        
         """Since our registration will need information from the configuration file,
         we load the Config object from this file <config.yaml>.
         """

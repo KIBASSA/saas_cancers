@@ -3,7 +3,10 @@ import os
 import sys
 sys.path.append("../../db_api")
 sys.path.append("../../cloud_api")
-
+sys.path.append("../../ia/src/models/Gans/DCGAN")
+sys.path.append("../../ia/src/utils")
+sys.path.append("../../ia/src/deploy")
+import joblib
 from flask import Flask,render_template,Response, jsonify, request
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
@@ -13,10 +16,13 @@ from models import Patient, PatientEncoder
 import json
 import datetime
 from flask_api import status
+from utilities import PatientImageCloudManager
+from predictor import Predictor
+from PIL import Image, ImageOps
+import time
 app = Flask(__name__)
 api = Api(app)  # type: Api
 
-from utilities import PatientImageCloudManager
 
 #initialization
 blob_manager = BlobStorageManager("DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net")
@@ -25,7 +31,8 @@ db_api = CancerDBAPI()
 
 @app.route("/")
 def hello():
-    return render_template("index.html")
+    JsonTest = [{"test1":"value1"}, {"test1":"value1"}]
+    return render_template("index.html", value=JsonTest)
 
 
 def _get_structure_patients_data(data):
@@ -106,6 +113,41 @@ def add_cancers_images():
     db_api.insert_cancer_images(patient_id, uploaded_images)
     patient = db_api.get_patient_by_id(patient_id)
     return jsonify(PatientEncoder().encode(patient))
+
+@app.route('/predict_cancer', methods=['POST'])
+def predict_cancer():
+    #print(request.json)
+    #classifier_file = os.path.join("classifier/classifier.hdf5")
+    #joblib.load(classifier_file)
+    #return jsonify({})
+    """
+    from discriminator import disc_network
+    base64Dict = json.loads(request.json)
+
+    classifier_file = os.path.join("classifier/classifier.hdf5")
+    if not os.path.isfile(classifier_file):
+        raise Exception("classifier doesn't exist")
+    
+    _, classifier = disc_network()
+    classifier.load_weights(classifier_file)
+
+    predictor = Predictor()
+    predictions = predictor.predict(classifier, base64Dict, (50,50), ["cancer", "not cancer"])
+
+    return jsonify(predictions)
+    """
+    #base64Dict = json.loads(request.json)
+    time.sleep(2.4)
+    response = []
+    for index, item in enumerate(request.json.items()):
+        img_file_name, base64Img = item
+        cancer_value = "cancer"
+        if index % 2 == 0:
+            cancer_value = "not cancer"
+        response.append({img_file_name:cancer_value})
+    #base64Dict = request.json
+    #print("len(base64Dict) : ", len(request.json))
+    return jsonify(response)
 
 @app.after_request
 def after_request(response):
