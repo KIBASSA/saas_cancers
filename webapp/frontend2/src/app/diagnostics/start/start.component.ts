@@ -39,9 +39,42 @@ export class StartComponent implements OnInit {
     this.allChecked = !this.patientList.some(u => !u.checked);
   }
 
+  getBase64Image(imgURL) {
+    fetch(imgURL)
+      .then(response => response.text())
+      .then(contents => console.log(contents))
+      .catch(() => console.log("Can’t access " + imgURL + " response. Blocked by browser?"))
+
+    //var xhr = new XMLHttpRequest();       
+    //xhr.open("GET", imgURL, true); 
+    //xhr.responseType = "blob";
+    //xhr.onload = function (e) {
+    //        console.log(this.response);
+    //        var reader = new FileReader();
+    //        reader.onload = function(event) {
+    //           var res = event.target.result;
+    //           console.log(res)
+    //        }
+    //        var file = this.response;
+    //        reader.readAsDataURL(file)
+    //};
+    //xhr.send()
+    
+    
+    //var dataURL = canvas.toDataURL("image/png");
+    //return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    return "salut"
+  }
+
+  
   onLaunch(eve: any)
   {
-    console.log("salut")
+    this.patientList.forEach(item => 
+      {
+        item.cancerImages.forEach(image=> {
+          console.log(this.getBase64Image(image))
+        });
+      });
   }
 
   ngOnDestroy(): void {

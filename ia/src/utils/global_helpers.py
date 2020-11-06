@@ -87,7 +87,7 @@ class WebServiceDeployer:
         myenv.add_pip_package("azureml-sdk")
         myenv.add_pip_package("joblib")
         myenv.add_pip_package("tensorflow")
-        
+        myenv.add_pip_package("Pillow")
         myenv.add_pip_package("azureml-dataprep[pandas,fuse]>=1.1.14")
 
         with open("diagnoz_env.yml","w") as f:
