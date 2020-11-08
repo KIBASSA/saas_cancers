@@ -5,18 +5,19 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card card-invoice card-patient">
             <div class="card-body">
-              <div class="list-card">
-                <div class="form-check form-check-flat form-check-primary">
-                  <label class="form-check-label">
-                    <input type="checkbox" 
-                                  [(ngModel)]="allChecked"
-                                      (ngModelChange)="onToDiagnoseAllPatientChange($event)" 
-                                          class="form-check-input">
-                    Check All
-                    <i class="input-helper"></i>
-                  </label>
+              <ng-template [ngIf]="this.patientList.length > 0">
+                <div class="list-card">
+                  <div class="form-check form-check-flat form-check-primary">
+                    <label class="form-check-label">
+                      <input type="checkbox" 
+                                    [(ngModel)]="allChecked"
+                                        (ngModelChange)="onToDiagnoseAllPatientChange($event)" 
+                                            class="form-check-input">
+                      Check All
+                      <i class="input-helper"></i>
+                    </label>
+                  </div>
                 </div>
-              </div>
                 <div class="list-card" *ngFor="let patient of patientList">
                     <div class="row align-items-center">
                         <div class="col-1">
@@ -33,7 +34,7 @@
                         <div class="col-4">
                             <div class="row align-items-center">
                                 <div class="col-sm-4">
-                                  <img id="loc1"[src]="patient.image" />
+                                  <img id="loc1"[src]="patient.image"/>
                                 </div>
                                 <div class="col-sm-6 pr-0 pl-sm-0">
                                   <h6 class="mb-1 mb-sm-0"><a class="text-name"  [routerLink]="['/patients/patient', patient.id]">{{patient.name}}</a></h6>
@@ -45,27 +46,47 @@
                               </div>
                         </div>
                         <div class="col-1">
-                          <img src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif" style="height: 20px;width: 20px;"/>
-                          <div class="badge badge-outline-danger badge-pill">Positif</div>
-                          <div class="badge badge-outline-success badge-pill">Négatif</div>
+                          <img *ngIf="diagnosticStatusStart(patient)" 
+                                    src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif"
+                                          style="height: 20px;width: 20px;"/>
+                         <div *ngIf="diagnosticStatusFinished(patient) && patient.hasCancer" class="badge badge-outline-danger badge-pill">Positif</div>
+                         <div *ngIf="diagnosticStatusFinished(patient) && !patient.hasCancer" class="badge badge-outline-success badge-pill">Négatif</div>
                         </div>
                         <div class="col-6">
                           <ul>
-                            <li class="loc-caption" *ngFor="let image of patient.cancerImages">
-                              <img id="loc1"[src]="image" />
+                            <li class="loc-caption" *ngFor="let image of patient.diagnosedImages">
+                              <img id="loc1"[src]="image.url"
+                              [style] = "getImageStyle(patient, image)" />
                             </li>
                           </ul>  
                         </div>
                     </div>
                 </div>
                 <div class="text-center">
-                    <a routerLink="/diagnostics/start"
-                    class="btn btn-outline-info btn-icon-text mt-auto"
-                    (click)="onLaunch($event)">
-                      Lancer                                                                             
-                    </a>
-                    <img src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif" style="height: 20px;width: 20px;"/>
+                  <div class="row">
+                    <div class="col-6">
+                      <button class="btn btn-outline-info btn-icon-text mt-auto"
+                              (click)="onLaunch($event)">
+                                                          Lancer                                                                             
+                    </button>
+                    <img *ngIf="diagnosticStatusStart(globalDiagnosticStatus)"  
+                              src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif" 
+                                style="height: 20px;width: 20px;"/>
+                    </div>
+                    <div  class="col-6">
+                      <button 
+                          [disabled]="!diagnosticStatusFinished(globalDiagnosticStatus)"
+                              class="btn btn-outline-info btn-icon-text mt-auto"
+                                (click)="onSave()">
+                                                  Enregistrer                                                                             
+                      </button>
+                    </div>
                   </div>
+                </div>
+              </ng-template>
+              <ng-template [ngIf]="this.patientList.length == 0">
+                Aucun patient ne contient des données à diagnostiquer
+              </ng-template>
             </div>
         </div>
     </div>

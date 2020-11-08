@@ -3,12 +3,15 @@ from PIL import Image, ImageOps
 from io import BytesIO
 import base64
 import numpy as np
+import json
 
 class Predictor(object):
     def predict(self, model, images_base64, image_shape, labels):
         responses = []
+        print("images_base64 :", images_base64)
+        print("type(images_base64) :", type(images_base64))
         for img_file_name, base64Img in images_base64.items():
-            decoded_img = base64.b64decode(image_base64)
+            decoded_img = base64.b64decode(base64Img)
             img_buffer = BytesIO(decoded_img)
             imageData = Image.open(img_buffer).convert("RGB")
             

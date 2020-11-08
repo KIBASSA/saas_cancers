@@ -9,12 +9,15 @@ import { RouterModule, Routes,  } from '@angular/router';
 import { NewComponent } from './new/new.component';
 import { ListComponent } from './list/list.component';
 
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemComponent } from './item/item.component';
+import { DiagnosedComponent } from './diagnosed/diagnosed.component';
 
 const routes: Routes = [
     { path: 'new', component: NewComponent },
     { path: 'list', component: ListComponent },
+    { path: 'diagnosed', component: DiagnosedComponent },
     { path: 'patient/:id', component: ItemComponent },
   ];
 
@@ -26,7 +29,7 @@ const routes: Routes = [
   };
   
 @NgModule({
-    declarations: [NewComponent, ListComponent, ItemComponent],
+    declarations: [NewComponent, ListComponent,DiagnosedComponent, ItemComponent, DiagnosedComponent],
     imports: [
       CommonModule,
       DropzoneModule,

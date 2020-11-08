@@ -18,6 +18,37 @@ from os.path import isfile, join
 from PIL import Image, ImageOps
 from io import BytesIO
 import numpy as np
+import random
+import string
+import urllib.request
+import base64
+import shutil
+class Helper:
+    @staticmethod
+    def get_base64_image_by_urls(image_urls):
+        images_result = {}
+        for image_url in image_urls:
+            images_result[image_url] = Helper.get_base64_image_by_url(image_url)
+        return images_result
+    @staticmethod
+    def get_base64_image_by_url(image_url):
+        #NamedTemporaryFile  has not been used because of a problem with access rights.
+        temp_file = os.path.join(os.getcwd(), Helper.generate_name() + "/" + Helper.generate_name())
+        os.makedirs(os.path.dirname(temp_file), exist_ok=True)
+        urllib.request.urlretrieve(image_url, temp_file)
+        with open(temp_file, 'rb') as read_file:
+                image_string = base64.b64encode(read_file.read())
+        shutil.rmtree(os.path.dirname(temp_file))
+        return image_string.decode("utf-8")
+
+    @staticmethod
+    def generate(size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+    
+    @staticmethod
+    def generate_name(size=6, chars=string.ascii_uppercase):
+        return ''.join(random.choice(chars) for _ in range(size))
+
 
 class ImagePathListUploader(object):
     def __init__(self, blob_manager):
@@ -83,6 +114,12 @@ class WebServiceDeployer:
        return principal_metric_value >= self.config.DEPLOY_THRESHOLD
 
     def deploy(self):
+        try:
+            AciWebservice(self.ws, self.config.DEPLOY_SERVICE_NAME).delete()
+            print("webservice deleted")
+        except WebserviceException:
+            pass
+
         myenv = CondaDependencies()                                                        
         myenv.add_pip_package("azureml-sdk")
         myenv.add_pip_package("joblib")
@@ -96,22 +133,11 @@ class WebServiceDeployer:
         huml_env = Environment.from_conda_specification(name="diagnoz_env", file_path="diagnoz_env.yml")
 
         inference_config = InferenceConfig(entry_script="score.py",source_directory='.', environment=huml_env)
-        print("file deployement : ")
-        for root, dir_, files in os.walk(os.getcwd()):
-            print("dir_", dir_)
-            for filename in files:
-                print("filename :", filename)
 
         aciconfig = AciWebservice.deploy_configuration(cpu_cores=1, 
                                                     memory_gb=1, 
                                                     tags={"data": "cancer-data",  "method" : "tensorflow"}, 
                                                     description='Predicting cancer with tensorflow')
-
-        try:
-            AciWebservice(self.ws, self.config.DEPLOY_SERVICE_NAME).delete()
-            print("webservice deleted")
-        except WebserviceException:
-            pass
 
         model = self.ws.models[self.config.MODEL_NAME]
         

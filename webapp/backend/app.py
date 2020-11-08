@@ -13,6 +13,7 @@ from flask_cors import CORS
 from cancer_db_api import CancerDBAPI
 from apis_utilities import BlobStorageManager
 from models import Patient, PatientEncoder
+from global_helpers import Helper, ConfigHandler, WorkspaceProvider
 import json
 import datetime
 from flask_api import status
@@ -20,11 +21,26 @@ from utilities import PatientImageCloudManager
 from predictor import Predictor
 from PIL import Image, ImageOps
 import time
+import base64
+import shutil
+import tempfile
+from azureml.core.webservice import Webservice
+from shutil import copyfile
+
+# copy configfile for flask app
+new_config_path = "config.yaml"
+copyfile("../../ia/config.yaml", new_config_path)
+configHandler = ConfigHandler()
+config = configHandler.get_file("config.yaml")
+ws_provider = WorkspaceProvider(config)
+work_space,_ = ws_provider.get_ws()
+
+#initialization for flask app
 app = Flask(__name__)
 api = Api(app)  # type: Api
 
 
-#initialization
+#initialization for blob storage
 blob_manager = BlobStorageManager("DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net")
 patient_img_manager = PatientImageCloudManager(blob_manager)
 db_api = CancerDBAPI()
@@ -109,45 +125,44 @@ def add_cancers_images():
     
     #upload_cancer_images
     uploaded_images = patient_img_manager.upload_cancer_images(patient_id, patient_cancer_images)
-    #print("uploaded_images :", uploaded_images)
     db_api.insert_cancer_images(patient_id, uploaded_images)
     patient = db_api.get_patient_by_id(patient_id)
     return jsonify(PatientEncoder().encode(patient))
 
-@app.route('/predict_cancer', methods=['POST'])
+#The transformation to base64 is done by flask because with angular it is complicated.
+@app.route('/get_base64_image', methods=['GET'])
+def get_base64_image():
+    image_urls = request.args.get('image_urls')
+    image_urls = list(image_urls.split(",")) 
+    return Helper.get_base64_image_by_urls(image_urls)
+
+@app.route('/predict_cancer', methods=['GET'])
 def predict_cancer():
-    #print(request.json)
-    #classifier_file = os.path.join("classifier/classifier.hdf5")
-    #joblib.load(classifier_file)
-    #return jsonify({})
-    """
-    from discriminator import disc_network
-    base64Dict = json.loads(request.json)
+    service = Webservice(workspace=work_space, name='diagnozinferenceservice')
+    image_urls = request.args.get('image_urls')
+    image_urls = list(image_urls.split(","))
+    images_dict = Helper.get_base64_image_by_urls(image_urls)
+    data_raw = json.dumps({"data": images_dict})
+    prediction = service.run(input_data=data_raw)
+    return jsonify(prediction)
 
-    classifier_file = os.path.join("classifier/classifier.hdf5")
-    if not os.path.isfile(classifier_file):
-        raise Exception("classifier doesn't exist")
+
+#update_patient_as_diagnosed
+@app.route('/update_patients_as_diagnosed', methods=['POST'])
+def update_patients_as_diagnosed():
+    if "patients" not in request.form:
+        return "patients must be provided", status.HTTP_400_BAD_REQUEST
+
+    patients = json.loads(request.form['patients'])
     
-    _, classifier = disc_network()
-    classifier.load_weights(classifier_file)
+    for patient in patients:
+        patient_model = Patient(patient["id"], patient["name"])
+        patient_model.diagnosis_date = datetime.datetime.now()
+        patient_model.is_diagnosed = patient["isDiagnosed"]
+        patient_model.has_cancer = patient["hasCancer"]
+        db_api.update_patient(patient_model)
 
-    predictor = Predictor()
-    predictions = predictor.predict(classifier, base64Dict, (50,50), ["cancer", "not cancer"])
-
-    return jsonify(predictions)
-    """
-    #base64Dict = json.loads(request.json)
-    time.sleep(2.4)
-    response = []
-    for index, item in enumerate(request.json.items()):
-        img_file_name, base64Img = item
-        cancer_value = "cancer"
-        if index % 2 == 0:
-            cancer_value = "not cancer"
-        response.append({img_file_name:cancer_value})
-    #base64Dict = request.json
-    #print("len(base64Dict) : ", len(request.json))
-    return jsonify(response)
+    return "Every thing is OK", status.HTTP_200_OK
 
 @app.after_request
 def after_request(response):
@@ -158,4 +173,9 @@ def after_request(response):
     return response
     
 if __name__ == "__main__":
-     app.run()
+    try:
+        app.run()
+    finally:
+        if os.path.isfile(new_config_path):
+            os.remove(new_config_path)
+    

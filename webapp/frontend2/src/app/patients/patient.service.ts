@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import { Headers, URLSearchParams  } from '@angular/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Headers, URLSearchParams, RequestOptions  } from '@angular/http';
 import { Observable, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
 import 'rxjs/add/operator/catch';
 import {API_URL} from '../../environments/environment';
@@ -15,7 +15,13 @@ FormData
     return Observable.throw(err.message || 'Error: Unable to complete request.');
   }
 
-  private headers = new Headers({'Content-Type': 'application/json'});
+  private _headers = new HttpHeaders({
+                                      'Content-Type': 'application/json',
+                                      'Accept': 'application/json',
+                                      'Access-Control-Allow-Origin': '*',
+                                      'Access-Control-Allow-Headers':'Content-Type, Authorization',
+                                      'Access-Control-Allow-Methods':'OPTIONS, HEAD, GET, POST, DELETE, PUT'
+                                    });
   // GET list of public, future events
   getUndiagnosedPatients(): Observable<string[]> {
     return this.http
@@ -85,9 +91,21 @@ FormData
       );
   }
 
-  //add cancer images 
-  //add_cancers_images
-  addCancerImages(patient_id: string, images:string[]):Observable<any>
+  addCancerImages(patient_id: string, images:string[]) : Observable<any>
+  {
+    const formData = new FormData();
+    formData.append('patient_id',  patient_id);
+    formData.append('images',  JSON.stringify(images));
+    return this.http.post<any>(`${API_URL}/add_cancer_images`, formData)
+      .pipe(
+        catchError(err => {
+          console.log(err);
+          return of(null);
+            })
+      );
+  }
+  
+  addCancerImages2(patient_id:string, images:string[]): Observable<any>
   {
     const formData = new FormData();
     formData.append('patient_id',  patient_id);
@@ -101,4 +119,26 @@ FormData
       );
   }
 
+  predict_cancer(image_urls: string): Observable<string> {
+    return this.http.get<any>(`${API_URL}/predict_cancer?image_urls=${image_urls}`)
+      .pipe(
+        catchError(err => {
+          console.log(err);
+          return of(null);
+            })
+      );
+  }
+
+
+  update_patients_as_diagnosed(patients : Patient[]): Observable<Patient> {
+    const formData = new FormData();
+    formData.append('patients',  JSON.stringify(patients));
+    return this.http.post<any>(`${API_URL}/update_patients_as_diagnosed`, formData)
+      .pipe(
+        catchError(err => {
+          console.log(err);
+          return of(null);
+            })
+      );
+  }
 }

@@ -32,12 +32,31 @@ export class Patient
   }
 }
 
+export enum DiagnosticStatus {
+  Start,
+  Finished
+}
+
 
 export class PatientToDiagnose extends Patient
 {
   checked : boolean
+  diagnosticStatus:DiagnosticStatus;
+  diagnosedImages: DiagnosedImage[] = [];
   constructor(public patient:Patient)
   {
       super(patient.id, patient.name,patient.image,patient.isDiagnosed,patient.hasCancer,patient.registrationDate, patient.diagnosisDate, patient.cancerImages);
+      patient.cancerImages.forEach(image=> 
+        {
+          var data = new DiagnosedImage();
+          data.url = image;
+          this.diagnosedImages.push(data);
+        })
   }
+}
+
+export class DiagnosedImage
+{
+  url : string;
+  withCancer:boolean;
 }

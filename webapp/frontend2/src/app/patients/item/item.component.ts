@@ -42,9 +42,12 @@ export class ItemComponent implements OnInit, OnDestroy {
 
     this.submitted = true;
     console.log("onSubmit....")
+    console.log(typeof this.patient.id)
+    console.log(typeof this.uploadedImages)
     this.cancerImagesSubscription = this.patientsApi
-                                      .addCancerImages(this.patient.id, this.uploadedImages)
+                                      .addCancerImages2(this.patient.id, this.uploadedImages)
                                       .subscribe(res => {
+                                        console.log("bug")
                                           if (res != null)
                                           {
                                             console.log("patient " + res.name + " created!")

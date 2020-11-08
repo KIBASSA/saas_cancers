@@ -7,7 +7,7 @@
     <li class="nav-item nav-profile">
       <a href="javascript:;" class="nav-link">
         <div class="nav-profile-image">
-          <img src="assets/images/faces/face1.jpg" alt="profile">
+          <img src="https://diagnozstorage.blob.core.windows.net/diagnoz/patients/5f76a8186a2c37007d4e27a2/profile/5f76a8186a2c37007d4e27a2.jpg" alt="profile">
           <span class="login-status online"></span> <!--change to offline or busy as needed-->
         </div>
         <div class="nav-profile-text">
@@ -33,7 +33,12 @@
           <li class="nav-item"> <a class="nav-link" routerLink="patients/list" 
                                     routerLinkActive="active" 
                                     #accordions="routerLinkActive" 
-                                    translate>list</a>
+                                    translate>Tous</a>
+          </li>
+          <li class="nav-item"> <a class="nav-link" routerLink="patients/diagnosed" 
+            routerLinkActive="active" 
+            #accordions="routerLinkActive" 
+            translate>Diagnostiqués</a>
           </li>
         </ul>
       </div>

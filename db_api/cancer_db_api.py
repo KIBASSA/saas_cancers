@@ -135,8 +135,11 @@ class CancerDBAPI:
         self.collection_patients.update_one({"_id": patient.id}, 
                                                {"$set":
                                                        {"image": patient.image,
+                                                        "diagnosis_date": patient.diagnosis_date,
                                                        "is_diagnosed": patient.is_diagnosed,
                                                        "has_cancer": patient.has_cancer}})
+
+
 
     def insert_first_data(self):
         post_data = {

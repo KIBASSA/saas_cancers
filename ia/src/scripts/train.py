@@ -108,8 +108,8 @@ class ModelTrainer(AbstractProcessorModel):
 
         ################## Training ##################
         ##############################################
-        for epoch in tqdm(range(2)):
-        #for epoch in tqdm(range(7500)):
+        #for epoch in tqdm(range(2)):
+        for epoch in tqdm(range(7500)):
             """Define objects to calculate the mean losses across each epoch
             """
             c_loss_mean = tf.keras.metrics.Mean()
