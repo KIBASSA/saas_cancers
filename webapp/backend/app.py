@@ -113,7 +113,7 @@ def add_patient():
     return jsonify(PatientEncoder().encode(patient_model))
 
 @app.route('/add_cancer_images', methods=['POST'])
-def add_cancers_images():
+def add_cancer_images():
     if "patient_id" not in request.form:
         return "patient_id must be provided", status.HTTP_400_BAD_REQUEST
     

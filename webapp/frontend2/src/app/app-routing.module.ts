@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AnnotationComponent } from './annotation/annotation.component';
 import { RtlComponent } from './rtl/rtl.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 
@@ -8,6 +9,7 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'annotation', component: AnnotationComponent },
   { path: 'diagnostics', loadChildren: () => import('./diagnostics/diagnostics.module').then(m => m.DiagnosticsModule) },
   { path: 'patients', loadChildren: () => import('./patients/patients.module').then(m => m.PatientsModule) },
   { path: '', redirectTo: '/rtl', pathMatch: 'full' },

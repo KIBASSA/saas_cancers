@@ -26,6 +26,7 @@ import { RtlComponent } from './rtl/rtl.component';
 
 import {PatientsApiService} from './patients/patient.service';
 import {PatientsProviders, PatientFactory} from './patients/patients.tools';
+import { AnnotationComponent } from './annotation/annotation.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -44,7 +45,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     TodoComponent,
     SpinnerComponent,
     ContentAnimateDirective,
-    RtlComponent
+    RtlComponent,
+    AnnotationComponent
   ],
   imports: [
     BrowserModule,

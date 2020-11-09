@@ -104,20 +104,6 @@ FormData
             })
       );
   }
-  
-  addCancerImages2(patient_id:string, images:string[]): Observable<any>
-  {
-    const formData = new FormData();
-    formData.append('patient_id',  patient_id);
-    formData.append('images',  JSON.stringify(images));
-    return this.http.post<any>(`${API_URL}/add_cancer_images`, formData)
-      .pipe(
-        catchError(err => {
-          console.log(err);
-          return of(null);
-            })
-      );
-  }
 
   predict_cancer(image_urls: string): Observable<string> {
     return this.http.get<any>(`${API_URL}/predict_cancer?image_urls=${image_urls}`)

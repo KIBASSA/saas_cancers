@@ -69,7 +69,7 @@ class SamplingProcessor(object):
         unlabeled_path = os.path.join(input_data, "unlabeled_data/data")
         unlabeled_images_list = glob.glob(unlabeled_path + '\*.png')
         sampled_images = random_sampler.sample(unlabeled_images_list, 200)
-
+        print("len(sampled_images)", sampled_images)
         classifier_name = "classifier.hdf5"
         classifier_file = os.path.join(register_model_folder, classifier_name)
         if os.path.isfile(classifier_file):
@@ -83,7 +83,7 @@ class SamplingProcessor(object):
             image_path_dest = os.path.join(sampled_data, os.path.basename(image_path))
             os.makedirs(sampled_data, exist_ok = True)
             shutil.copy(image_path, image_path_dest)
-
+        print("len(sampled_images)", sampled_images)
         imagepath_list_uploader.upload(sampled_images, "sampled_data/current")
 
 if __name__ == "__main__":

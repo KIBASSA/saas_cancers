@@ -45,7 +45,7 @@ export class ItemComponent implements OnInit, OnDestroy {
     console.log(typeof this.patient.id)
     console.log(typeof this.uploadedImages)
     this.cancerImagesSubscription = this.patientsApi
-                                      .addCancerImages2(this.patient.id, this.uploadedImages)
+                                      .addCancerImages(this.patient.id, this.uploadedImages)
                                       .subscribe(res => {
                                         console.log("bug")
                                           if (res != null)
