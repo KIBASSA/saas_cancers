@@ -22,23 +22,23 @@
         <span class="menu-title" translate>Dashboard</span>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{'active' : accordions.isActive || buttons.isActive || badges.isActive || breadcrumbs.isActive || dropdowns.isActive || modals.isActive || progressbar.isActive || pagination.isActive || tabs.isActive || typography.isActive || tooltips.isActive }">
-      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link1">
+    <li class="nav-item" [ngClass]="{'active' : patientlist.isActive || patientdiagnosed.isActive }">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link-patient">
         <i class="mdi mdi-crosshairs-gps menu-icon"></i>
         <span class="menu-title" translate>Patients</span>
         <i class="menu-arrow"></i>
       </a>
-      <div class="collapse" id="ui-basic" [ngbCollapse]="parentId !== 'nav-link1'">
+      <div class="collapse" id="ui-basic" [ngbCollapse]="parentId !== 'nav-link-patient'">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item"> <a class="nav-link" routerLink="patients/list" 
                                     routerLinkActive="active" 
-                                    #accordions="routerLinkActive" 
+                                    #patientlist="routerLinkActive" 
                                     translate>Tous</a>
           </li>
           <li class="nav-item"> <a class="nav-link" routerLink="patients/diagnosed" 
-            routerLinkActive="active" 
-            #accordions="routerLinkActive" 
-            translate>Diagnostiqués</a>
+                                    routerLinkActive="active" 
+                                    #patientdiagnosed="routerLinkActive" 
+                                    translate>Diagnostiqués</a>
           </li>
         </ul>
       </div>
@@ -49,11 +49,26 @@
         <span class="menu-title" translate>Diagnostics</span>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': rtl.isActive }">
-      <a class="nav-link" (click)="clickedMenu($event)" routerLink="/annotation" routerLinkActive>
-        <i class="mdi mdi-home menu-icon"></i>
+    <li class="nav-item" [ngClass]="{'active' : annotate.isActive || modelperformance.isActive}">
+      <a class="nav-link" (click)="clickedMenu($event)" id="nav-link-annotation">
+        <i class="mdi mdi-crosshairs-gps menu-icon"></i>
         <span class="menu-title" translate>Annotation</span>
+        <i class="menu-arrow"></i>
       </a>
+      <div class="collapse" id="ui-basic" [ngbCollapse]="parentId !== 'nav-link-annotation'">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="annotations/annotate" 
+                                    routerLinkActive="active" 
+                                    #annotate="routerLinkActive" 
+                                    translate>Annoter</a>
+          </li>
+          <li class="nav-item"> <a class="nav-link" routerLink="annotations/annotate"
+                                    routerLinkActive="active" 
+                                    #modelperformance="routerLinkActive" 
+                                    translate>Performance Model</a>
+          </li>
+        </ul>
+      </div>
     </li>
     <li class="nav-item" [ngClass]="{ 'active': rtl.isActive }">
       <a class="nav-link" (click)="clickedMenu($event)" routerLink="/rtl" routerLinkActive #rtl="routerLinkActive">

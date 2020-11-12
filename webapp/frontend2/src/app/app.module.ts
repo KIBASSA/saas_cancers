@@ -25,8 +25,8 @@ import { RtlComponent } from './rtl/rtl.component';
 
 
 import {PatientsApiService} from './patients/patient.service';
+import {AnnotationsApiService} from './annotations/annotation.service'
 import {PatientsProviders, PatientFactory} from './patients/patients.tools';
-import { AnnotationComponent } from './annotation/annotation.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -45,8 +45,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TodoComponent,
     SpinnerComponent,
     ContentAnimateDirective,
-    RtlComponent,
-    AnnotationComponent
+    RtlComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +65,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }
     })
   ],
-  providers: [PatientsApiService, PatientsProviders, PatientFactory],
+  providers: [PatientsApiService, AnnotationsApiService, PatientsProviders, PatientFactory],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

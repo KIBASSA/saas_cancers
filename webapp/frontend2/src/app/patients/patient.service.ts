@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Headers, URLSearchParams, RequestOptions  } from '@angular/http';
 import { Observable, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
 import 'rxjs/add/operator/catch';
 import {API_URL} from '../../environments/environment';
@@ -127,4 +126,7 @@ FormData
             })
       );
   }
+
+  //get_sampled_images
+
 }

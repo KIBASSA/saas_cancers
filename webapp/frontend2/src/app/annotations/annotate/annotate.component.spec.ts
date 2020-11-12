@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnnotationComponent } from './annotation.component';
+import { AnnotateComponent } from './annotate.component';
 
-describe('AnnotationComponent', () => {
-  let component: AnnotationComponent;
-  let fixture: ComponentFixture<AnnotationComponent>;
+describe('AnnoterComponent', () => {
+  let component: AnnotateComponent;
+  let fixture: ComponentFixture<AnnotateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnnotationComponent ]
+      declarations: [ AnnotateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AnnotationComponent);
+    fixture = TestBed.createComponent(AnnotateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,7 @@
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from azure.core.exceptions import ResourceNotFoundError
 import ntpath
+import inspect
 class BlobStorageManager:
     def __init__(self, connection_string="DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net"):
         self.connection_string = connection_string
@@ -14,6 +15,12 @@ class BlobStorageManager:
 
         with open(file_path, "rb") as data:
             blob_client.upload_blob(data, overwrite=overwrite)
+    
+    def props(self, cls):
+        """
+        allows to retrieve the properties and attributes of an object
+        """
+        return [i for i in cls.__dict__.keys() if i[:1] != '_']
 
     def get_list_file(self, blob_container, prefix):
         files = []
@@ -27,8 +34,14 @@ class BlobStorageManager:
             raise Exception("Container not found.")
         
         return files
-
+    
 #if __name__ == "__main__":
+#    blob_service_client = BlobServiceClient.from_connection_string("connection_string")
+#    container_client = blob_service_client.get_container_client("blob_container")
+#    result = list(container_client.list_blobs(prefix="prefix"))
+#    for blob in container_client.list_blobs(prefix="prefix"):
+#        files.append(blob)
+    #print(ItemPaged)
 #     app = BlobStorageManager()
 #     #app.get_list_file("diagnoz/patients/5f76ae1ab18cb6ab2172b606/cancer/breast/images")
 #     print(app.get_list_file("diagnoz", "patients/5f76ae1ab18cb6ab2172b606/cancer/breast/images"))

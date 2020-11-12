@@ -43,10 +43,9 @@ try:
     print("config.CONTAINER_NAME :", config.CONTAINER_NAME)
     print("config.ACCOUNT_KEY :", config.ACCOUNT_KEY)
     blob_datastore = DataStoreConfig.config(ws,config.BLOB_DATASTORE_NAME,
-                                            config.ACCOUNT_NAME,
-                                            config.CONTAINER_NAME,
-                                            config.ACCOUNT_KEY)
-
+                                                    config.ACCOUNT_NAME,
+                                                        config.CONTAINER_NAME,
+                                                              config.ACCOUNT_KEY)
     print("get datasets from datastore")
 
     input_data_paths =[(blob_datastore, 'mldata')]
@@ -97,7 +96,7 @@ try:
 
     data_store = ws.get_default_datastore()
 
-    pipeline_mode_param = PipelineParameter(name="mode",default_value="execute")
+    pipeline_mode_param = PipelineParameter(name="mode",default_value="deploy")
 
     estimator_train = Estimator(source_directory=script_folder,
                           compute_target = compute_target,

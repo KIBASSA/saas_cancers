@@ -17,7 +17,7 @@ from global_helpers import Helper, ConfigHandler, WorkspaceProvider
 import json
 import datetime
 from flask_api import status
-from utilities import PatientImageCloudManager
+from utilities import PatientImageCloudManager, Consts
 from predictor import Predictor
 from PIL import Image, ImageOps
 import time
@@ -26,7 +26,6 @@ import shutil
 import tempfile
 from azureml.core.webservice import Webservice
 from shutil import copyfile
-
 # copy configfile for flask app
 new_config_path = "config.yaml"
 copyfile("../../ia/config.yaml", new_config_path)
@@ -123,8 +122,10 @@ def add_cancer_images():
     patient_id = request.form['patient_id']
     patient_cancer_images = json.loads(request.form['images'])
     
+    #get old patient : before update with new images 
+    old_patient = db_api.get_patient_by_id(patient_id)
     #upload_cancer_images
-    uploaded_images = patient_img_manager.upload_cancer_images(patient_id, patient_cancer_images)
+    uploaded_images = patient_img_manager.upload_cancer_images(patient_id, len(old_patient.cancer_images), patient_cancer_images)
     db_api.insert_cancer_images(patient_id, uploaded_images)
     patient = db_api.get_patient_by_id(patient_id)
     return jsonify(PatientEncoder().encode(patient))
@@ -163,6 +164,13 @@ def update_patients_as_diagnosed():
         db_api.update_patient(patient_model)
 
     return "Every thing is OK", status.HTTP_200_OK
+
+@app.route('/get_sampled_images', methods=['GET'])
+def get_sampled_images():
+    images = blob_manager.get_list_file(Consts.DIAGNOZ_HUML, "mldata/annotated_data/current/")
+    for index, image in enumerate(images):
+        images[index] = "{0}/{1}".format("https://diagnozstorage.blob.core.windows.net/diagnozhuml", image)
+    return jsonify(images)
 
 @app.after_request
 def after_request(response):

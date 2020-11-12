@@ -315,6 +315,7 @@ class ConfigProvider:
         self.BLOB_DATASTORE_NAME = data["Azure"]["StorageAccount"]["BlobDatastoreName"]
         self.ACCOUNT_NAME = data["Azure"]["StorageAccount"]["AccountName"]
         self.CONTAINER_NAME = data["Azure"]["StorageAccount"]["ContainerName"]
+        self.CONTAINER_HUML_NAME = data["Azure"]["StorageAccount"]["ContainerNameHuml"]
         self.ACCOUNT_KEY = data["Azure"]["StorageAccount"]["AccountKey"]
         self.BLOB_STORAGE_CONNECTION_STRING = data["Azure"]["StorageAccount"]["BlobStorageConnectionString"]
         #Azureml

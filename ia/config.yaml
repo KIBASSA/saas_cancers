@@ -16,6 +16,7 @@ Azure:
     BlobDatastoreName: "diagnozdatastore"
     AccountName : "diagnozstorage"
     ContainerName : "diagnoz"
+    ContainerNameHuml: "diagnozhuml"
     AccountKey : "SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag=="
     BlobStorageConnectionString : "DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net"
   Azureml:

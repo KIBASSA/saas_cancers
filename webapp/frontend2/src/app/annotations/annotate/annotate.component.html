@@ -1,0 +1,47 @@
+<div class="page-header">
+    <h3 class="page-title">
+      Badges
+    </h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:;">UI Elements</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Badges</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-md-2 grid-margin stretch-card">
+    </div>
+    <div class="col-md-8 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <ng-template [ngIf]="imagesList">
+            <div class="text-center">
+              <img class="mr-3 w-25 mb-4"
+                      [src]="imagesList[currentImageIndex].url" alt="sample image">
+          </div>
+          <div class="template-demo text-center">
+              <button type="button" 
+                      class="btn btn-dark"
+                      (click)="onPrev()"
+                      [disabled]="!hasPrev()">Précédent</button>
+              <button type="button" 
+                      class="btn btn-fw"
+                      (click)="onNotCancer()"
+                      [style] = "getNotCancerStyle()"
+                      [ngClass]="(imagesList[currentImageIndex].hasCancer == null) || (imagesList[currentImageIndex].hasCancer) ? 'btn-outline-success' : 'btn-success'">Pas Cancer</button>
+              <button type="button" class="btn btn-fw"
+                      (click)="onCancer()"
+                      [style] = "getCancerStyle()"
+                      [ngClass]="(imagesList[currentImageIndex].hasCancer == null) || (!imagesList[currentImageIndex].hasCancer) ? 'btn-outline-danger' : 'btn-danger'">Cancer</button>
+              <button type="button" class="btn btn-dark"
+                      (click)="onNext()"
+                      [disabled]="!hasNext()">Suivant</button>
+          </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 grid-margin stretch-card">
+    </div>
+  </div>

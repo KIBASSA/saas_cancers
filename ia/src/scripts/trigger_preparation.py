@@ -40,7 +40,7 @@ try:
     
     blob_datastore = DataStoreConfig.config(ws,config.BLOB_DATASTORE_NAME,
                                             config.ACCOUNT_NAME,
-                                            config.CONTAINER_NAME,
+                                            config.CONTAINER_HUML_NAME,
                                             config.ACCOUNT_KEY)
 
     print("get datasets from datastore")

@@ -11,10 +11,12 @@ import shutil
 import ntpath
 from cloud_helpers import BlobStorageHandler
 from global_helpers import  ImagePathListUploader, ConfigHandler
+from os.path import isfile, join
 import argparse
 class RandomSampler(object):
     def sample(self, unlabeled_data_list_files, number):
         shuffle(unlabeled_data_list_files)
+        print("len(unlabeled_data_list_files)", len(unlabeled_data_list_files))
         random_items = []
         for item in unlabeled_data_list_files:
             random_items.append(item)
@@ -31,7 +33,7 @@ class LowConfUnlabeledSampler(object):
             raise Exception("model cannot be empty")
         
         shuffle(unlabeled_data_list_files)
-        
+        print("len(unlabeled_data_list_files)", len(unlabeled_data_list_files))
         confidences = []
         for image_path in unlabeled_data_list_files:
             img = image.load_img(image_path, target_size=(50, 50))
@@ -66,10 +68,9 @@ class SamplingProcessor(object):
                                     lowfonc_sampler, 
                                         imagepath_list_uploader):
         
-        unlabeled_path = os.path.join(input_data, "unlabeled_data/data")
-        unlabeled_images_list = glob.glob(unlabeled_path + '\*.png')
+        unlabeled_path = os.path.join(input_data, "unlabeled/data")
+        unlabeled_images_list = glob.glob(unlabeled_path + '/*.png')
         sampled_images = random_sampler.sample(unlabeled_images_list, 200)
-        print("len(sampled_images)", sampled_images)
         classifier_name = "classifier.hdf5"
         classifier_file = os.path.join(register_model_folder, classifier_name)
         if os.path.isfile(classifier_file):
@@ -83,8 +84,7 @@ class SamplingProcessor(object):
             image_path_dest = os.path.join(sampled_data, os.path.basename(image_path))
             os.makedirs(sampled_data, exist_ok = True)
             shutil.copy(image_path, image_path_dest)
-        print("len(sampled_images)", sampled_images)
-        imagepath_list_uploader.upload(sampled_images, "sampled_data/current")
+        imagepath_list_uploader.upload(sampled_images, "diagnozhuml/mldata/sampled_data/current")
 
 if __name__ == "__main__":
 
@@ -100,7 +100,8 @@ if __name__ == "__main__":
     sampled_data = args.sampled_data
     registered_model_folder = args.registered_model_folder
     mode = args.mode
-    if mode == "execute":
+
+    if mode == "deploy":
         configHandler = ConfigHandler()
         config = configHandler.get_file("config.yaml")
 

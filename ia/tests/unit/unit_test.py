@@ -129,7 +129,7 @@ class WebServiceDeployerMoq:
         print("deployed")
 
 def test_if_method___merge__is_running_properly():
-    annotated_folder = os.path.join(os.path.dirname(__file__), "data/data_merger/merge/annotated")
+    annotated_folder = os.path.join(os.path.dirname(__file__), "data/data_merger/merge/annotated_data")
     train_folder = os.path.join(os.path.dirname(__file__), "data/data_merger/merge/train")
     train_result_folder = os.path.join(os.path.dirname(__file__), "data/data_merger/merge/train_result")
     
@@ -160,7 +160,7 @@ def test_if_method___prepare__to_eval_folder____is_running_properly():
     #input_data
     input_data = os.path.join(os.path.dirname(__file__),"data/data_preparator/prepare___to_eval_folder")
     prepped_data = os.path.join(os.path.dirname(__file__),"data/data_preparator/prepare___to_eval_folder")
-    eval_folder = os.path.join(prepped_data,"eval_data")
+    eval_folder = os.path.join(prepped_data,"eval")
     if os.path.isdir(eval_folder):
         clean_dir(eval_folder)
     shutil.rmtree(eval_folder, ignore_errors=True)
@@ -183,7 +183,7 @@ def test_if_method___prepare__to_train_folder____is_running_properly():
     #input_data
     input_data = os.path.join(os.path.dirname(__file__),"data/data_preparator/prepare___to_train_folder")
     prepped_data = os.path.join(os.path.dirname(__file__),"data/data_preparator/prepare___to_train_folder")
-    train_folder = os.path.join(prepped_data,"train_data")
+    train_folder = os.path.join(prepped_data,"train")
     if os.path.isdir(train_folder):
         clean_dir(train_folder)
     shutil.rmtree(train_folder, ignore_errors=True)
@@ -284,7 +284,7 @@ def test_if_ModelRegister___register___is_running_properly():
 Testing the useful functions of the RandomSampler class.
 """
 def test_if_RandomSampler___sample___is_running_properly():
-    unlabeled_path = os.path.join(os.path.dirname(__file__), "data/random_sampler/sample/unlabeled_data/data")
+    unlabeled_path = os.path.join(os.path.dirname(__file__), "data/random_sampler/sample/unlabeled/data")
     unlabeled_images_list = glob.glob(unlabeled_path + '\*.png')
     random_sampler = RandomSampler()
     sampled_images = random_sampler.sample(unlabeled_images_list, 20)
@@ -296,7 +296,7 @@ def test_if_RandomSampler___sample___is_running_properly():
 Testing the useful functions of the LowConfUnlabeledSampler class.
 """
 def test_if_LowConfUnlabeledSampler___sample___is_running_properly():
-    unlabeled_path = os.path.join(os.path.dirname(__file__), "data/low_conf_unlabeled_sampler/sample/unlabeled_data/data")
+    unlabeled_path = os.path.join(os.path.dirname(__file__), "data/low_conf_unlabeled_sampler/sample/unlabeled/data")
     unlabeled_images_list = glob.glob(unlabeled_path + '\*.png')
     classifier_file = os.path.join(os.path.dirname(__file__), "data/low_conf_unlabeled_sampler/sample/model_register/classifier.hdf5")
     assert os.path.isfile(classifier_file) == True

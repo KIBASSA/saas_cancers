@@ -6,6 +6,7 @@ import tempfile
 class Consts:
     BREAST = "breast"
     DIAGNOZ = "diagnoz"
+    DIAGNOZ_HUML = "diagnozhuml"
     DIAGNOZ_PATIENTS = "diagnoz/patients"
 
 class PatientImageURLBuilder:
@@ -53,10 +54,9 @@ class PatientImageCloudManager:
         return uploaded_image
 
 
-    def upload_cancer_images(self, patient_id, images):
+    def upload_cancer_images(self, patient_id, db_images_count, images):
         uploaded_images = []
-        existing_images = self.blob_manager.get_list_file(Consts.DIAGNOZ, "patients/{0}/cancer/breast/images".format(patient_id))
-        index = len(existing_images)
+        index = db_images_count
         with tempfile.TemporaryDirectory() as dir:
             for img_data in images:
                 print("img_data :", img_data)
