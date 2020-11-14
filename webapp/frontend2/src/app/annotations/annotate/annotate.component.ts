@@ -39,20 +39,36 @@ export class AnnotateComponent implements OnInit {
   onNotCancer()
   {
     this.imagesList[this.currentImageIndex].hasCancer = false;
-    this.onNext()
+    if (this.hasNext())
+        this.onNext();
   }
   onCancer()
   {
     this.imagesList[this.currentImageIndex].hasCancer = true;
-    this.onNext()
+    if (this.hasNext())
+        this.onNext();
   }
   hasNext()
   {
-    return this.currentImageIndex  < this.imagesList.length
+    return this.currentImageIndex  < this.imagesList.length - 1;
   }
   onNext()
   {
-    if (this.hasNext())
-        this.currentImageIndex++
+    this.currentImageIndex++
+  }
+
+  getTotalAnnotated()
+  {
+    return this.imagesList.filter(a=> a.hasCancer != undefined).length
+  }
+  getWidthStyle()
+  {
+    var value = (this.getTotalAnnotated() * 100)/this.imagesList.length;
+    console.log(value)
+    return this.sanitizer.bypassSecurityTrustStyle(`width: ${value}%`);
+  }
+  getCurrentFileName()
+  {
+    return this.imagesList[this.currentImageIndex].url.replace(/^.*[\\\/]/, '')
   }
 }

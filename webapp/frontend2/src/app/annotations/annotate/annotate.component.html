@@ -16,28 +16,51 @@
       <div class="card">
         <div class="card-body">
           <ng-template [ngIf]="imagesList">
-            <div class="text-center">
-              <img class="mr-3 w-25 mb-4"
-                      [src]="imagesList[currentImageIndex].url" alt="sample image">
-          </div>
-          <div class="template-demo text-center">
-              <button type="button" 
-                      class="btn btn-dark"
-                      (click)="onPrev()"
-                      [disabled]="!hasPrev()">Précédent</button>
-              <button type="button" 
-                      class="btn btn-fw"
-                      (click)="onNotCancer()"
-                      [style] = "getNotCancerStyle()"
-                      [ngClass]="(imagesList[currentImageIndex].hasCancer == null) || (imagesList[currentImageIndex].hasCancer) ? 'btn-outline-success' : 'btn-success'">Pas Cancer</button>
-              <button type="button" class="btn btn-fw"
-                      (click)="onCancer()"
-                      [style] = "getCancerStyle()"
-                      [ngClass]="(imagesList[currentImageIndex].hasCancer == null) || (!imagesList[currentImageIndex].hasCancer) ? 'btn-outline-danger' : 'btn-danger'">Cancer</button>
-              <button type="button" class="btn btn-dark"
-                      (click)="onNext()"
-                      [disabled]="!hasNext()">Suivant</button>
-          </div>
+            <div class="row" style="margin-bottom: 30px;">
+              <div class="col-md-3"></div>
+            <div class="col-md-6" >
+              <div class="progress" style="height: 15px;margin-bottom: 5px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                      role="progressbar" 
+                      aria-valuenow="75" 
+                      aria-valuemin="0" 
+                      aria-valuemax="100" 
+                      [style]="getWidthStyle()"></div>
+              </div>
+              <p class="card-description"><span style="float: left;" >Number of annotated items</span> <span style="float: right;">{{getTotalAnnotated()}}/{{imagesList.length}}</span> </p>
+            </div>
+            <div class="col-md-3"></div>
+            </div>
+            
+            <div class="row">
+                <div style="margin:auto;">
+                              <img style="width: 70px;margin-left: auto;margin-right: auto;display: block;"
+                                      [src]="imagesList[currentImageIndex].url" alt="sample image">
+                              <p class="card-description text-center"><span>{{this.currentImageIndex + 1}}/{{imagesList.length}}</span> </p>
+                              <p class="card-description text-center">{{getCurrentFileName()}}</p>
+                </div>
+                
+            </div>
+            <div class="row" style="margin-top: 30px;">
+              <div class="template-demo" style="margin:auto">
+                  <button type="button" 
+                          class="btn btn-dark"
+                          (click)="onPrev()"
+                          [disabled]="!hasPrev()">Précédent</button>
+                  <button type="button" 
+                          class="btn btn-fw"
+                          (click)="onNotCancer()"
+                          [ngClass]="(imagesList[currentImageIndex].hasCancer == null) || (imagesList[currentImageIndex].hasCancer) ? 'btn-outline-success' : 'btn-success'">Pas Cancer</button>
+                  <button type="button" class="btn btn-fw"
+                          (click)="onCancer()"
+                          [ngClass]="(imagesList[currentImageIndex].hasCancer == null) || (!imagesList[currentImageIndex].hasCancer) ? 'btn-outline-danger' : 'btn-danger'">Cancer</button>
+                  <button type="button" class="btn btn-dark"
+                          (click)="onNext()"
+                          [disabled]="!hasNext()">Suivant</button>
+              </div>
+            </div>
+            
+
           </ng-template>
         </div>
       </div>
