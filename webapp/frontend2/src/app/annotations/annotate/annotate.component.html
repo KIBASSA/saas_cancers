@@ -16,6 +16,7 @@
       <div class="card">
         <div class="card-body">
           <ng-template [ngIf]="imagesList">
+            <ng-template [ngIf]="imagesList.length > 0 ">
             <div class="row" style="margin-bottom: 30px;">
               <div class="col-md-3"></div>
             <div class="col-md-6" >
@@ -37,7 +38,7 @@
                               <img style="width: 70px;margin-left: auto;margin-right: auto;display: block;"
                                       [src]="imagesList[currentImageIndex].url" alt="sample image">
                               <p class="card-description text-center"><span>{{this.currentImageIndex + 1}}/{{imagesList.length}}</span> </p>
-                              <p class="card-description text-center">{{getCurrentFileName()}}</p>
+                              <p class="card-description text-center">simulation diagnostic médecin : {{getCurrentClass()}}</p>
                 </div>
                 
             </div>
@@ -60,7 +61,12 @@
               </div>
             </div>
             
-
+            </ng-template>
+            <ng-template [ngIf]="imagesList.length == 0 ">
+             <p class="text-center">
+              Pas d'images pour l'instant à annoter!
+             </p> 
+            </ng-template>
           </ng-template>
         </div>
       </div>
@@ -68,3 +74,46 @@
     <div class="col-md-2 grid-margin stretch-card">
     </div>
   </div>
+  <ng-template [ngIf]="imagesList && imagesList.length > 0">  
+    <div class="row">
+    <div class="col-md-2 grid-margin stretch-card">
+    </div>
+    <div class="col-md-8 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div style="justify-content: flex-end;display: flex;">
+              <button type="button" 
+                      style="margin-right: .25rem;" 
+                      class="btn btn-success"
+                      [disabled]="!toSubmit()"
+                      (click)="submit()">Submit</button>
+              <button type="button" 
+                      style="margin-left: .25rem;" 
+                      class="btn btn-light mt-2 mt-sm-0"
+                      (click)="reset()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 grid-margin stretch-card">
+    </div>
+  </div></ng-template>
+
+
+
+  <ng-template #successUploadModal let-modal class="modal fade" id="exampleModal-2" aria-labelledby="exampleModalLabel-2">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel-2">Annotation des données</h5>
+        <button type="button" class="close" (click)="modal.dismiss()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Les données annotées ont été téléchargé avec succès.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="closeModal(modal)">OK</button>
+      </div>
+    </div>
+  </ng-template>

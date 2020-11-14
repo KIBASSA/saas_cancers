@@ -13,6 +13,7 @@ from cloud_helpers import BlobStorageHandler
 from global_helpers import  ImagePathListUploader, ConfigHandler
 from os.path import isfile, join
 import argparse
+from random import shuffle
 class RandomSampler(object):
     def sample(self, unlabeled_data_list_files, number):
         shuffle(unlabeled_data_list_files)
@@ -84,6 +85,8 @@ class SamplingProcessor(object):
             image_path_dest = os.path.join(sampled_data, os.path.basename(image_path))
             os.makedirs(sampled_data, exist_ok = True)
             shutil.copy(image_path, image_path_dest)
+        
+        shuffle(sampled_images)
         imagepath_list_uploader.upload(sampled_images, "diagnozhuml/mldata/sampled_data/current")
 
 if __name__ == "__main__":

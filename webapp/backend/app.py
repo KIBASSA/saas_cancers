@@ -147,8 +147,6 @@ def predict_cancer():
     prediction = service.run(input_data=data_raw)
     return jsonify(prediction)
 
-
-#update_patient_as_diagnosed
 @app.route('/update_patients_as_diagnosed', methods=['POST'])
 def update_patients_as_diagnosed():
     if "patients" not in request.form:
@@ -171,6 +169,13 @@ def get_sampled_images():
     for index, image in enumerate(images):
         images[index] = "{0}/{1}".format("https://diagnozstorage.blob.core.windows.net/diagnozhuml", image)
     return jsonify(images)
+
+@app.route('/upload_annotated_data', methods=['POST'])
+def upload_annotated_data():
+    if "images" not in request.form:
+        return "images must be provided", status.HTTP_400_BAD_REQUEST
+    print("cool")
+    return "Every thing is OK", status.HTTP_200_OK
 
 @app.after_request
 def after_request(response):
