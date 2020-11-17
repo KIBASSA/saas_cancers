@@ -17,7 +17,7 @@ from global_helpers import Helper, ConfigHandler, WorkspaceProvider
 import json
 import datetime
 from flask_api import status
-from utilities import PatientImageCloudManager, Consts
+from utilities import PatientImageCloudManager, Consts,AnnotatedDataManager, SampedDataDataManager
 from predictor import Predictor
 from PIL import Image, ImageOps
 import time
@@ -26,6 +26,7 @@ import shutil
 import tempfile
 from azureml.core.webservice import Webservice
 from shutil import copyfile
+import requests
 # copy configfile for flask app
 new_config_path = "config.yaml"
 copyfile("../../ia/config.yaml", new_config_path)
@@ -42,6 +43,8 @@ api = Api(app)  # type: Api
 #initialization for blob storage
 blob_manager = BlobStorageManager("DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net")
 patient_img_manager = PatientImageCloudManager(blob_manager)
+annotated_data_manager = AnnotatedDataManager(blob_manager)
+sampled_data_manager = SampedDataDataManager(blob_manager)
 db_api = CancerDBAPI()
 
 @app.route("/")
@@ -165,16 +168,20 @@ def update_patients_as_diagnosed():
 
 @app.route('/get_sampled_images', methods=['GET'])
 def get_sampled_images():
-    images = blob_manager.get_list_file(Consts.DIAGNOZ_HUML, "mldata/annotated_data/current/")
-    for index, image in enumerate(images):
-        images[index] = "{0}/{1}".format("https://diagnozstorage.blob.core.windows.net/diagnozhuml", image)
+    images = sampled_data_manager.get_sampled_data()
     return jsonify(images)
 
 @app.route('/upload_annotated_data', methods=['POST'])
 def upload_annotated_data():
     if "images" not in request.form:
         return "images must be provided", status.HTTP_400_BAD_REQUEST
-    print("cool")
+
+    images = json.loads(request.form['images'])
+    annotated_data_manager.upload_data(images)
+    """
+    archive the data because it has just been annotated
+    """
+    sampled_data_manager.archive()
     return "Every thing is OK", status.HTTP_200_OK
 
 @app.after_request

@@ -2,7 +2,7 @@ import os
 import sys 
 script_path = os.path.join(os.getcwd(), "../utils")
 sys.path.append(script_path)
-from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig
+from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager
 from azureml.core import Workspace,Experiment
 from azureml.core.dataset import Dataset
 from azureml.core.runconfig import DEFAULT_GPU_IMAGE
@@ -188,6 +188,14 @@ try:
     print("Pipeline submitted for execution.")
 
     pipeline_run.wait_for_completion()
+
+    #Publish the pipeline and its endpoint
+    publisher = EndpointPipelinePublisher(ws)
+    published_endpoint = publisher.publish(config.EXPERIMENT_DS_NAME,pipeline, config.PIPELINE_DS_NAME, config.PIPELINE_DS_ENDPOINT)
+
+    #publish pipeline config for logic app
+    logicappManager = LogicAppPipelineConfigManager(config)
+    logicappManager.update("-",published_endpoint,"published_ds_pipeline.json")
 
 except Exception as e:
   raise Exception(e)

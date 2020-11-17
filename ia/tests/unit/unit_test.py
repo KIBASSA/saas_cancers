@@ -12,7 +12,7 @@ script_path = os.path.join(os.path.dirname(__file__), "../../src/models/Gans/DCG
 sys.path.append(script_path)
 script_path = os.path.join(os.path.dirname(__file__), "../../src/models/processors")
 sys.path.append(script_path)
-from prep_data import DataMerger, DataPreparator
+from prep_data import DataPreparator
 from train import ModelTrainer
 from eval_model import ModelValidator
 from register import ModelRegister
@@ -165,12 +165,11 @@ def test_if_method___prepare__to_eval_folder____is_running_properly():
         clean_dir(eval_folder)
     shutil.rmtree(eval_folder, ignore_errors=True)
     
-    data_merger = DataMerger()
     blob_manager = BlobManagerMoq()
     data_uploader = DataUploaderMoq(blob_manager)
     run = AzureMLRunMoq(None)
     data_peparator = DataPreparator(run)
-    data_peparator.prepare(input_data,prepped_data,data_merger,data_uploader)
+    data_peparator.prepare(input_data,prepped_data,data_uploader)
 
     eval_folder_label_0 = os.path.join(eval_folder,"0")
     eval_label_0_files = glob.glob(eval_folder_label_0 + '/*.png')
@@ -188,12 +187,11 @@ def test_if_method___prepare__to_train_folder____is_running_properly():
         clean_dir(train_folder)
     shutil.rmtree(train_folder, ignore_errors=True)
     
-    data_merger = DataMerger()
     blob_manager = BlobManagerMoq()
     data_uploader = DataUploaderMoq(blob_manager)
     run = AzureMLRunMoq(None)
     data_peparator = DataPreparator(run)
-    data_peparator.prepare(input_data,prepped_data,data_merger,data_uploader)
+    data_peparator.prepare(input_data,prepped_data,data_uploader)
 
     train_folder_label_0 = os.path.join(train_folder,"0")
     train_label_0_files = glob.glob(train_folder_label_0 + '/*.png')
@@ -208,14 +206,14 @@ Testing the useful functions of the ModelTrainer class.
 """
 
 def test_if_ModelTrainer_method___train____is_running_properly():
-    input_data = prepped_data = os.path.join(os.path.dirname(__file__),"data/model_trainer/train")
-    model_candidate_folder = os.path.join(prepped_data,"models")
+    input_data = os.path.join(os.path.dirname(__file__),"data/model_trainer/train")
+    model_candidate_folder = os.path.join(input_data,"models")
     if os.path.isdir(model_candidate_folder):
         clean_dir(model_candidate_folder)
 
     run = AzureMLRunMoq(None)
     trainer = ModelTrainer(run)
-    trainer.train(input_data, prepped_data, model_candidate_folder)
+    trainer.train(input_data, model_candidate_folder)
     classifier_file = os.path.join(model_candidate_folder, "classifier.hdf5")
     assert os.path.isfile(classifier_file) == True
     generator_file = os.path.join(model_candidate_folder, "generator.hdf5")
@@ -335,12 +333,12 @@ def test_if_SamplingProcessor___sample___is_running_properly():
     assert len(sampled_data_images) == 200
 
 if __name__ == "__main__":
-    test_if_method___merge__is_running_properly()
-    test_if_method___prepare__to_eval_folder____is_running_properly()
-    test_if_method___prepare__to_train_folder____is_running_properly()
+    #test_if_method___merge__is_running_properly()
+    #test_if_method___prepare__to_eval_folder____is_running_properly()
+    #test_if_method___prepare__to_train_folder____is_running_properly()
     test_if_ModelTrainer_method___train____is_running_properly()
-    test_if_ModelTrainer___evaluate___is_running_properly()
-    test_if_ModelRegister___register___is_running_properly()
-    test_if_RandomSampler___sample___is_running_properly()
-    test_if_LowConfUnlabeledSampler___sample___is_running_properly()
-    test_if_SamplingProcessor___sample___is_running_properly()
+    #test_if_ModelTrainer___evaluate___is_running_properly()
+    #test_if_ModelRegister___register___is_running_properly()
+    #test_if_RandomSampler___sample___is_running_properly()
+    #test_if_LowConfUnlabeledSampler___sample___is_running_properly()
+    #test_if_SamplingProcessor___sample___is_running_properly()

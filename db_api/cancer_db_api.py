@@ -7,12 +7,13 @@ from bson.objectid import ObjectId
 
 class CancerDBAPI:
     def __init__(self, connectionstring="mongodb://admincancer:2563crRT8@localhost:27017/"):
-        #self.connectionstring = connectionstring
         self.conn = MongoClient(connectionstring)
         self.db = self.conn.CancerDB
 
         self.collection_cancers = self.db.cancers
         self.collection_patients = self.db.patients
+        self.collection_models = self.db.models
+
         
     
     def add_cancers(self,external_ids, types, names, imagelinks):
@@ -31,8 +32,6 @@ class CancerDBAPI:
              self.collection_cancers.insert_many(bulk_to_insert)
         except Exception as e:
             print(e)
-
-    #def add_patient(self, name, email):
 
     def patient_awaiting_diagnosis(self):
         """
@@ -138,7 +137,6 @@ class CancerDBAPI:
                                                         "diagnosis_date": patient.diagnosis_date,
                                                        "is_diagnosed": patient.is_diagnosed,
                                                        "has_cancer": patient.has_cancer}})
-
 
 
     def insert_first_data(self):
@@ -304,8 +302,13 @@ class CancerDBAPI:
                                                 })
         print("patient updated")
 
-#if __name__ == "__main__":
-#     api = CancerDBAPI()
-#     result = api.insert_first_data()
-#     if result != None:
-#         print("result : ", result.inserted_id)
+    
+    def add_model_accuracy(self, model_name, accuracy):
+        item_count = self.collection_models.count_documents({'model_name':model_name})
+        
+        model_id = ""
+        if item_count == 0:
+            model_id = self.collection_models.insert_one({"model_name": model_name}).inserted_id
+        
+        result = list(self.collection_models.find({'model_name':model_name}))[0]
+        

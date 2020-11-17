@@ -20,9 +20,98 @@ from io import BytesIO
 import numpy as np
 import random
 import string
+import urllib
 import urllib.request
 import base64
 import shutil
+import tempfile
+import json
+import traceback
+import sys
+from datetime import datetime
+import requests
+from urllib.error import URLError, HTTPError
+from urllib.parse import urlparse
+
+class FolderUtilities:
+    @staticmethod
+    def make_missing_dir_from_file(file_path):
+        os.makedirs(os.path.dirname(os.path.abspath(file_path)), exist_ok=True)
+    
+    @staticmethod 
+    def make_dir(folder_path):
+        os.makedirs(folder_path, exist_ok=True)
+
+class BlobStorageHandler(object):
+    def __init__(self, connection_string="DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net"):
+        self.blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+    
+    def upload(self, blob_container, file_path, overwrite = False):
+        file_name = ntpath.basename(file_path)
+        print("file_name :",file_name)
+        blob_client=self.blob_service_client.get_blob_client(container=blob_container,blob=file_name)
+        with open(file_path,"rb") as data:
+            blob_client.upload_blob(data, overwrite=overwrite)
+    
+    def delete(self,blob_container,  file_path):
+        """deletes the file from the blob storage
+
+        Arguments:
+            blob_container {str} -- container (or folder) in blob storage 
+            file_path {str} -- [description]
+        """
+
+        if os.path.isabs(file_path):
+            file_name = ntpath.basename(file_path)
+        else:
+            file_name = file_path
+        # Create a blob client using the local file name as the name for the blob
+        blob_client = self.blob_service_client.get_blob_client(container=blob_container, blob=file_name)
+
+        print("\Deleting from Azure Storage:\n\t" + file_name)
+
+        # Upload the created file
+        blob_client.delete_blob()
+    
+    def download_json_by_url(self, file_path):
+        data = {}
+        try:
+            response = urllib.request.urlopen(file_path)
+            data = json.loads(response.read())
+        except HTTPError as e:
+            # do something
+            print('Error code: ', e.code)
+        except URLError as e:
+            # do something
+            print('Reason: ', e.reason)
+
+        return data
+    
+    def download_text_by_url(self, file_path):
+        """download the file from the http link
+
+        Arguments:
+            file_path {str} -- http link
+
+        Returns:
+            str -- downloaded file content
+        """
+        data = None
+        try:
+            response = urllib.request.urlopen(file_path)
+            data = response.read().decode('utf-8')
+        except HTTPError as e:
+            # do something
+            print('Error code: ', e.code)
+        except URLError as e:
+            # do something
+            print('Reason: ', e.reason)
+        except Exception as e:
+            # do something
+            print('Reason: ', e)
+
+        return data
+
 class Helper:
     @staticmethod
     def get_base64_image_by_urls(image_urls):
@@ -49,7 +138,6 @@ class Helper:
     def generate_name(size=6, chars=string.ascii_uppercase):
         return ''.join(random.choice(chars) for _ in range(size))
 
-
 class ImagePathListUploader(object):
     def __init__(self, blob_manager):
         self.blob_manager = blob_manager
@@ -61,6 +149,64 @@ class ImagePathListUploader(object):
             self.blob_manager.upload(blob_container_dest, file_source, overwrite = True)
             uploaded_image = "{0}/{1}/{2}".format(self.host, blob_container_dest, file_source_name)
             print("uploaded_image :", uploaded_image)
+
+class SampedDataDataManager:
+    def __init__(self, blob_manager):
+        self.blob_manager = blob_manager
+        self.host = "https://diagnozstorage.blob.core.windows.net"
+    
+    def _get_http_sampled_data(self, sampled_data):
+        items = []
+        for item in sampled_data:
+            print("item[0]", item[0])
+            print("item[1]", item[1])
+            image_name = os.path.basename(item[0])
+            url_file =  "{0}/diagnoz/mldata/unlabeled/data/{1}".format(self.host, image_name)
+            items.append(url_file)
+        return items
+
+    def upload_data(self, sampled_data):
+        sampled_data = self._get_http_sampled_data(sampled_data)
+        with tempfile.TemporaryDirectory() as dir:
+            sampled_data_file = os.path.join(dir,'sampled_data.json')
+            with open(sampled_data_file, 'w') as outfile:
+                json.dump(sampled_data, outfile)
+            blob_container = "diagnoz/mldata/sampled_data/current"
+            self.blob_manager.upload(blob_container, sampled_data_file, overwrite = True)
+            print("file {0} uploaded".format(sampled_data_file))
+
+class AnnotatedDataManager:
+    def __init__(self, blob_manager):
+        self.blob_manager = blob_manager
+        self.host = "https://diagnozstorage.blob.core.windows.net"
+        self.annotated_data_file = "annotated_data.json"
+        self.annotated_data_url = "{0}/diagnoz/mldata/annotated_data/current/{1}".format(self.host,self.annotated_data_file)
+        self.ARCHIVE_ANNOTATED_PATH = "diagnoz/mldata/annotated_data/archive"
+        self.CURRENT_ANNOTATED_PATH = "diagnoz/mldata/annotated_data/current"
+
+    def archive(self, working_dir):
+        try:
+            print("step 1")
+            annotated_data_path = os.path.join(working_dir, self.annotated_data_file)
+            r = requests.get(self.annotated_data_url, allow_redirects=True)
+            open(annotated_data_path, "wb").write(r.content)
+            print("step 2")
+            archive_name = "annotated_data_{0}{1}".format(datetime.now().strftime("%m_%d_%Y_%H_%M_%S"),".json")
+            archived_file = os.path.join(working_dir, archive_name)
+            #copy sampled file as archived file
+            shutil.copyfile(annotated_data_path, archived_file)
+            print("step 3")
+            #upload sampled file to blob
+            self.blob_manager.upload(self.ARCHIVE_ANNOTATED_PATH, archived_file)
+            #upload sampled file to blob
+            self.blob_manager.delete(self.CURRENT_ANNOTATED_PATH, annotated_data_path)
+            #delete sampled file
+            os.remove(archived_file)
+            print("step 4")
+        except Exception as e:
+            print(traceback.format_exc())
+            print(sys.exc_info()[2])
+            raise Exception(e)
 
 class AzureMLLogsProvider:
     def __init__(self, run):
@@ -268,7 +414,6 @@ class ComputeTargetConfig:
 
         return attached_dsvm_compute
         
-
 class DataStoreConfig:
     @staticmethod
     def config(ws, blob_datastore_name,account_name,container_name,account_key):
@@ -494,3 +639,109 @@ class ConfigHandler:
         # If it's launched via DevOps, then the values will be pass as params
         else:
             configGen.by_args(sys.argv, config_path)
+
+class PipelineEndpointLauncher:
+    def start(self, ws, svc_pr, endpoint_pipeline, json_data):
+        """The PIPELINE_ENDPOINT pipeline is launched through its published REST address.
+        """
+        #workspaceProvider = WorkspaceProvider(self.config)
+        #ws,svc_pr = workspaceProvider.get_ws()
+        auth_header = svc_pr.get_authentication_header()
+        pipeline_endpoint_by_name = PipelineEndpoint.get(workspace=ws, name=endpoint_pipeline)
+        rest_endpoint = pipeline_endpoint_by_name.endpoint
+        print(datetime.now(), " - pipeline_endpoint_by_name.endpoint : ", rest_endpoint)
+        _ = requests.post(rest_endpoint, headers=auth_header, json=json_data)
+
+class PipelinePublisher:
+    def __init__(self, ws):
+        self.ws = ws
+    
+    def publish(self, experiment_name,pipeline_name):
+        """Publish an experiment from name and the last Run that has just performed
+
+        Arguments:
+            experiment_name {str} -- The name of the experiment in the workspace...
+            pipeline_name {str} --The name of the published pipeline
+
+        Returns:
+            str --pipeline id published, str --endpoint : http address through which the pipeline can be called
+        """
+        
+        pipeline_experiment = self.ws.experiments.get(experiment_name)
+        run = list(pipeline_experiment.get_runs())[0]
+       
+        published_pipeline = run.publish_pipeline(name = pipeline_name, description='pipelines', version="2.1")
+
+        #return published_pipeline.id, published_pipeline.endpoint
+        return published_pipeline
+
+
+class EndpointPipelinePublisher:
+    def __init__(self, ws):
+        self.ws = ws
+    
+    def publish(self, experiment_name,pipeline, pipeline_name,pipeline_endpoint_name):
+        pipeline_endpoint = None
+        try:
+            pipeline_endpoint = PipelineEndpoint.get(workspace=self.ws, name=pipeline_endpoint_name)
+        except Exception as e:
+            s = str(e)
+            if not "BadRequest" in s:
+                raise Exception(e)
+
+        if not pipeline_endpoint:
+            pipeline_endpoint = PipelineEndpoint.publish(workspace=self.ws,
+                                                        name=pipeline_endpoint_name,
+                                                        pipeline=pipeline,
+                                                        description="New Pipeline Endpoint for {0}".format(pipeline_endpoint_name))
+            published_endpoint = pipeline_endpoint.endpoint
+            
+        else:
+            publisher = PipelinePublisher(self.ws)
+            published_pipeline = publisher.publish(experiment_name, pipeline_name)
+            
+            pipeline_endpoint.add_default(published_pipeline)
+            published_endpoint = published_pipeline.endpoint
+            
+        return published_endpoint
+
+class LogicAppPipelineConfigManager:
+    def __init__(self, config):
+        """Initializing class with the config object.
+            
+        Arguments:
+            config {object} -- Object containing all the information in the yaml configuration file
+        """
+        # BlobStorageHandler object is created from the connectionstring coming from config object.
+        self.blobManager = BlobStorageHandler(config.BLOB_STORAGE_CONNECTION_STRING)
+        # declaration of container (or folder) which will contain the json file
+        self.BLOB_CONTAINER = "{0}/configs".format(config.CONTAINER_NAME)
+        self.host = "https://diagnozstorage.blob.core.windows.net"
+    
+    def update(self, pipelineid, pipeline_endpoint, pipeline_file_name):
+        """ Create or update json file of the pipeline in the blob storage
+
+        Arguments:
+            pipelineid {str} -- pipeline id published
+            pipeline_endpoint {str} --endpoint : http address through which the pipeline can be called
+        """
+        
+        file_url = "{0}/{1}/{2}".format(self.host, self.BLOB_CONTAINER, pipeline_file_name)
+
+        data = self.blobManager.download_json_by_url(file_url)
+
+        data["pipelineid"] = pipelineid
+        data["published_pipeline_endpoint"] = pipeline_endpoint
+
+        temp = "./temp"
+        FolderUtilities.make_dir(temp)
+
+        temp_file = os.path.join(temp, pipeline_file_name)
+
+        with open(temp_file, 'w') as outfile:
+            json.dump(data, outfile)
+
+        print("update remote file")
+        self.blobManager.upload(self.BLOB_CONTAINER, temp_file, overwrite = True)
+
+        shutil.rmtree(temp_file, ignore_errors=True)

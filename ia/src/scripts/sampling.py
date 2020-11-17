@@ -9,18 +9,17 @@ import os
 import glob
 import shutil
 import ntpath
-from cloud_helpers import BlobStorageHandler
-from global_helpers import  ImagePathListUploader, ConfigHandler
+from global_helpers import  ImagePathListUploader, ConfigHandler, SampedDataDataManager, AnnotatedDataManager, BlobStorageHandler
 from os.path import isfile, join
 import argparse
 from random import shuffle
+import os
 class RandomSampler(object):
     def sample(self, unlabeled_data_list_files, number):
         shuffle(unlabeled_data_list_files)
-        print("len(unlabeled_data_list_files)", len(unlabeled_data_list_files))
         random_items = []
         for item in unlabeled_data_list_files:
-            random_items.append(item)
+            random_items.append([item, 0,'random'])
             if len(random_items) >= number:
                 break
 
@@ -29,14 +28,13 @@ class RandomSampler(object):
 class LowConfUnlabeledSampler(object):
 
     def sample(self, model, unlabeled_data_list_files, number):
-        print("type(model)", type(model))
         if model is None:
             raise Exception("model cannot be empty")
         
         shuffle(unlabeled_data_list_files)
-        print("len(unlabeled_data_list_files)", len(unlabeled_data_list_files))
+        unlabeled_data_list_files = unlabeled_data_list_files[:20000]
         confidences = []
-        for image_path in unlabeled_data_list_files:
+        for index, image_path in enumerate(unlabeled_data_list_files):
             img = image.load_img(image_path, target_size=(50, 50))
             img_array = image.img_to_array(img)
             img_batch = np.expand_dims(img_array, axis=0)
@@ -51,9 +49,12 @@ class LowConfUnlabeledSampler(object):
                 confidence = 1 - prob_related
             else:
                confidence = prob_related
-            item = [image_path, confidence]
+            item = [image_path, confidence, 'lowconf']
             confidences.append(item)
+            print("element ", index, "/", len(unlabeled_data_list_files), " prob_related :", prob_related, " confidence :", confidence )
         confidences.sort(key=lambda x: x[1])
+        print("confidences :", confidences)
+        print("confidences :", confidences[:number:])
         return confidences[:number:]
 
 
@@ -67,8 +68,9 @@ class SamplingProcessor(object):
                             sampled_data, 
                                 random_sampler, 
                                     lowfonc_sampler, 
-                                        imagepath_list_uploader):
-        
+                                        sampled_data_manager,
+                                            annotated_data_manager):
+        print("sampling process")
         unlabeled_path = os.path.join(input_data, "unlabeled/data")
         unlabeled_images_list = glob.glob(unlabeled_path + '/*.png')
         sampled_images = random_sampler.sample(unlabeled_images_list, 200)
@@ -81,13 +83,25 @@ class SamplingProcessor(object):
             lowconf_sampled_images = lowfonc_sampler.sample(classifier, unlabeled_images_list, 180)
             sampled_images = sampled_images[:20] + lowconf_sampled_images
         
-        for image_path in sampled_images:
-            image_path_dest = os.path.join(sampled_data, os.path.basename(image_path))
-            os.makedirs(sampled_data, exist_ok = True)
-            shutil.copy(image_path, image_path_dest)
+        #for image_path in sampled_images:
+        #    image_path_dest = os.path.join(sampled_data, os.path.basename(image_path))
+        #    os.makedirs(sampled_data, exist_ok = True)
+        #    shutil.copy(image_path, image_path_dest)
         
         shuffle(sampled_images)
-        imagepath_list_uploader.upload(sampled_images, "diagnozhuml/mldata/sampled_data/current")
+        sampled_data_manager.upload_data(sampled_images)
+
+        annotated_file = os.path.join(input_data, "annotated_data/current/annotated_data.json")
+        if not os.path.isfile(annotated_file):
+            print("No annotation data provided. skip archive step")
+            return
+        """
+        archiving of the current annotation file because there is a new sample file
+        """
+        print("archive")
+        working_dir = os.path.join(sampled_data, "working_dir")
+        os.makedirs(working_dir, exist_ok=True)
+        annotated_data_manager.archive(working_dir)
 
 if __name__ == "__main__":
 
@@ -104,20 +118,23 @@ if __name__ == "__main__":
     registered_model_folder = args.registered_model_folder
     mode = args.mode
 
-    if mode == "deploy":
+    if mode == "execute":
         configHandler = ConfigHandler()
         config = configHandler.get_file("config.yaml")
 
         random_sampler = RandomSampler()
         low_conf_sampler = LowConfUnlabeledSampler()
         blob_manager = BlobStorageHandler()
-        imagepath_list_uploader = ImagePathListUploader(blob_manager)
+        #imagepath_list_uploader = ImagePathListUploader(blob_manager)
+        sampled_data_manager = SampedDataDataManager(blob_manager)
+        annotated_data_manager = AnnotatedDataManager(blob_manager)
         sampler = SamplingProcessor(run)
         sampler.process(input_data,
                             registered_model_folder, 
                                 sampled_data, 
                                     random_sampler, 
                                         low_conf_sampler, 
-                                            imagepath_list_uploader)
+                                            sampled_data_manager,
+                                                annotated_data_manager)
     else:
         print("the mode has value '{0}' so no need to execute data sampling step".format(mode))

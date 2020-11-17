@@ -2,7 +2,7 @@ import os
 import sys 
 script_path = os.path.join(os.getcwd(), "../utils")
 sys.path.append(script_path)
-from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig
+from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager
 from azureml.core import Workspace,Experiment
 from azureml.core.dataset import Dataset
 from azureml.core.runconfig import DEFAULT_GPU_IMAGE
@@ -94,7 +94,7 @@ try:
     data_store = ws.get_default_datastore()
     prepped_data = PipelineData('prepped_data',  datastore=data_store)
 
-    pipeline_mode_param = PipelineParameter(name="mode",default_value="execute")
+    pipeline_mode_param = PipelineParameter(name="mode",default_value="deploy")
 
     prep_step = PythonScriptStep(name = 'Prepare data',
                           source_directory = script_folder,
@@ -122,6 +122,14 @@ try:
     print("Pipeline submitted for execution.")
 
     pipeline_run.wait_for_completion()
+
+    #Publish the pipeline and its endpoint
+    publisher = EndpointPipelinePublisher(ws)
+    published_endpoint = publisher.publish(config.EXPERIMENT_PREP_NAME,pipeline, config.PIPELINE_PREP_NAME, config.PIPELINE_PREP_ENDPOINT)
+
+    #publish pipeline config for logic app
+    logicappManager = LogicAppPipelineConfigManager(config)
+    logicappManager.update("-",published_endpoint,"published_prep_pipeline.json")
 
 except Exception as e:
   raise Exception(e)

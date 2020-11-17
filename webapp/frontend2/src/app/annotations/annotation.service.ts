@@ -15,7 +15,6 @@ FormData
   }
   // Get Patient by her id
   get_sampled_images(): Observable<any> {
-    //urlSearchParams.append('password', password);
     return this.http.get<any>(`${API_URL}/get_sampled_images`)
       .pipe(
         catchError(err => {
