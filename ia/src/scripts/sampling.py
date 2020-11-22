@@ -14,6 +14,19 @@ from os.path import isfile, join
 import argparse
 from random import shuffle
 import os
+from enum import Enum
+
+class SamplerType(Enum):
+    random = 1
+    lowconf = 2
+
+class SamplerFactory(object):
+    def get_sampler(self, sampler_type : SamplerType):
+        if sampler_type.value == SamplerType.random.value:
+            return RandomSampler()
+        elif sampler_type.value == SamplerType.lowconf.value:
+            return LowConfUnlabeledSampler()
+
 class RandomSampler(object):
     def sample(self, unlabeled_data_list_files, number):
         shuffle(unlabeled_data_list_files)
@@ -46,14 +59,14 @@ class LowConfUnlabeledSampler(object):
             Because we used the probability to predict that it is cancer (prediction[0][1])
             """ 
             if prob_related < 0.5:
-                confidence = 1 - prob_related
+                confidence = 1.0 - prob_related
             else:
                confidence = prob_related
             item = [image_path, confidence, 'lowconf']
             confidences.append(item)
-            print("element ", index, "/", len(unlabeled_data_list_files), " prob_related :", prob_related, " confidence :", confidence )
+            #print("element ", index, "/", len(unlabeled_data_list_files), " prob_related :", prob_related, " confidence :", confidence)
         confidences.sort(key=lambda x: x[1])
-        print("confidences :", confidences)
+        #print("confidences :", confidences)
         print("confidences :", confidences[:number:])
         return confidences[:number:]
 
@@ -70,7 +83,6 @@ class SamplingProcessor(object):
                                     lowfonc_sampler, 
                                         sampled_data_manager,
                                             annotated_data_manager):
-        print("sampling process")
         unlabeled_path = os.path.join(input_data, "unlabeled/data")
         unlabeled_images_list = glob.glob(unlabeled_path + '/*.png')
         sampled_images = random_sampler.sample(unlabeled_images_list, 200)

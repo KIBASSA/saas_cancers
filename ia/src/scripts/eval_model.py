@@ -8,21 +8,12 @@ from discriminator import disc_network
 import os
 import shutil
 from global_helpers import ConfigHandler
-class ModelValidator(AbstractProcessorModel):
-    def __init__(self, run, azure_ml_logs_provider):
-        super().__init__()
-        self.run = run
-        self.azure_ml_logs_provider = azure_ml_logs_provider
+
+class ModelValidateProcessor(AbstractProcessorModel):
 
     def evaluate(self,input_data,
-                          model_candidate_folder, 
-                                    validated_model_folder):
+                          model_candidate_folder):
         
-        IGNORE_TRAIN_STEP = self.azure_ml_logs_provider.get_tag_from_brother_run("prep_data.py","IGNORE_TRAIN_STEP")   
-        if IGNORE_TRAIN_STEP == True:
-            print("Ignore evaluate step")
-            return
-
         test_datagen = ImageDataGenerator(rescale=1./255)
         test_generator = test_datagen.flow_from_directory(
                                 os.path.join(input_data, "eval/"),
@@ -39,7 +30,30 @@ class ModelValidator(AbstractProcessorModel):
 
         classifier.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer="adam")
         loss, acc = classifier.evaluate_generator(test_generator, steps=steps, verbose=0)
+
+        return acc
+
+class ModelValidator(AbstractProcessorModel):
+    def __init__(self, run, azure_ml_logs_provider):
+        super().__init__()
+        self.run = run
+        self.azure_ml_logs_provider = azure_ml_logs_provider
+
+    def evaluate(self,
+                      model_validate_processor,
+                          input_data,
+                                model_candidate_folder, 
+                                    validated_model_folder):
+        
+        IGNORE_TRAIN_STEP = self.azure_ml_logs_provider.get_tag_from_brother_run("prep_data.py","IGNORE_TRAIN_STEP")   
+        if IGNORE_TRAIN_STEP == True:
+            print("Ignore evaluate step")
+            return
+        
+        acc = model_validate_processor.evaluate(input_data, model_candidate_folder)
+
         self.run.log("acc", round(acc,5))
+        print("acc : ", round(acc,5))
 
         validated_model_file = os.path.join(validated_model_folder, classifier_name)
         
@@ -47,7 +61,8 @@ class ModelValidator(AbstractProcessorModel):
         
         _ = shutil.copy(model_candidate_file, validated_model_file)
 
-       
+        return [acc]
+
 if __name__ == "__main__":
 
     # get hold of the current run
@@ -77,9 +92,11 @@ if __name__ == "__main__":
         """We create the instance of the ModelValidator class by passing the Run to it 
             and then we launch the evaluation of model.
         """
+        model_validate_processor = ModelValidateProcessor()
         validator = ModelValidator(run, azure_ml_logs_provider)
-        validator.evaluate(input_data,
-                                model_candidate_folder, 
-                                    validated_model_folder)
+        validator.evaluate(model_validate_processor, 
+                                input_data,
+                                    model_candidate_folder, 
+                                        validated_model_folder)
     else:
         print("the mode has value '{0}' so no need to execute evaluation step".format(mode))

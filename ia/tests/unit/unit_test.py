@@ -16,7 +16,7 @@ from prep_data import DataPreparator
 from train import ModelTrainer
 from eval_model import ModelValidator
 from register import ModelRegister
-from sampling import RandomSampler, LowConfUnlabeledSampler, SamplingProcessor
+from sampling import RandomSampler, LowConfUnlabeledSampler, SamplingProcessor, SamplerFactory, SamplerType
 from global_helpers import AzureMLLogsProvider, ConfigHandler
 from discriminator import disc_network
 
@@ -277,6 +277,15 @@ def test_if_ModelRegister___register___is_running_properly():
     classifier_file = os.path.join(registered_model_folder, "classifier.hdf5")
     assert os.path.isfile(classifier_file) == True
 
+#SamplerFactory
+"""|||||||||| SamplerFactory ||||||||||
+Testing the useful functions of the SamplerFactory class.
+"""
+def test_if_SamplerFactory___get_sampler___is_running_properly():
+    sampler_factory = SamplerFactory()
+    sampler = sampler_factory.get_sampler(SamplerType.random)
+    assert type(sampler) == RandomSampler
+    
 
 """|||||||||| RandomSampler ||||||||||
 Testing the useful functions of the RandomSampler class.
@@ -336,9 +345,10 @@ if __name__ == "__main__":
     #test_if_method___merge__is_running_properly()
     #test_if_method___prepare__to_eval_folder____is_running_properly()
     #test_if_method___prepare__to_train_folder____is_running_properly()
-    test_if_ModelTrainer_method___train____is_running_properly()
+    #test_if_ModelTrainer_method___train____is_running_properly()
     #test_if_ModelTrainer___evaluate___is_running_properly()
     #test_if_ModelRegister___register___is_running_properly()
     #test_if_RandomSampler___sample___is_running_properly()
     #test_if_LowConfUnlabeledSampler___sample___is_running_properly()
     #test_if_SamplingProcessor___sample___is_running_properly()
+    test_if_SamplerFactory___get_sampler___is_running_properly()

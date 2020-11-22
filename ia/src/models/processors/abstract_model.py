@@ -5,3 +5,6 @@ class AbstractProcessorModel(object):
         self.BATCH_SIZE_TRAINING_LABELED_SUBSET = 16
         self.BATCH_SIZE_TRAINING_UNLABELED_SUBSET = 8
     
+    def set_params(self, run, epochs):
+        self.run = run
+        self.epochs = epochs
