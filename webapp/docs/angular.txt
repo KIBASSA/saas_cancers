@@ -1,3 +1,11 @@
 Pour lancer l'appli angular :
 1. se positionner sur le répertoire frontend2
 2. lancer ng serve
+3. s'il y l'erreur: 
+    Could not find module “@angular-devkit/build-angular”
+   solution : 
+            source: https://stackoverflow.com/questions/50333003/could-not-find-module-angular-devkit-build-angular
+            
+            npm install --save-dev @angular-devkit/build-angular
+4. Si les erreurs persistent alors créer une nouvelle app angular.
+   Positionner vous sur le dossier parent puis : ng new frontend 
