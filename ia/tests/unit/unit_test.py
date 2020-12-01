@@ -14,7 +14,7 @@ script_path = os.path.join(os.path.dirname(__file__), "../../src/models/processo
 sys.path.append(script_path)
 from prep_data import DataPreparator
 from train import ModelTrainer
-from eval_model import ModelValidator
+from eval_model import ModelValidator, ModelValidateProcessor
 from register import ModelRegister
 from sampling import RandomSampler, LowConfUnlabeledSampler, SamplingProcessor, SamplerFactory, SamplerType
 from global_helpers import AzureMLLogsProvider, ConfigHandler
@@ -240,7 +240,11 @@ def test_if_ModelTrainer___evaluate___is_running_properly():
     run = AzureMLRunMoq(parent)
     azure_ml_logs_provider = AzureMLLogsProvider(run)
     model_validator = ModelValidator(run, azure_ml_logs_provider)
-    model_validator.evaluate(input_data,model_candidate_folder, validated_model_folder)
+    model_validator_processor =  ModelValidateProcessor()
+    model_validator.evaluate(model_validator_processor,
+                                input_data,
+                                    model_candidate_folder, 
+                                        validated_model_folder)
     classifier_file = os.path.join(validated_model_folder, "classifier.hdf5")
     assert os.path.isfile(classifier_file) == True
 
@@ -346,9 +350,9 @@ if __name__ == "__main__":
     #test_if_method___prepare__to_eval_folder____is_running_properly()
     #test_if_method___prepare__to_train_folder____is_running_properly()
     #test_if_ModelTrainer_method___train____is_running_properly()
-    #test_if_ModelTrainer___evaluate___is_running_properly()
+    test_if_ModelTrainer___evaluate___is_running_properly()
     #test_if_ModelRegister___register___is_running_properly()
     #test_if_RandomSampler___sample___is_running_properly()
     #test_if_LowConfUnlabeledSampler___sample___is_running_properly()
     #test_if_SamplingProcessor___sample___is_running_properly()
-    test_if_SamplerFactory___get_sampler___is_running_properly()
+    #test_if_SamplerFactory___get_sampler___is_running_properly()

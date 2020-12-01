@@ -8,8 +8,33 @@ from discriminator import disc_network
 import os
 import shutil
 from global_helpers import ConfigHandler
+import keras
+from keras import backend as K
+import keras_metrics
+import numpy as np
+from sklearn.metrics import recall_score, precision_score, f1_score
+
+def recall_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+    recall = true_positives / (possible_positives + K.epsilon())
+    print("--- recall :", recall)
+    return recall
+
+def precision_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    precision = true_positives / (predicted_positives + K.epsilon())
+    return precision
+
+def f1_m(y_true, y_pred):
+    precision = precision_m(y_true, y_pred)
+    recall = recall_m(y_true, y_pred)
+    return 2*((precision * recall) / (precision + recall + K.epsilon()))
 
 class ModelValidateProcessor(AbstractProcessorModel):
+
+    
 
     def evaluate(self,input_data,
                           model_candidate_folder):
@@ -19,7 +44,8 @@ class ModelValidateProcessor(AbstractProcessorModel):
                                 os.path.join(input_data, "eval/"),
                                 target_size=(self.IMAGE_RESIZE, self.IMAGE_RESIZE),
                                 batch_size=self.BATCH_SIZE_TRAINING_LABELED_SUBSET,
-                                class_mode='categorical') # set as training data
+                                class_mode='categorical',
+                                shuffle=True) # set as training data
 
         steps = len(test_generator.filenames)/self.BATCH_SIZE_TRAINING_LABELED_SUBSET
 
@@ -28,10 +54,30 @@ class ModelValidateProcessor(AbstractProcessorModel):
         model_candidate_file = os.path.join(model_candidate_folder, classifier_name)
         classifier.load_weights(model_candidate_file)
 
+        #classifier.compile(loss="categorical_crossentropy", metrics=["accuracy", f1_m, keras.metrics.Precision(), keras.metrics.Recall()], optimizer="adam")
+        #loss, acc, f1_score, precision, recall = classifier.evaluate_generator(test_generator, steps=steps, verbose=0)
+
         classifier.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer="adam")
         loss, acc = classifier.evaluate_generator(test_generator, steps=steps, verbose=0)
 
-        return acc
+        result = classifier.predict_generator(test_generator,verbose=1,steps=steps)
+        #y_pred = np.rint(result)
+        #print("y_pred :", y_pred)
+        y_true = test_generator.classes
+        print("y_true :", y_true)
+        y_pred = np.argmax(result, axis=1)
+        print("y_pred :", y_pred)
+        #print("result :", result)
+        recall = recall_score(y_true, y_pred, average='macro')
+        precision = precision_score(y_true, y_pred, average='macro')
+        f1_s = f1_score(y_true, y_pred, average='macro')
+        #classifier.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer="adam")
+        #loss, acc = classifier.evaluate_generator(test_generator, steps=steps, verbose=0)
+        #accuracy, f1_score, precision, recall
+        print("f1_score :", f1_s)
+        print("---precision :", precision)
+        print("---recall :", recall)
+        return acc, model_candidate_file
 
 class ModelValidator(AbstractProcessorModel):
     def __init__(self, run, azure_ml_logs_provider):
@@ -50,11 +96,12 @@ class ModelValidator(AbstractProcessorModel):
             print("Ignore evaluate step")
             return
         
-        acc = model_validate_processor.evaluate(input_data, model_candidate_folder)
+        acc, model_candidate_file = model_validate_processor.evaluate(input_data, model_candidate_folder)
 
         self.run.log("acc", round(acc,5))
         print("acc : ", round(acc,5))
 
+        classifier_name = "classifier.hdf5"
         validated_model_file = os.path.join(validated_model_folder, classifier_name)
         
         os.makedirs(validated_model_folder)
