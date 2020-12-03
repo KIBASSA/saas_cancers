@@ -139,9 +139,9 @@ class Helper:
         return ''.join(random.choice(chars) for _ in range(size))
 
 class ImagePathListUploader(object):
-    def __init__(self, blob_manager):
+    def __init__(self, blob_manager, host):
         self.blob_manager = blob_manager
-        self.host = "https://diagnozstorage.blob.core.windows.net/"
+        self.host = host
     
     def upload(self,files_source, blob_container_dest):
         for file_source in files_source:
@@ -151,9 +151,9 @@ class ImagePathListUploader(object):
             print("uploaded_image :", uploaded_image)
 
 class SampedDataDataManager:
-    def __init__(self, blob_manager):
+    def __init__(self, blob_manager, host):
         self.blob_manager = blob_manager
-        self.host = "https://diagnozstorage.blob.core.windows.net"
+        self.host = host
     
     def _get_http_sampled_data(self, sampled_data):
         items = []
@@ -176,9 +176,9 @@ class SampedDataDataManager:
             print("file {0} uploaded".format(sampled_data_file))
 
 class AnnotatedDataManager:
-    def __init__(self, blob_manager):
+    def __init__(self, blob_manager, host):
         self.blob_manager = blob_manager
-        self.host = "https://diagnozstorage.blob.core.windows.net"
+        self.host = host
         self.annotated_data_file = "annotated_data.json"
         self.annotated_data_url = "{0}/diagnoz/mldata/annotated_data/current/{1}".format(self.host,self.annotated_data_file)
         self.ARCHIVE_ANNOTATED_PATH = "diagnoz/mldata/annotated_data/archive"
@@ -445,6 +445,8 @@ class ConfigProvider:
         data = self._load_data()
 
         #AmlComputes
+        self.AML_COMPUTE_BM_CLUSTER_NAME = data["Azure"]["AmlComputes"]["Benchmark"]["ClusterName"]
+        self.AML_COMPUTE_BM_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["Benchmark"]["ClusterType"]
         self.AML_COMPUTE_PREP_CLUSTER_NAME = data["Azure"]["AmlComputes"]["DataPreparation"]["ClusterName"]
         self.AML_COMPUTE_PREP_CLUSTER_VM_TYPE = data["Azure"]["AmlComputes"]["DataPreparation"]["ClusterType"]
         self.AML_COMPUTE_DS_CLUSTER_NAME = data["Azure"]["AmlComputes"]["DataScience"]["ClusterName"]
@@ -463,6 +465,7 @@ class ConfigProvider:
         self.CONTAINER_HUML_NAME = data["Azure"]["StorageAccount"]["ContainerNameHuml"]
         self.ACCOUNT_KEY = data["Azure"]["StorageAccount"]["AccountKey"]
         self.BLOB_STORAGE_CONNECTION_STRING = data["Azure"]["StorageAccount"]["BlobStorageConnectionString"]
+        self.SERVICE_BLOB = data["Azure"]["StorageAccount"]["ServiceBlob"]
         #Azureml
         self.LOCATION = data["Azure"]["Azureml"]["Location"]
         self.RESOURCEGROUP = data["Azure"]["Azureml"]["ResourceGroup"]
@@ -470,13 +473,14 @@ class ConfigProvider:
 
 
         #ExperimentName
-        #self.EXPERIMENT_NAME = data["Azure"]["Azureml"]["Experiment"]["Name"]
+        self.EXPERIMENT_BM_NAME = data["Azure"]["Azureml"]["Experiments"]["Benchmark"]["Name"]
         self.EXPERIMENT_PREP_NAME = data["Azure"]["Azureml"]["Experiments"]["DataPreparation"]["Name"]
         self.EXPERIMENT_DS_NAME = data["Azure"]["Azureml"]["Experiments"]["DataScience"]["Name"]
         #self.EXPERIMENT_SAMPLING_NAME = data["Azure"]["Azureml"]["Experiments"]["Sampling"]["Name"]
         
         #self.PIPELINE_NAME = data["Azure"]["Azureml"]["Pipeline"]["Name"]
-
+        self.PIPELINE_BM_NAME = data["Azure"]["Azureml"]["Pipelines"]["Benchmark"]["Name"]
+        self.PIPELINE_BM_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["Benchmark"]["EndPoint"]
         self.PIPELINE_PREP_NAME = data["Azure"]["Azureml"]["Pipelines"]["DataPreparation"]["Name"]
         self.PIPELINE_PREP_ENDPOINT = data["Azure"]["Azureml"]["Pipelines"]["DataPreparation"]["EndPoint"]
         self.PIPELINE_DS_NAME = data["Azure"]["Azureml"]["Pipelines"]["DataScience"]["Name"]
@@ -716,7 +720,7 @@ class LogicAppPipelineConfigManager:
         self.blobManager = BlobStorageHandler(config.BLOB_STORAGE_CONNECTION_STRING)
         # declaration of container (or folder) which will contain the json file
         self.BLOB_CONTAINER = "{0}/configs".format(config.CONTAINER_NAME)
-        self.host = "https://diagnozstorage.blob.core.windows.net"
+        self.host = config.SERVICE_BLOB
     
     def update(self, pipelineid, pipeline_endpoint, pipeline_file_name):
         """ Create or update json file of the pipeline in the blob storage

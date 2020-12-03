@@ -3,7 +3,7 @@ import sys
 script_path = os.path.join(os.getcwd(), "../utils")
 sys.path.append(script_path)
 from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager
-from azureml.core import Workspace,Experiment
+from azureml.core import Workspace,Experiment, ScriptRunConfig
 from azureml.core.dataset import Dataset
 from azureml.core.runconfig import DEFAULT_GPU_IMAGE
 from azureml.pipeline.core import PipelineData
@@ -15,7 +15,6 @@ from azureml.pipeline.core.graph import PipelineParameter
 import shutil
 from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core import Environment
-from azureml.core.runconfig import RunConfiguration
 script_folder = 'diagnoz_data_science_scripts_pipeline'
 
 try:
@@ -66,6 +65,7 @@ try:
                                                                         'joblib',
                                                                          'tqdm',
                                                                          'Pillow',
+                                                                          'horovod==0.19.5',
                                                                           'azureml-dataprep[pandas,fuse]>=1.1.14'])
 
     diagnoz_env = Environment("diagnoz-pipeline-env")
@@ -117,13 +117,12 @@ try:
                                                               '--model_candidate_folder',model_candidate_folder,
                                                               '--mode', pipeline_mode_param], 
                             allow_reuse=False)
-
+    
 
     estimator_evaluate = Estimator(source_directory=script_folder,
                           compute_target = compute_target,
                           environment_definition=pipeline_run_config.environment,
                           entry_script='eval_model.py')
-
 
     validated_model_folder = PipelineData('validated_model_folder',  datastore = data_store)
 

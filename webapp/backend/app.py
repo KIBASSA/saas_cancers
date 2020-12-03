@@ -42,9 +42,9 @@ api = Api(app)  # type: Api
 
 #initialization for blob storage
 blob_manager = BlobStorageManager("DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net")
-patient_img_manager = PatientImageCloudManager(blob_manager)
-annotated_data_manager = AnnotatedDataManager(blob_manager)
-sampled_data_manager = SampedDataDataManager(blob_manager)
+patient_img_manager = PatientImageCloudManager(blob_manager, config.SERVICE_BLOB)
+annotated_data_manager = AnnotatedDataManager(blob_manager, config.SERVICE_BLOB)
+sampled_data_manager = SampedDataDataManager(blob_manager, config.SERVICE_BLOB)
 db_api = CancerDBAPI()
 
 @app.route("/")

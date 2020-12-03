@@ -3,6 +3,9 @@ logLevel: WARN
 
 Azure:
   AmlComputes:
+    Benchmark:
+        ClusterName: "dsclusterdev"
+        ClusterType: "Standard_NC12"
     DataPreparation:
         ClusterName: "dsclusterdev"
         ClusterType: "Standard_NC12"
@@ -19,16 +22,22 @@ Azure:
     ContainerNameHuml: "diagnozhuml"
     AccountKey : "SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag=="
     BlobStorageConnectionString : "DefaultEndpointsProtocol=https;AccountName=diagnozstorage;AccountKey=SWWLDWxC6xjhWuNTblGdkOT6jAPcpA0W1LzowyginzEsibTHqla2xurPgWeRtcCzO2Rb0KXpTn3KXdn38EYTag==;EndpointSuffix=core.windows.net"
+    ServiceBlob : "https://diagnozstorage.blob.core.windows.net"
   Azureml:
     Location : "eastus"
     ResourceGroup : "diagnoz"
     WorkspaceName : "diagnozws"
     Experiments :
+      Benchmark :
+        Name : "exp_bm_dev"
       DataPreparation :
           Name : "exp_prep_dev"
       DataScience :
         Name : "exp_ds_dev"
     Pipelines:
+      Benchmark :
+        Name : "pipeline_bm_dev"
+        EndPoint : "pipeline_bm_endpoint_dev"
       DataPreparation :
           Name : "pipeline_prep_dev"
           EndPoint : "pipeline_prep_endpoint_dev"

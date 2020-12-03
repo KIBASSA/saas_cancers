@@ -16,18 +16,18 @@ class Consts:
     DIAGNOZ_PATIENTS = "diagnoz/patients"
 
 class PatientImageURLBuilder:
-    def __init__(self, connection_string):
+    def __init__(self, connection_string, host):
         self.connection_string = connection_string
-        self.host = "https://diagnozstorage.blob.core.windows.net/"
+        self.host = host
 
     def get_image(self,patient,img_data):
         ext = guess_extension(guess_type(img_data)[0])
         return "{0}/{1}/{2}/profile".format(self.host, Consts.DIAGNOZ_PATIENTS, patient.id)
 
 class AnnotatedDataManager:
-    def __init__(self, blob_manager):
+    def __init__(self, blob_manager, host):
         self.blob_manager = blob_manager
-        self.host = "https://diagnozstorage.blob.core.windows.net"
+        self.host = host
      
     def upload_data(self, annotated_data):
         with tempfile.TemporaryDirectory() as dir:
@@ -39,9 +39,9 @@ class AnnotatedDataManager:
             print("file {0} uploaded".format(annotated_data_file))
 
 class SampedDataDataManager:
-    def __init__(self, blob_manager):
+    def __init__(self, blob_manager, host):
         self.blob_manager = blob_manager
-        self.host = "https://diagnozstorage.blob.core.windows.net"
+        self.host = host
         self.sampled_data_file = "sampled_data.json"
         self.sampled_data_url = "{0}/diagnoz/mldata/sampled_data/current/{1}".format(self.host,self.sampled_data_file)
         self.ARCHIVE_SAMPLED_PATH = "{0}/mldata/sampled_data/archive".format(Consts.DIAGNOZ)
@@ -83,9 +83,9 @@ class SampedDataDataManager:
 
 
 class PatientImageCloudManager:
-    def __init__(self, blob_manager):
+    def __init__(self, blob_manager, host):
         self.blob_manager = blob_manager
-        self.host = "https://diagnozstorage.blob.core.windows.net"
+        self.host = host
         
     def _get_profile_container(self,patient,img_data):
         return "{0}/{1}/profile".format(Consts.DIAGNOZ_PATIENTS, patient.id)

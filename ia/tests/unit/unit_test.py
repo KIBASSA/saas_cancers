@@ -47,8 +47,9 @@ class BlobManagerMoq(object):
         print("upload")
     
 class DataUploaderMoq(object):
-    def __init__(self, blob_manager):
+    def __init__(self, blob_manager, host="localhost"):
         self.blob_manager = blob_manager
+        self.host = host
 
     def upload(self,folder_source, blob_container_dest):
         print("upload")

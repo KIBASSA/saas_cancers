@@ -10,9 +10,9 @@ from urllib.parse import urlparse
 import requests
 
 class DataUploader(object):
-    def __init__(self, blob_manager):
+    def __init__(self, blob_manager, host):
         self.blob_manager = blob_manager
-        self.host = "https://diagnozstorage.blob.core.windows.net"
+        self.host = host
     
     def upload_image(self, image_url_source, working_dir, blob_container_dest):
         parsed = urlparse(image_url_source)
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         config = configHandler.get_file("config.yaml")
 
         blob_manager = BlobStorageHandler()
-        data_uploader = DataUploader(blob_manager)
+        data_uploader = DataUploader(blob_manager, config.SERVICE_BLOB)
         data_peparator = DataPreparator(run, config)
         pipeline_endpoint_launcher = PipelineEndpointLauncher()
         data_peparator.prepare(input_data,prepped_data_path, data_uploader, pipeline_endpoint_launcher)

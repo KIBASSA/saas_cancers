@@ -45,7 +45,7 @@ class LowConfUnlabeledSampler(object):
             raise Exception("model cannot be empty")
         
         shuffle(unlabeled_data_list_files)
-        unlabeled_data_list_files = unlabeled_data_list_files[:20000]
+        unlabeled_data_list_files = unlabeled_data_list_files[:30000]
         confidences = []
         for index, image_path in enumerate(unlabeled_data_list_files):
             img = image.load_img(image_path, target_size=(50, 50))
@@ -58,6 +58,9 @@ class LowConfUnlabeledSampler(object):
             will be the probability of predicting that it is not cancer (1- confidence) 
             Because we used the probability to predict that it is cancer (prediction[0][1])
             """ 
+            if prob_related > 0.0:
+                print("YESSSSSSSSSSSSS")
+
             if prob_related < 0.5:
                 confidence = 1.0 - prob_related
             else:
@@ -137,9 +140,8 @@ if __name__ == "__main__":
         random_sampler = RandomSampler()
         low_conf_sampler = LowConfUnlabeledSampler()
         blob_manager = BlobStorageHandler()
-        #imagepath_list_uploader = ImagePathListUploader(blob_manager)
-        sampled_data_manager = SampedDataDataManager(blob_manager)
-        annotated_data_manager = AnnotatedDataManager(blob_manager)
+        sampled_data_manager = SampedDataDataManager(blob_manager, config.SERVICE_BLOB)
+        annotated_data_manager = AnnotatedDataManager(blob_manager, config.SERVICE_BLOB)
         sampler = SamplingProcessor(run)
         sampler.process(input_data,
                             registered_model_folder, 

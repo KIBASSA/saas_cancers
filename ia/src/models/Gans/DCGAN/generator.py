@@ -1,7 +1,9 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from tensorflow.keras.layers import *
+#from tensorflow.keras.layers import Dense, Reshape, Conv2DTranspose, LeakyReLU, ZeroPadding2D, Input
 from tensorflow.keras.models import *
+#from tensorflow.keras.models import Model
 import tensorflow.keras.backend as K
 # Generator
 # Reference: Chapter 20, GANs in Python by Jason Brownlee, Chapter 7 of GANs in Action

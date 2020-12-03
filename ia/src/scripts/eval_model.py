@@ -61,15 +61,13 @@ class ModelValidateProcessor(AbstractProcessorModel):
         loss, acc = classifier.evaluate_generator(test_generator, steps=steps, verbose=0)
 
         result = classifier.predict_generator(test_generator,verbose=1,steps=steps)
-        #y_pred = np.rint(result)
-        #print("y_pred :", y_pred)
         y_true = test_generator.classes
         print("y_true :", y_true)
         y_pred = np.argmax(result, axis=1)
         print("y_pred :", y_pred)
         #print("result :", result)
-        recall = recall_score(y_true, y_pred, average='macro')
         precision = precision_score(y_true, y_pred, average='macro')
+        recall = recall_score(y_true, y_pred, average='macro')
         f1_s = f1_score(y_true, y_pred, average='macro')
         #classifier.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer="adam")
         #loss, acc = classifier.evaluate_generator(test_generator, steps=steps, verbose=0)
@@ -77,7 +75,7 @@ class ModelValidateProcessor(AbstractProcessorModel):
         print("f1_score :", f1_s)
         print("---precision :", precision)
         print("---recall :", recall)
-        return acc, model_candidate_file
+        return [loss, acc, precision, recall, f1_s], model_candidate_file
 
 class ModelValidator(AbstractProcessorModel):
     def __init__(self, run, azure_ml_logs_provider):
@@ -96,8 +94,8 @@ class ModelValidator(AbstractProcessorModel):
             print("Ignore evaluate step")
             return
         
-        acc, model_candidate_file = model_validate_processor.evaluate(input_data, model_candidate_folder)
-
+        #acc, model_candidate_file = model_validate_processor.evaluate(input_data, model_candidate_folder)
+        [_, acc, _, _, _], model_candidate_file = model_validate_processor.evaluate(input_data, model_candidate_folder)
         self.run.log("acc", round(acc,5))
         print("acc : ", round(acc,5))
 
