@@ -12,7 +12,7 @@ from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 from cancer_db_api import CancerDBAPI
 from apis_utilities import BlobStorageManager
-from models import Patient, PatientEncoder
+from models import Patient, PatientEncoder, Doctor, DoctorEncoder
 from global_helpers import Helper, ConfigHandler, WorkspaceProvider
 import json
 import datetime
@@ -184,6 +184,36 @@ def upload_annotated_data():
     sampled_data_manager.archive()
     return "Every thing is OK", status.HTTP_200_OK
 
+#/users/authenticate
+@app.route('/users/authenticate', methods=['POST'])
+def users_authenticate():
+    if "images" not in request.form:
+        return "images must be provided", status.HTTP_400_BAD_REQUEST
+
+    images = json.loads(request.form['images'])
+    annotated_data_manager.upload_data(images)
+    """
+    archive the data because it has just been annotated
+    """
+    sampled_data_manager.archive()
+    return "Every thing is OK", status.HTTP_200_OK
+
+@app.route('/login', methods=['POST'])
+def login():
+    json_data = request.json
+    print('username : ',json_data['username'])
+    print('password : ',json_data['password'])
+    user = db_api.login(json_data['username'], json_data['password'])
+    if user == None:
+        return "User Not found", status.HTTP_404_NOT_FOUND 
+    print("type(user) :", type(user))
+    if type(user) is Patient:
+        return jsonify(PatientEncoder().encode(user))
+    elif type(user) is Doctor:
+        return jsonify(DoctorEncoder().encode(user))
+    
+    return "User found but no entity", status.HTTP_404_NOT_FOUND
+
 @app.after_request
 def after_request(response):
     header = response.headers
@@ -191,7 +221,8 @@ def after_request(response):
     header['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
     header['Access-Control-Allow-Methods'] = 'OPTIONS, HEAD, GET, POST, DELETE, PUT'
     return response
-    
+
+
 if __name__ == "__main__":
     try:
         app.run()

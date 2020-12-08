@@ -6,7 +6,7 @@ import { RegisterComponent } from './register/register.component';
 import { Register2Component } from './register2/register2.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
 import { Routes, RouterModule } from '@angular/router';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'login-2', component: Login2Component },
@@ -18,6 +18,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [LoginComponent, Login2Component, RegisterComponent, Register2Component, LockscreenComponent],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     RouterModule.forChild(routes)
   ]

@@ -129,14 +129,14 @@
             <span class="availability-status online"></span>
           </div>
           <div class="nav-profile-text">
-            <p class="mb-0" translate>J. KIBASSA</p>
+            <p class="mb-0" translate>{{currentUser.name}}</p>
           </div>
         </a>
         <div class="dropdown-menu navbar-dropdown" ngbDropdownMenu aria-labelledby="profileDropdown2">
           <a class="dropdown-item" href="javascript:;" translate>
             <i class="mdi mdi-cached mr-2 text-success"></i>Activity Log</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:;" translate>
+          <a class="dropdown-item" (click)="logout()" translate>
             <i class="mdi mdi-logout mr-2 text-primary"></i>Signout</a>
         </div>
       </li>

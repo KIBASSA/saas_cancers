@@ -23,7 +23,12 @@ def disc_network(in_shape=(50,50,3), n_classes=2):
     fe = Conv2D(64, (3,3), strides=(2,2), padding='same')(fe)
     fe = BatchNormalization()(fe)
     fe = LeakyReLU(alpha=0.01)(fe)
+
     fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
+    fe = BatchNormalization()(fe)
+    fe = LeakyReLU(alpha=0.01)(fe)
+
+    fe = Conv2D(256, (3,3), strides=(2,2), padding='same')(fe)
     fe = BatchNormalization()(fe)
     fe = LeakyReLU(alpha=0.01)(fe)
 

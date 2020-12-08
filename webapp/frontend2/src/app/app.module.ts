@@ -1,13 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
-import {HttpClientModule, HttpClient} from '@angular/common/http';
+import {HttpClientModule, HttpClient, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartsModule } from 'ng2-charts';
+
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { ErrorInterceptor } from './_helpers/error.interceptor';
+// used to create fake backend
+import { fakeBackendProvider } from './_helpers/fake-backend';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
@@ -27,6 +33,9 @@ import { RtlComponent } from './rtl/rtl.component';
 import {PatientsApiService} from './patients/patient.service';
 import {AnnotationsApiService} from './annotations/annotation.service'
 import {PatientsProviders, PatientFactory} from './patients/patients.tools';
+import { AlertComponent } from './_components/alert.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register/register.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -45,7 +54,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     TodoComponent,
     SpinnerComponent,
     ContentAnimateDirective,
-    RtlComponent
+    RtlComponent,
+    AlertComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +77,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     }
     })
   ],
-  providers: [PatientsApiService, AnnotationsApiService, PatientsProviders, PatientFactory],
+  providers: [PatientsApiService, AnnotationsApiService, PatientsProviders, PatientFactory,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    // provider used to create fake backend
+    fakeBackendProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

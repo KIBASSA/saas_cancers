@@ -4,7 +4,15 @@ from json import JSONEncoder
 from bson.objectid import ObjectId
 import datetime
 class Patient:
-    def __init__(self, id,name,image = "",is_diagnosed=False,has_cancer=False,registration_date=False,diagnosis_date=False, cancer_images=[]):
+    def __init__(self, 
+                    id,
+                      name,
+                         image = "",
+                            is_diagnosed=False,
+                               has_cancer=False,
+                                  registration_date=False,
+                                      diagnosis_date=False, 
+                                         cancer_images=[]):
         self.id = id
         self.name = name
         self.image = image
@@ -19,6 +27,21 @@ class PatientEncoder(JSONEncoder):
         if isinstance(o, datetime.date):
             return dict(year=o.year, month=o.month, day=o.day)
         elif isinstance(o, ObjectId):
+            return str(o)
+        else:
+            return o.__dict__
+
+class Doctor:
+    def __init__(self, id, email,name,image,roles):
+        self.id = id
+        self.email = email
+        self.name = name,
+        self.image = image
+        self.roles = roles
+
+class DoctorEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
             return str(o)
         else:
             return o.__dict__

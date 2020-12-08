@@ -14,7 +14,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
 
   undiagnosedPatientsSubscription: Subscription;
   diagnosedPatientsSubscription: Subscription;
-  undiagnosedPatientList : Patient[];
+  patientList : Patient[];
   diagnosedPatientList: Patient[];
 
   constructor(private patientsApi: PatientsApiService, private patientsProviders:PatientsProviders) {}
@@ -23,9 +23,9 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   ngOnInit() 
   {
       this.undiagnosedPatientsSubscription = this.patientsApi
-                                              .getUndiagnosedPatients()
+                                              .getPatientAwaitingDiagnosis()
       .subscribe(res => {
-                  this.undiagnosedPatientList = this.patientsProviders.getPatients(res).filter((u, i) => i < 4);
+                  this.patientList = this.patientsProviders.getPatients(res).filter((u, i) => i < 4);
         },
         console.error
       );

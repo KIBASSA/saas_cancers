@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, NavigationStart, RouteConfigLoadStart, RouteConfigLoadEnd } from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
+import { AuthenticationService } from './_services/authentication.service';
+import { User } from './_models/user';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +18,12 @@ export class AppComponent implements OnInit{
   showSettings: boolean = true;
   isLoading: boolean;
 
-  constructor(private router: Router, translate: TranslateService) {
+  currentUser: User;
+  constructor(private router: Router, translate: TranslateService,
+    private authenticationService: AuthenticationService) {
     
+    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+
     // Removing Sidebar, Navbar, Footer for Documentation, Error and Auth pages
     router.events.forEach((event) => { 
       if(event instanceof NavigationStart) {
@@ -28,7 +34,21 @@ export class AppComponent implements OnInit{
           translate.use('en');
           document.querySelector('body').classList.remove('rtl');
         }
-        if((event['url'] == '/user-pages/login') || (event['url'] == '/user-pages/login-2') || (event['url'] == '/user-pages/register') || (event['url'] == '/user-pages/register-2') || (event['url'] == '/user-pages/lock-screen') || (event['url'] == '/error-pages/404') || (event['url'] == '/error-pages/500') ) {
+        if((event['url'].includes('/login'))
+          ||
+          (event['url'].includes('/user-pages/login'))
+          ||
+          (event['url'].includes('/user-pages/login-2'))
+          || 
+          (event['url'].includes('/user-pages/register')) 
+          || 
+          (event['url'].includes('/user-pages/register-2')) 
+          ||
+          (event['url'] == '/user-pages/lock-screen')
+          ||
+          (event['url'] == '/error-pages/404')
+          ||
+          (event['url'] == '/error-pages/500') ) {
           this.showSidebar = false;
           this.showNavbar = false;
           this.showFooter = false;
@@ -68,7 +88,11 @@ export class AppComponent implements OnInit{
       }
     });
   }
-
+  
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
+  }
 
 
   ngOnInit() {

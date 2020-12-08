@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from pymongo import errors
 import pymongo 
 from datetime import date
-from models import Patient
+from models import Patient, Doctor
 from bson.objectid import ObjectId
 
 class CancerDBAPI:
@@ -13,6 +13,8 @@ class CancerDBAPI:
         self.collection_cancers = self.db.cancers
         self.collection_patients = self.db.patients
         self.collection_models = self.db.models
+        self.collection_users = self.db.users
+        self.collection_doctors = self.db.doctors
 
         
     
@@ -311,4 +313,26 @@ class CancerDBAPI:
             model_id = self.collection_models.insert_one({"model_name": model_name}).inserted_id
         
         result = list(self.collection_models.find({'model_name':model_name}))[0]
+    
+
+    def login(self, email, password):
         
+        result = list(self.collection_users.find({'email':email, 'password':password}))
+        if len(result) == 0:
+            return None
+
+        if result[0]["type"] == "doctor":
+            doctor_bd = list(self.collection_doctors.find({'email':email}))
+            if len(doctor_bd) == 0:
+                raise Exception("The user exists but the link with the doctor entity does not exist")
+            doctor_bd = doctor_bd[0]
+            return Doctor(doctor_bd["_id"],doctor_bd["email"], doctor_bd["name"], doctor_bd["image"],doctor_bd["roles"])
+        elif result[0]["type"] == "patient":
+            patient_bd = list(self.collection_patients.find({'email':email}))
+            if len(patient_bd) == 0:
+                raise Exception("The user exists but the link with the patient entity does not exist")
+            patient_bd = patient_bd[0]
+            return self.__get_patient(patient_bd)
+        
+        raise Exception("Type {0} has no specific table".format(result[0]["type"]))
+

@@ -11,13 +11,16 @@
           <span class="login-status online"></span> <!--change to offline or busy as needed-->
         </div>
         <div class="nav-profile-text">
-          <span class="font-weight-medium mb-2" translate>J. KIBASSA</span>
+          <span class="font-weight-medium mb-2" translate>{{currentUser.name}}</span>
         </div>
         <i class="badge badge-danger nav-profile-badge">3</i>
       </a>
     </li>
     <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }">
-      <a class="nav-link" (click)="clickedMenu($event)" routerLink="/dashboard" routerLinkActive #dashboard="routerLinkActive">
+      <a class="nav-link"
+          routerLink="/dashboard" 
+          routerLinkActive = "active"
+          #dashboard="routerLinkActive">
         <i class="mdi mdi-home menu-icon"></i>
         <span class="menu-title" translate>Dashboard</span>
       </a>
@@ -43,8 +46,11 @@
         </ul>
       </div>
     </li>
-    <li class="nav-item" [ngClass]="{ 'active': rtl.isActive }">
-      <a class="nav-link" (click)="clickedMenu($event)" routerLink="/diagnostics/start" routerLinkActive #dashboard="routerLinkActive">
+    <li class="nav-item" [ngClass]="{ 'active': diagnostics.isActive }">
+      <a class="nav-link" 
+          (click)="clickedMenu($event)" 
+          routerLink="/diagnostics/start" 
+            routerLinkActive #diagnostics="routerLinkActive">
         <i class="mdi mdi-home menu-icon"></i>
         <span class="menu-title" translate>Diagnostics</span>
       </a>

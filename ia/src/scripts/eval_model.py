@@ -3,7 +3,7 @@ import argparse
 from azureml.core import Run
 from global_helpers import AzureMLLogsProvider, WebServiceDeployer
 from keras.preprocessing.image import ImageDataGenerator
-from abstract_model import AbstractProcessorModel
+from abstract_trainer import AbstractModelTrainer
 from discriminator import disc_network
 import os
 import shutil
@@ -32,7 +32,7 @@ def f1_m(y_true, y_pred):
     recall = recall_m(y_true, y_pred)
     return 2*((precision * recall) / (precision + recall + K.epsilon()))
 
-class ModelValidateProcessor(AbstractProcessorModel):
+class ModelValidateProcessor(AbstractModelTrainer):
 
     
 
@@ -77,7 +77,7 @@ class ModelValidateProcessor(AbstractProcessorModel):
         print("---recall :", recall)
         return [loss, acc, precision, recall, f1_s], model_candidate_file
 
-class ModelValidator(AbstractProcessorModel):
+class ModelValidator(AbstractModelTrainer):
     def __init__(self, run, azure_ml_logs_provider):
         super().__init__()
         self.run = run
