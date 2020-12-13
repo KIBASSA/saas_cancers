@@ -7,6 +7,7 @@ class Patient:
     def __init__(self, 
                     id,
                       name,
+                       email,
                          image = "",
                             is_diagnosed=False,
                                has_cancer=False,
@@ -15,6 +16,7 @@ class Patient:
                                          cancer_images=[]):
         self.id = id
         self.name = name
+        self.email = email
         self.image = image
         self.is_diagnosed = is_diagnosed
         self.has_cancer = has_cancer

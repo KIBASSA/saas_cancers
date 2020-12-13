@@ -52,7 +52,7 @@ export class NewComponent implements OnInit {
     // display form values on success
     let result  = this.registerForm.value //JSON.stringify(this.registerForm.value, null, 4)
     
-    this.patient = new Patient("",result["firstName"] + " "  + result["lastName"], this.uploadedImage)
+    this.patient = new Patient("",result["firstName"] + " "  + result["lastName"], result["email"], this.uploadedImage)
     this.loading = true
     this.patientsSubscription = this.patientsApi
                                       .addPatient(this.patient)

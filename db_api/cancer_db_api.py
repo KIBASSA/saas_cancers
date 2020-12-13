@@ -69,6 +69,7 @@ class CancerDBAPI:
         cancer_images = self._get_cancer_images(mongo_patient)
         return Patient(id=str(mongo_patient["_id"]),
                                     name=mongo_patient["name"],
+                                      email = mongo_patient["email"],
                                         image=mongo_patient["image"],
                                             is_diagnosed=mongo_patient["is_diagnosed"], 
                                                 has_cancer=mongo_patient["has_cancer"],
@@ -82,8 +83,9 @@ class CancerDBAPI:
         if patient_model.id:
             data["id"] = patient_model.id
 
-        
         data["name"] = patient_model.name
+
+        data["email"] = patient_model.email
         
         data["image"] = patient_model.image
         
@@ -115,13 +117,23 @@ class CancerDBAPI:
         return patients
     
     def insert_patient(self, patient):
-        item_count = self.collection_patients.count_documents({'name': patient.name})
-        
+
+        ## add user entity
+        user_count = self.collection_users.count_documents({'email': patient.email})
+        if user_count == 0:
+            data = {}
+            data["email"] = patient.email
+            data["password"] = "mypass"
+            data["type"] = "patient"
+            self.collection_users.insert_one(data)
+
+        ## add patient entity
+        item_count = self.collection_patients.count_documents({'email': patient.email})
         if item_count == 0:
             json_patient = self._get_json_patient(patient)
             return self.collection_patients.insert_one(json_patient).inserted_id
         
-        return self.get_patient_by_name(patient.name)
+        return self.get_patient_by_name(patient.email)
 
     def get_patient_by_id(self, patient_id):
         result = list(self.collection_patients.find({'_id':ObjectId(patient_id)}))
@@ -139,138 +151,6 @@ class CancerDBAPI:
                                                         "diagnosis_date": patient.diagnosis_date,
                                                        "is_diagnosed": patient.is_diagnosed,
                                                        "has_cancer": patient.has_cancer}})
-
-
-    def insert_first_data(self):
-        post_data = {
-            'name': 'Martin Smith',
-            'image': "https://www.bootstrapdash.com/demo/breeze/angular/preview/demo_1/assets/images/faces/face1.jpg",
-            'is_diagnosed': True,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Jimmy Nelson',
-            'image': "https://www.bootstrapdash.com/demo/breeze/angular/preview/demo_1/assets/images/faces/face13.jpg",
-            'is_diagnosed': True,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Carrie Parker',
-            'image': "https://www.bootstrapdash.com/demo/breeze/angular/preview/demo_1/assets/images/faces/face11.jpg",
-            'is_diagnosed': False,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Harry Holloway',
-            'image': "https://www.bootstrapdash.com/demo/breeze/angular/preview/demo_1/assets/images/faces/face7.jpg",
-            'is_diagnosed': True,
-            'has_cancer':True
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Ethel Doyle',
-            'image': "https://www.bootstrapdash.com/demo/futureui/template/images/faces/face1.jpg",
-            'is_diagnosed': True,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Cameron',
-            'image': "https://www.bootstrapdash.com/demo/futureui/template/images/faces/face3.jpg",
-            'is_diagnosed': True,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Jose Ball',
-            'image': "https://www.bootstrapdash.com/demo/futureui/template/images/faces/face4.jpg",
-            'is_diagnosed': True,
-            'has_cancer':True
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Jared Carr',
-            'image': "https://www.bootstrapdash.com/demo/futureui/template/images/faces/face6.jpg",
-            'is_diagnosed': False,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'David Grey',
-            'image': "https://www.bootstrapdash.com/demo/purple/angular/preview/demo_1/assets/images/faces/face1.jpg",
-            'is_diagnosed': False,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Stella Johnson',
-            'image': "https://www.bootstrapdash.com/demo/purple/angular/preview/demo_1/assets/images/faces/face2.jpg",
-            'is_diagnosed': True,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Marina Michel',
-            'image': "https://www.bootstrapdash.com/demo/purple/angular/preview/demo_1/assets/images/faces/face3.jpg",
-            'is_diagnosed': True,
-            'has_cancer':True
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'John Doe',
-            'image': "https://www.bootstrapdash.com/demo/purple/angular/preview/demo_1/assets/images/faces/face4.jpg",
-            'is_diagnosed': True,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Connor Chandler',
-            'image': "https://www.bootstrapdash.com/demo/celestial/template/images/faces/face31.png",
-            'is_diagnosed': False,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Russell Floyd',
-            'image': "https://www.bootstrapdash.com/demo/celestial/template/images/faces/face32.png",
-            'is_diagnosed': True,
-            'has_cancer':False
-        }
-        self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Allen Moreno',
-            'image': "https://www.bootstrapdash.com/demo/star-admin-pro/src/assets/images/faces/face1.jpg",
-            'is_diagnosed': False,
-            'has_cancer':False
-        }
-        result = self.insert_patient(post_data)
-
-        post_data = {
-            'name': 'Fukuyo Kazutoshi',
-            'image': "https://www.bootstrapdash.com/demo/star-admin-pro/src/assets/images/faces/face4.jpg",
-            'is_diagnosed': True,
-            'has_cancer':False
-        }
-        result = self.insert_patient(post_data)
-
-        return result
 
     def _get_cancer_images(self, mongo_patient_data):
         original_images = []
@@ -304,7 +184,6 @@ class CancerDBAPI:
                                                 })
         print("patient updated")
 
-    
     def add_model_accuracy(self, model_name, accuracy):
         item_count = self.collection_models.count_documents({'model_name':model_name})
         

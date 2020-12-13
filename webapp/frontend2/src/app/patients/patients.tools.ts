@@ -3,7 +3,8 @@ export class PatientFactory {
     public getPatient(item): Patient {
         console.log("item :" + typeof(item))
         return new Patient(item["id"], 
-                                item["name"], 
+                                item["name"],
+                                  item["email"],
                                     item["image"], 
                                         item["is_diagnosed"], 
                                         item["has_cancer"],

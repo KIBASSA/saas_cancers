@@ -103,7 +103,7 @@ def get_patient():
 def add_patient():
     patient_form = request.form['patient']
     patient_form = json.loads(patient_form)
-    patient_model = Patient("", patient_form["name"])
+    patient_model = Patient("", patient_form["name"], patient_form["email"])
     patient_model.registration_date = datetime.datetime.now()
     patient_model.diagnosis_date = datetime.datetime.min
     patient_model.id =  db_api.insert_patient(patient_model)

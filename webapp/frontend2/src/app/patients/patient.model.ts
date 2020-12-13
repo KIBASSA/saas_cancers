@@ -3,10 +3,11 @@ export class Patient
 {
   registrationDateStr: string;
   diagnosisDateStr : string;
-
+  //ajouter email dans patient
   constructor(
     public id:string,
     public name:string,
+    public email:string,
     public image:string,
     public isDiagnosed?:boolean,
     public hasCancer?:boolean,
@@ -17,6 +18,7 @@ export class Patient
   {
     this.id = id
     this.name = name
+    this.email = email
     this.image = image
     this.isDiagnosed = isDiagnosed
     this.hasCancer = hasCancer
@@ -45,7 +47,7 @@ export class PatientToDiagnose extends Patient
   diagnosedImages: DiagnosedImage[] = [];
   constructor(public patient:Patient)
   {
-      super(patient.id, patient.name,patient.image,patient.isDiagnosed,patient.hasCancer,patient.registrationDate, patient.diagnosisDate, patient.cancerImages);
+      super(patient.id, patient.name, patient.email, patient.image,patient.isDiagnosed,patient.hasCancer,patient.registrationDate, patient.diagnosisDate, patient.cancerImages);
       patient.cancerImages.forEach(image=> 
         {
           var data = new DiagnosedImage();
