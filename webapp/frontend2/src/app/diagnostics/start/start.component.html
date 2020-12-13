@@ -1,10 +1,12 @@
 <div class="page-header flex-wrap">
-    <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block">You can start diagnosing all patients by checking "All" and clicking "Start" or you can just select a few and click "Start".</span>
+    <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block">
+      Diagnostiquer tous les patients en cochant «Tous» ou Sélectionner quelques-uns et cliquer sur «Lancer».
+    </span>
 </div>
 <div class="row">
     <div class="col-12 grid-margin stretch-card">
         <div class="card card-invoice card-patient">
-            <div class="card-body">
+            <div class="card-body" >
               <ng-template [ngIf]="this.patientList.length > 0">
                 <div class="list-card">
                   <div class="form-check form-check-flat form-check-primary">
@@ -13,12 +15,13 @@
                                     [(ngModel)]="allChecked"
                                         (ngModelChange)="onToDiagnoseAllPatientChange($event)" 
                                             class="form-check-input">
-                      Check All
+                      Tous
                       <i class="input-helper"></i>
                     </label>
                   </div>
                 </div>
-                <div class="list-card" *ngFor="let patient of patientList">
+                <div style="overflow-y: auto;max-height: 400px;overflow-x: hidden;">
+                  <div class="list-card" *ngFor="let patient of patientList">
                     <div class="row align-items-center">
                         <div class="col-1">
                             <div class="form-check form-check-flat form-check-primary">
@@ -54,7 +57,7 @@
                         </div>
                         <div class="col-6">
                           <ul>
-                            <li class="loc-caption" *ngFor="let image of patient.diagnosedImages">
+                            <li class="loc-caption" style="margin:2px" *ngFor="let image of patient.diagnosedImages">
                               <img id="loc1"[src]="image.url"
                               [style] = "getImageStyle(patient, image)" />
                             </li>
@@ -62,6 +65,8 @@
                         </div>
                     </div>
                 </div>
+                </div>
+               
                 <div class="text-center">
                   <div class="row">
                     <div class="col-6">

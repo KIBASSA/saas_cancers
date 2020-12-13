@@ -18,16 +18,16 @@ import { fakeBackendProvider } from './_helpers/fake-backend';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
-import { SettingsPanelComponent } from './shared/settings-panel/settings-panel.component';
+//import { SettingsPanelComponent } from './shared/settings-panel/settings-panel.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
-import { TodoComponent } from './apps/todo-list/todo/todo.component';
+//import { TodoComponent } from './apps/todo-list/todo/todo.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { ContentAnimateDirective } from './shared/directives/content-animate.directive';
-import { TodoListComponent } from './apps/todo-list/todo-list.component';
-import { RtlComponent } from './rtl/rtl.component';
+//import { TodoListComponent } from './apps/todo-list/todo-list.component';
+//import { RtlComponent } from './rtl/rtl.component';
 
 
 import {PatientsApiService} from './patients/patient.service';
@@ -47,14 +47,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     NavbarComponent,
     SidebarComponent,
-    SettingsPanelComponent,
+    //SettingsPanelComponent,
     FooterComponent,
     DashboardComponent,
-    TodoListComponent,
-    TodoComponent,
+    //TodoListComponent,
+    //TodoComponent,
     SpinnerComponent,
     ContentAnimateDirective,
-    RtlComponent,
+    //RtlComponent,
     AlertComponent,
     LoginComponent,
     RegisterComponent

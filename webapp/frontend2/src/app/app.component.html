@@ -3,7 +3,7 @@
     <app-sidebar *ngIf="showSidebar"></app-sidebar>
     <div class="container-fluid page-body-wrapper">
       <app-navbar *ngIf="showNavbar"></app-navbar>
-      <app-settings-panel *ngIf="showSettings"></app-settings-panel>
+      <!--<app-settings-panel *ngIf="showSettings"></app-settings-panel>-->
       <div class="main-panel" [ngClass]="{ 'main-panel-only' : !showSidebar }">
         <div class="content-wrapper">
           <app-spinner *ngIf="isLoading"></app-spinner>
