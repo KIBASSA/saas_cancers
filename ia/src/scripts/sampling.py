@@ -1,7 +1,7 @@
 
 from azureml.core import Run
 from tensorflow.keras.preprocessing import image
-from discriminator import disc_network
+from discriminator import disc_network # pylint: disable=import-error
 from random import shuffle
 import numpy as np
 import math
@@ -9,7 +9,7 @@ import os
 import glob
 import shutil
 import ntpath
-from global_helpers import  ImagePathListUploader, ConfigHandler, SampedDataDataManager, AnnotatedDataManager, BlobStorageHandler
+from global_helpers import  ImagePathListUploader, ConfigHandler, SampedDataDataManager, AnnotatedDataManager, BlobStorageHandler # pylint: disable=import-error
 from os.path import isfile, join
 import argparse
 from random import shuffle
@@ -58,8 +58,8 @@ class LowConfUnlabeledSampler(object):
             will be the probability of predicting that it is not cancer (1- confidence) 
             Because we used the probability to predict that it is cancer (prediction[0][1])
             """ 
-            if prob_related > 0.0:
-                print("YESSSSSSSSSSSSS")
+            #if prob_related > 0.0:
+            #    print("YESSSSSSSSSSSSS")
 
             if prob_related < 0.5:
                 confidence = 1.0 - prob_related

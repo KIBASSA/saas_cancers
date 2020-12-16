@@ -4,8 +4,8 @@ import numpy as np
 import os
 import pickle
 import joblib
-from discriminator import disc_network
-from predictor import Predictor
+from discriminator import disc_network # pylint: disable=import-error
+from predictor import Predictor # pylint: disable=import-error
 import traceback
 
 def init():

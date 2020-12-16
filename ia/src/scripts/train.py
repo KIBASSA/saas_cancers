@@ -1,6 +1,6 @@
 from azureml.core import Run
 import argparse
-from simple_trainer import ModelTrainer
+from simple_trainer import ModelTrainer # pylint: disable=import-error
 
 if __name__ == "__main__":
 
@@ -18,7 +18,8 @@ if __name__ == "__main__":
         """We create the instance of the ModelTrainer class by passing the Run to it 
             and then we launch the training.
         """
-        trainer = ModelTrainer(run)
+        trainer = ModelTrainer()
+        ModelTrainer.set_params(run, 10)
         trainer.train(input_data, model_candidate_folder)
         
     else:

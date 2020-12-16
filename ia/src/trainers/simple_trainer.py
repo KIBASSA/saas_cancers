@@ -1,6 +1,6 @@
-from generator import generator_network
-from discriminator import disc_network
-from global_helpers import AzureMLLogsProvider
+from generator import generator_network # pylint: disable=no-name-in-module
+from discriminator import disc_network # pylint: disable=import-error
+from global_helpers import AzureMLLogsProvider # pylint: disable=import-error
 from abstract_trainer import AbstractModelTrainer
 import tensorflow as tf
 import keras
@@ -23,11 +23,14 @@ import itertools
 import sklearn
 from sklearn.utils import class_weight
 import fnmatch
-import cv2
+from cv2 import cv2
 from sklearn.model_selection import train_test_split
 from keras.utils.np_utils import to_categorical
 from sklearn.metrics import confusion_matrix
 from random import shuffle
+from data_loader import DataLoader
+
+
 class MetricsCheckpoint(Callback):
     """Callback that saves metrics after each epoch"""
     def __init__(self, savepath):
@@ -47,7 +50,7 @@ class PaulMooneyCreditModelTrainer(AbstractModelTrainer):
         self.BATCH_SIZE_VALIDATION = 32
         self.BATCH_SIZE_TESTING = 1
     
-    def proc_images(self, imagePatches,classZero,classOne, lowerIndex,upperIndex):
+    def proc_images(self, imagePatches, classZero, classOne, lowerIndex, upperIndex):
         """
         Returns two arrays: 
             x is an array of resized images
@@ -89,7 +92,7 @@ class PaulMooneyCreditModelTrainer(AbstractModelTrainer):
     def plot_confusion_matrix(self, cm, classes,
                           normalize=False,
                           title='Confusion matrix',
-                          cmap=plt.cm.Blues):
+                          cmap=plt.cm.Blues): # pylint: disable=no-member
         """
         This function prints and plots the confusion matrix.
         Normalization can be applied by setting `normalize=True`.
@@ -133,6 +136,23 @@ class PaulMooneyCreditModelTrainer(AbstractModelTrainer):
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
         plt.savefig('./loss_curve.png')
+
+    def get_model(self, input_shape, num_classes):
+        model = Sequential()
+        model.add(Conv2D(32, kernel_size=(3, 3),
+                        activation='relu',
+                        input_shape=input_shape,strides=2))
+        model.add(Conv2D(64, (3, 3), activation='relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+        model.add(Flatten())
+        model.add(Dense(128, activation='relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(num_classes, activation='softmax'))
+        model.compile(loss=keras.losses.categorical_crossentropy,
+                    optimizer=keras.optimizers.Adadelta(),
+                    metrics=['accuracy'])
+        return model
 
     def train(self,input_data, model_candidate_folder):
         
@@ -219,32 +239,20 @@ class PaulMooneyCreditModelTrainer(AbstractModelTrainer):
         #Step 4: Define Helper Functions for the Classification Task
 
         
-        class_weight1 = class_weight.compute_class_weight('balanced', np.unique(Y_train), Y_train)
-        #print("Old Class Weights: ",class_weight1)
-        class_weight2 = class_weight.compute_class_weight('balanced', np.unique(Y_trainRos), Y_trainRos)
+        class_weight1 = class_weight.compute_class_weight('balanced', np.unique(Y_train), Y_train) # pylint: disable=missing-kwoa,too-many-function-args
+        print("Old Class Weights: ",class_weight1)
+        class_weight2 = class_weight.compute_class_weight('balanced', np.unique(Y_trainRos), Y_trainRos) # pylint: disable=missing-kwoa,too-many-function-args
         #print("New Class Weights: ",class_weight2)
 
 
         batch_size = 128
         num_classes = 2
         epochs = 8
-    #   img_rows, img_cols = a.shape[1],a.shape[2]
+        #img_rows, img_cols = a.shape[1],a.shape[2]
         img_rows,img_cols=50,50
         input_shape = (img_rows, img_cols, 3)
-        model = Sequential()
-        model.add(Conv2D(32, kernel_size=(3, 3),
-                        activation='relu',
-                        input_shape=input_shape,strides=2))
-        model.add(Conv2D(64, (3, 3), activation='relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.25))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu'))
-        model.add(Dropout(0.5))
-        model.add(Dense(num_classes, activation='softmax'))
-        model.compile(loss=keras.losses.categorical_crossentropy,
-                    optimizer=keras.optimizers.Adadelta(),
-                    metrics=['accuracy'])
+        model = self.get_model(input_shape, num_classes)
+        
         datagen = ImageDataGenerator(
             featurewise_center=False,  # set input mean to 0 over the dataset
             samplewise_center=False,  # set each sample mean to 0

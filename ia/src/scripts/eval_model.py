@@ -1,13 +1,13 @@
 
 import argparse
 from azureml.core import Run
-from global_helpers import AzureMLLogsProvider, WebServiceDeployer
+from global_helpers import AzureMLLogsProvider, WebServiceDeployer, ConfigHandler # pylint: disable=import-error
 from keras.preprocessing.image import ImageDataGenerator
-from abstract_trainer import AbstractModelTrainer
-from discriminator import disc_network
+from abstract_trainer import AbstractModelTrainer # pylint: disable=import-error
+from discriminator import disc_network # pylint: disable=import-error
 import os
 import shutil
-from global_helpers import ConfigHandler
+from global_helpers import ConfigHandler # pylint: disable=import-error
 import keras
 from keras import backend as K
 import keras_metrics
@@ -33,9 +33,6 @@ def f1_m(y_true, y_pred):
     return 2*((precision * recall) / (precision + recall + K.epsilon()))
 
 class ModelValidateProcessor(AbstractModelTrainer):
-
-    
-
     def evaluate(self,input_data,
                           model_candidate_folder):
         
