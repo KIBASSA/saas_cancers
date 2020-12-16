@@ -10,15 +10,15 @@ import joblib
 from flask import Flask,render_template,Response, jsonify, request
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
-from cancer_db_api import CancerDBAPI
-from apis_utilities import BlobStorageManager
-from models import Patient, PatientEncoder, Doctor, DoctorEncoder
-from global_helpers import Helper, ConfigHandler, WorkspaceProvider
+from cancer_db_api import CancerDBAPI # pylint: disable=import-error
+from apis_utilities import BlobStorageManager # pylint: disable=import-error
+from models import Patient, PatientEncoder, Doctor, DoctorEncoder # pylint: disable=import-error
+from global_helpers import Helper, ConfigHandler, WorkspaceProvider # pylint: disable=import-error
 import json
 import datetime
 from flask_api import status
 from utilities import PatientImageCloudManager, Consts,AnnotatedDataManager, SampedDataDataManager
-from predictor import Predictor
+from predictor import Predictor # pylint: disable=import-error
 from PIL import Image, ImageOps
 import time
 import base64
@@ -158,7 +158,7 @@ def update_patients_as_diagnosed():
     patients = json.loads(request.form['patients'])
     
     for patient in patients:
-        patient_model = Patient(patient["id"], patient["name"])
+        patient_model = Patient(patient["id"], patient["name"], patient["email"], patient["image"])
         patient_model.diagnosis_date = datetime.datetime.now()
         patient_model.is_diagnosed = patient["isDiagnosed"]
         patient_model.has_cancer = patient["hasCancer"]

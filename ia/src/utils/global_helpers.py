@@ -1,4 +1,4 @@
-from azureml.core.compute import AmlCompute, ComputeTarget
+from azureml.core.compute import AmlCompute, ComputeTarget, RemoteCompute
 from azureml.core.datastore import Datastore
 from azureml.core import Environment
 from azureml.core.conda_dependencies import CondaDependencies
@@ -9,6 +9,7 @@ from azureml.core.webservice import AciWebservice
 from azureml.core.model import InferenceConfig, Model
 from azureml.pipeline.core import PipelineEndpoint
 from azureml.exceptions import WebserviceException
+from azureml.core.compute_target import ComputeTargetException
 from azureml.core import Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication
 import yaml

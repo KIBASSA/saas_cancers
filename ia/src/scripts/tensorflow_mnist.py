@@ -14,6 +14,7 @@
 # ==============================================================================
 #!/usr/bin/env python
 
+"""
 import tensorflow as tf
 import os
 import horovod.tensorflow as hvd
@@ -24,7 +25,7 @@ tf.logging.set_verbosity(tf.logging.INFO)
 
 
 def conv_model(feature, target, mode):
-    """2-layer convolution model."""
+    """"""2-layer convolution model.
     # Convert the target to a one-hot tensor of shape (batch_size, 10) and
     # with a on-value of 1 for each one-hot vector of length 10.
     target = tf.one_hot(tf.cast(target, tf.int32), 10, 1, 0)
@@ -124,3 +125,5 @@ def main(_):
 
 if __name__ == "__main__":
     tf.app.run()
+
+"""

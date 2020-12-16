@@ -22,9 +22,9 @@ export class SidebarComponent implements OnInit {
   }
 
   currentUser: User;
-  constructor(private authenticationService: AuthenticationService) 
+  constructor(private authenticationService: AuthenticationService)
   {
-    this.authenticationService.currentUser.subscribe(x => 
+    this.authenticationService.currentUser.subscribe(x =>
       {
         this.currentUser = x
       } );
@@ -48,4 +48,14 @@ export class SidebarComponent implements OnInit {
     });
   }
 
+  isAnnotator()
+  {
+      if (this.currentUser == null)
+          return false;
+      if (this.currentUser.roles == null)
+          return false;
+      if (this.currentUser.roles.includes("annotator"))
+          return true;
+      return false;
+  }
 }

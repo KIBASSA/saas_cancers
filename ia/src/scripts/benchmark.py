@@ -1,7 +1,7 @@
 from azureml.core import Run
 import argparse
-from simple_trainer import ModelTrainer
-from benchmark_engine import BenchmarkEngineProcessor
+from simple_trainer import ModelTrainer # pylint: disable=import-error
+from benchmark_engine import BenchmarkEngineProcessor # pylint: disable=import-error
 import os
 if __name__ == "__main__":
 

@@ -11,28 +11,28 @@
                 <div class="list-card">
                   <div class="form-check form-check-flat form-check-primary">
                     <label class="form-check-label">
-                      <input type="checkbox" 
+                      <input type="checkbox"
                                     [(ngModel)]="allChecked"
-                                        (ngModelChange)="onToDiagnoseAllPatientChange($event)" 
+                                        (ngModelChange)="onToDiagnoseAllPatientChange($event)"
                                             class="form-check-input">
                       Tous
                       <i class="input-helper"></i>
                     </label>
                   </div>
                 </div>
-                <div style="overflow-y: auto;max-height: 400px;overflow-x: hidden;">
+                <div style="overflow-y: auto;max-height: 600px;overflow-x: hidden;">
                   <div class="list-card" *ngFor="let patient of patientList">
                     <div class="row align-items-center">
                         <div class="col-1">
                             <div class="form-check form-check-flat form-check-primary">
                                 <label class="form-check-label">
                                   <input type="checkbox"
-                                        [(ngModel)]="patient.checked" 
+                                        [(ngModel)]="patient.checked"
                                           (ngModelChange)="onToDiagnosePatientChange($event)"
                                                   class="form-check-input">
                                   <i class="input-helper"></i>
                                 </label>
-                              </div>    
+                              </div>
                         </div>
                         <div class="col-4">
                             <div class="row align-items-center">
@@ -44,12 +44,12 @@
                                   <span>Wed Feb 19 2020</span>
                                 </div>
                                 <div class="col-sm-2">
-                                  
+
                                 </div>
                               </div>
                         </div>
                         <div class="col-1">
-                          <img *ngIf="diagnosticStatusStart(patient)" 
+                          <img *ngIf="diagnosticStatusStart(patient)"
                                     src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif"
                                           style="height: 20px;width: 20px;"/>
                          <div *ngIf="diagnosticStatusFinished(patient) && patient.hasCancer" class="badge badge-outline-danger badge-pill">Positif</div>
@@ -61,29 +61,29 @@
                               <img id="loc1"[src]="image.url"
                               [style] = "getImageStyle(patient, image)" />
                             </li>
-                          </ul>  
+                          </ul>
                         </div>
                     </div>
                 </div>
                 </div>
-               
+
                 <div class="text-center">
                   <div class="row">
                     <div class="col-6">
                       <button class="btn btn-outline-info btn-icon-text mt-auto"
                               (click)="onLaunch($event)">
-                                                          Lancer                                                                             
+                                                          Lancer
                     </button>
-                    <img *ngIf="diagnosticStatusStart(globalDiagnosticStatus)"  
-                              src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif" 
+                    <img *ngIf="diagnosticStatusStart(globalDiagnosticStatus)"
+                              src="https://media.giphy.com/media/sSgvbe1m3n93G/giphy.gif"
                                 style="height: 20px;width: 20px;"/>
                     </div>
                     <div  class="col-6">
-                      <button 
+                      <button
                           [disabled]="!diagnosticStatusFinished(globalDiagnosticStatus)"
                               class="btn btn-outline-info btn-icon-text mt-auto"
                                 (click)="onSave()">
-                                                  Enregistrer                                                                             
+                                                  Enregistrer
                       </button>
                     </div>
                   </div>

@@ -3,7 +3,7 @@ import glob
 import shutil
 import ntpath
 import os
-from global_helpers import ConfigHandler, BlobStorageHandler, PipelineEndpointLauncher, WorkspaceProvider
+from global_helpers import ConfigHandler, BlobStorageHandler, PipelineEndpointLauncher, WorkspaceProvider # pylint: disable=import-error
 import argparse
 import tempfile
 from urllib.parse import urlparse

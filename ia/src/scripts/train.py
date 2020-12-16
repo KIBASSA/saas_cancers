@@ -19,7 +19,7 @@ if __name__ == "__main__":
             and then we launch the training.
         """
         trainer = ModelTrainer()
-        ModelTrainer.set_params(run, 10)
+        trainer.set_params(run, 10)
         trainer.train(input_data, model_candidate_folder)
         
     else:

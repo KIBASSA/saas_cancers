@@ -25,6 +25,6 @@ class SupervisedContrastiveLearning(AbstractModelTrainer):
         )
 
         # Setting the state of the normalization layer.
-        data_augmentation.layers[0].adapt(x_train)
+        data_augmentation.layers[0].adapt(X_trainRosReshaped)
 
         #Build the encoder model

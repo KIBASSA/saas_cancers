@@ -3,7 +3,7 @@ import sys
 script_path = os.path.join(os.getcwd(), "../utils")
 sys.path.append(script_path)
 
-from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager
+from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager # pylint: disable=import-error
 from azureml.core import Workspace,Experiment, ScriptRunConfig
 from azureml.core.dataset import Dataset
 from azureml.core.runconfig import DEFAULT_GPU_IMAGE
@@ -63,7 +63,7 @@ try:
                                                                         'joblib',
                                                                          'tqdm',
                                                                          'Pillow',
-                                                                          'horovod==0.19.5',
+                                                                          #'horovod==0.19.5',
                                                                           'azureml-dataprep[pandas,fuse]>=1.1.14'])
 
     diagnoz_env = Environment("diagnoz-pipeline-env")
@@ -96,11 +96,11 @@ try:
 
     model_folder = PipelineData('model_folder',  datastore = data_store)
 
-    src = ScriptRunConfig(source_directory=project_folder,
+    src = ScriptRunConfig(source_directory=script_folder,
                       script='tensorflow_mnist.py',
                       arguments=['--input_data', input_data],
                       compute_target=compute_target,
-                      environment=tf_env,
+                      environment=diagnoz_env,
                       distributed_job_config=MpiConfiguration(node_count=3))
 
     # Create an experiment and run the pipeline

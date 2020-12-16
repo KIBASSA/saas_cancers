@@ -2,7 +2,7 @@ import os
 import sys 
 script_path = os.path.join(os.getcwd(), "../utils")
 sys.path.append(script_path)
-from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager
+from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager # pylint: disable=import-error
 from azureml.core import Workspace,Experiment
 from azureml.core.dataset import Dataset
 from azureml.core.runconfig import DEFAULT_GPU_IMAGE
@@ -59,6 +59,8 @@ try:
                                                                  'seaborn',
                                                                  'tensorflow',
                                                                    'Keras',
+                                                                   'keras-metrics',
+                                                                      'scikit-learn',
                                                                       'tensorflow-hub',
                                                                         'joblib',
                                                                          'tqdm',

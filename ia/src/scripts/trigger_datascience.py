@@ -1,8 +1,8 @@
 import os
 import sys 
 script_path = os.path.join(os.getcwd(), "../utils")
-sys.path.append(script_path)
-from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager
+sys.path.append(script_path) 
+from global_helpers import FilesProviders, ConfigHandler, WorkspaceProvider, ComputeTargetConfig, DataStoreConfig, EndpointPipelinePublisher, LogicAppPipelineConfigManager  # pylint: disable=import-error
 from azureml.core import Workspace,Experiment, ScriptRunConfig
 from azureml.core.dataset import Dataset
 from azureml.core.runconfig import DEFAULT_GPU_IMAGE
@@ -12,6 +12,7 @@ from azureml.pipeline.core import PipelineEndpoint
 from azureml.train.estimator import Estimator
 from azureml.pipeline.core import Pipeline
 from azureml.pipeline.core.graph import PipelineParameter
+from azureml.core.runconfig import RunConfiguration
 import shutil
 from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core import Environment
@@ -61,11 +62,14 @@ try:
                                                                  'seaborn',
                                                                  'tensorflow',
                                                                    'Keras',
+                                                                   'keras-metrics',
+                                                                      'scikit-learn',
                                                                       'tensorflow-hub',
                                                                         'joblib',
                                                                          'tqdm',
+                                                                         "imblearn",
                                                                          'Pillow',
-                                                                          'horovod==0.19.5',
+                                                                           'opencv-python',
                                                                           'azureml-dataprep[pandas,fuse]>=1.1.14'])
 
     diagnoz_env = Environment("diagnoz-pipeline-env")
@@ -96,7 +100,11 @@ try:
 
     data_store = ws.get_default_datastore()
 
-    pipeline_mode_param = PipelineParameter(name="mode",default_value="deploy")
+    """This parameter allows to specify that either the Pipeline execution will only
+    be in "deploy" mode (just publish the code) or in "execute" mode (execute the pipeline code).
+    """
+
+    pipeline_mode_param = PipelineParameter(name="mode",default_value="execute")
 
     estimator_train = Estimator(source_directory=script_folder,
                           compute_target = compute_target,

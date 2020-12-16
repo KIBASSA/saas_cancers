@@ -7,7 +7,7 @@
     <li class="nav-item nav-profile">
       <a href="javascript:;" class="nav-link">
         <div class="nav-profile-image">
-          <img src="https://diagnozstorage.blob.core.windows.net/diagnoz/patients/5f76a8186a2c37007d4e27a2/profile/5f76a8186a2c37007d4e27a2.jpg" alt="profile">
+          <img [src]="currentUser.image" alt="profile">
           <span class="login-status online"></span> <!--change to offline or busy as needed-->
         </div>
         <div class="nav-profile-text">
@@ -18,7 +18,7 @@
     </li>
     <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }">
       <a class="nav-link"
-          routerLink="/dashboard" 
+          routerLink="/dashboard"
           routerLinkActive = "active"
           #dashboard="routerLinkActive">
         <i class="mdi mdi-home menu-icon"></i>
@@ -33,29 +33,30 @@
       </a>
       <div class="collapse" id="ui-basic" [ngbCollapse]="parentId !== 'nav-link-patient'">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" routerLink="patients/list" 
-                                    routerLinkActive="active" 
-                                    #patientlist="routerLinkActive" 
+          <li class="nav-item"> <a class="nav-link" routerLink="patients/list"
+                                    routerLinkActive="active"
+                                    #patientlist="routerLinkActive"
                                     translate>Tous</a>
           </li>
-          <li class="nav-item"> <a class="nav-link" routerLink="patients/diagnosed" 
-                                    routerLinkActive="active" 
-                                    #patientdiagnosed="routerLinkActive" 
+          <li class="nav-item"> <a class="nav-link" routerLink="patients/diagnosed"
+                                    routerLinkActive="active"
+                                    #patientdiagnosed="routerLinkActive"
                                     translate>Diagnostiqués</a>
           </li>
         </ul>
       </div>
     </li>
     <li class="nav-item" [ngClass]="{ 'active': diagnostics.isActive }">
-      <a class="nav-link" 
-          (click)="clickedMenu($event)" 
-          routerLink="/diagnostics/start" 
+      <a class="nav-link"
+          (click)="clickedMenu($event)"
+          routerLink="/diagnostics/start"
             routerLinkActive #diagnostics="routerLinkActive">
         <i class="mdi mdi-heart-pulse menu-icon"></i>
         <span class="menu-title" translate>Diagnostics</span>
       </a>
     </li>
-    <li class="nav-item" [ngClass]="{'active' : annotate.isActive || modelperformance.isActive}">
+
+    <li class="nav-item" *ngIf="isAnnotator()" [ngClass]="{'active' : annotate.isActive || modelperformance.isActive}">
       <a class="nav-link" (click)="clickedMenu($event)" id="nav-link-annotation">
         <i class="mdi mdi-crosshairs-gps menu-icon"></i>
         <span class="menu-title" translate>Annotation</span>
@@ -63,18 +64,19 @@
       </a>
       <div class="collapse" id="ui-basic" [ngbCollapse]="parentId !== 'nav-link-annotation'">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" routerLink="annotations/annotate" 
-                                    routerLinkActive="active" 
-                                    #annotate="routerLinkActive" 
+          <li class="nav-item"> <a class="nav-link" routerLink="annotations/annotate"
+                                    routerLinkActive="active"
+                                    #annotate="routerLinkActive"
                                     translate>Annoter</a>
           </li>
           <li class="nav-item"> <a class="nav-link" routerLink="annotations/performance"
-                                    routerLinkActive="active" 
-                                    #modelperformance="routerLinkActive" 
+                                    routerLinkActive="active"
+                                    #modelperformance="routerLinkActive"
                                     translate>Performance Model</a>
           </li>
         </ul>
       </div>
     </li>
+
   </ul>
 </nav>

@@ -121,6 +121,7 @@ class CancerDBAPI:
         ## add user entity
         user_count = self.collection_users.count_documents({'email': patient.email})
         if user_count == 0:
+            print("youpiiii")
             data = {}
             data["email"] = patient.email
             data["password"] = "mypass"
@@ -145,7 +146,9 @@ class CancerDBAPI:
         return self.collection_patients.find({'name':name})
 
     def update_patient(self,patient):
-        self.collection_patients.update_one({"_id": patient.id}, 
+        #print("patient.is_diagnosed :", patient.is_diagnosed)
+        #print("patient.id :", patient.id)
+        self.collection_patients.update_one({"_id": ObjectId(patient.id)}, 
                                                {"$set":
                                                        {"image": patient.image,
                                                         "diagnosis_date": patient.diagnosis_date,
