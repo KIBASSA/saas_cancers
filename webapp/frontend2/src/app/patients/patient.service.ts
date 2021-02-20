@@ -24,7 +24,8 @@ FormData
   // GET list of public, future events
   getUndiagnosedPatients(): Observable<string[]> {
     return this.http
-      .get(`${API_URL}/undiagnosed_patients`).pipe(
+      .get(`${API_URL}/undiagnosed_patients`)
+      .pipe(
         retry(3),
         catchError(err => {
                  console.log(err);
@@ -42,7 +43,7 @@ FormData
                  return of(null);
         }));
   }
-  
+
   getPatientAwaitingDiagnosis():Observable<string[]> {
     return this.http
       .get(`${API_URL}/patient_awaiting_diagnosis`).pipe(

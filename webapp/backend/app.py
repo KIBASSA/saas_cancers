@@ -207,6 +207,7 @@ def login():
     if user == None:
         return "User Not found", status.HTTP_404_NOT_FOUND 
     print("type(user) :", type(user))
+    print("user.email :", user.email)
     if type(user) is Patient:
         return jsonify(PatientEncoder().encode(user))
     elif type(user) is Doctor:
