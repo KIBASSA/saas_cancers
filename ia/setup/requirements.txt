@@ -1,5 +1,5 @@
 tensorflow-gpu==2.1.0
 Keras==2.4.3
-Pillow==8.0.1
+Pillow==9.3.0
 tqdm==4.51.0
 jwt==1.1.0
